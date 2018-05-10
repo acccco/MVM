@@ -1,0 +1,11 @@
+{
+  "name": "MVM",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "aco <wwsxuan@163.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vuejs/vue.git"
+  }
+}
