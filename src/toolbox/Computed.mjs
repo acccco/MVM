@@ -3,7 +3,7 @@ import {noop} from "../util/util"
 
 let uid = 0
 
-export default class Computed {
+export class Computed {
     constructor(ctx, key, option,) {
         this.id = uid++
         this.ctx = ctx

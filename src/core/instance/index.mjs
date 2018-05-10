@@ -1,7 +1,7 @@
 import {Event} from "../../toolbox/Event"
 import {observe} from "../../toolbox/Observe"
 import {Watcher} from "../../toolbox/Watcher"
-import Computed from "../../toolbox/Computed"
+import {Computed} from "../../toolbox/Computed"
 import {mergeOptions} from "../../util/options"
 import {proxy, getProvideForInject, initComponents} from "../../util/util"
 
