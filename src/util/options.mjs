@@ -1,11 +1,14 @@
 import R from 'ramda'
 import {noop} from "./util"
+import MVM from "../index"
 
 export function mergeOptions(parent, child) {
 
     normalizeProps(child)
 
     normalizeInject(child)
+
+    handleComponent(child)
 
     let options = R.mergeAll([{}, parent, child])
 
