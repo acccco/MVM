@@ -1,6 +1,5 @@
 import R from 'ramda'
 import {noop} from "./util"
-import MVM from "../index"
 
 export function mergeOptions(parent, child) {
 
@@ -8,8 +7,7 @@ export function mergeOptions(parent, child) {
 
     normalizeInject(child)
 
-    handleComponent(child)
-
+    // 统一先取 child 中的数据，放到新对象中
     let options = R.mergeAll([{}, parent, child])
 
     // 合并 data
