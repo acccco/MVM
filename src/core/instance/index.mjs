@@ -77,7 +77,7 @@ export class MVM extends Event {
         }
 
         for (let key in vm.$options.components) {
-            initComponents(vm, vm.$options.components[key])
+            initComponents(vm, key, vm.$options.components[key])
         }
 
     }

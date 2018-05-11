@@ -10,6 +10,8 @@ export function mergeOptions(parent, child) {
     // 统一先取 child 中的数据，放到新对象中
     let options = R.mergeAll([{}, parent, child])
 
+    normalizeComponent(child, options._base)
+
     // 合并 data
     options.data = mergeData(parent.data, child.data)
 
@@ -96,5 +98,19 @@ function normalizeInject(options) {
                 from: key
             }
         })
+    }
+}
+
+/**
+ * 处理 components 返回构造函数
+ * @param options
+ * @param MVM
+ */
+function normalizeComponent(options, MVM) {
+    let components = options.components
+    for (let key in components) {
+        if (R.is(Object, components[key])) {
+            components[key] = MVM.extend(components[key])
+        }
     }
 }

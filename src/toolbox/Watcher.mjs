@@ -1,4 +1,5 @@
 import Dep from './Dep'
+import {traverse} from "../util/traverse";
 
 let uid = 0
 
@@ -6,22 +7,29 @@ export class Watcher {
 
     constructor(ctx, getter, callback, options) {
         this.id = ++uid
+
+        if (options) {
+            this.lazy = !!options.lazy
+            this.deep = !!options.deep
+        } else {
+            this.lazy = this.deep = false
+        }
+
         this.ctx = ctx
         this.getter = getter
         this.cb = callback
         this.deps = []
         this.value = this.init()
-        if (options) {
-            this.lazy = !!options.lazy
-        } else {
-            this.lazy = false
-        }
         this.dirty = this.lazy
     }
 
     init() {
         Dep.target = this
         let value = this.getter.call(this.ctx)
+        if (this.deep) {
+            // 对其子项添加依赖
+            traverse(value)
+        }
         Dep.target = null
         return value
     }

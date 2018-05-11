@@ -32,10 +32,3 @@ export function getProvideForInject(ctx, key, defaultValue) {
     }
     return value
 }
-
-export function initComponents(ctx, component) {
-    if (R.is(Object, component)) {
-        component = ctx._base.extend(component)
-    }
-    new component({parent: ctx})
-}
