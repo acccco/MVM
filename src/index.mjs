@@ -1,6 +1,8 @@
-import MVM from './core/instance'
+import {MVM} from './core/instance'
 import {initGlobalApi} from "./core/global-api/index"
 
 initGlobalApi(MVM)
 
 MVM.version = '0.0.0'
+
+export default MVM
