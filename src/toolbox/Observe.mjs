@@ -21,10 +21,8 @@ export function defineReactive(object, key, value) {
             return value
         },
         set(newValue) {
-            if (newValue !== value) {
-                value = newValue
-                dep.notify()
-            }
+            value = newValue
+            dep.notify()
         }
     })
 }

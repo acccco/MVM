@@ -1,5 +1,6 @@
 import Dep from './Dep'
 import {traverse} from "../util/traverse";
+import {watcherQueue} from "../util/watcherQueue";
 
 let uid = 0
 
@@ -7,17 +8,19 @@ export class Watcher {
 
     constructor(ctx, getter, callback, options) {
         this.id = ++uid
+        this.active = true
 
         if (options) {
             this.lazy = !!options.lazy
             this.deep = !!options.deep
+            // 仅仅是监听（只要set就触发）还是值变化才触发
+            this.ignoreChange = !!options.ignoreChange
         } else {
             this.lazy = this.deep = false
         }
 
-        this.ctx = ctx
-        this.getter = getter
-        this.cb = callback
+        this.getter = getter.bind(ctx)
+        this.cb = callback.bind(ctx)
         this.deps = []
         this.value = this.init()
         this.dirty = this.lazy
@@ -25,7 +28,7 @@ export class Watcher {
 
     init() {
         Dep.target = this
-        let value = this.getter.call(this.ctx)
+        let value = this.getter()
         if (this.deep) {
             // 对其子项添加依赖
             traverse(value)
@@ -37,19 +40,33 @@ export class Watcher {
     update() {
         if (this.lazy) {
             this.dirty = true
-            return
+        } else {
+            watcherQueue(this)
         }
-        const value = this.getter.call(this.ctx)
-        const oldValue = this.value
-        this.value = value
-        this.cb.call(this.ctx, value, oldValue)
+    }
+
+    run() {
+        if (this.active) {
+            const value = this.getter()
+            if (
+                this.ignoreChange ||
+                value !== this.value ||
+                // 深度监听对象,只要是触发了就要执行，不需要判断值有没有变化
+                this.deep
+            ) {
+                // 设置新值
+                const oldValue = this.value
+                this.value = value
+                this.cb(value, oldValue)
+            }
+        }
     }
 
     /**
      * 脏检查机制手动触发更新函数
      */
     evaluate() {
-        this.value = this.getter.call(this.ctx)
+        this.value = this.getter()
         this.dirty = false
     }
 
@@ -58,11 +75,14 @@ export class Watcher {
     }
 
     teardown() {
-        let i = this.deps.length
-        while (i--) {
-            this.deps[i].removeSub(this)
+        if (this.active) {
+            let i = this.deps.length
+            while (i--) {
+                this.deps[i].removeSub(this)
+            }
+            this.deps = []
+            this.active = false
         }
-        this.deps = []
     }
 
 }
