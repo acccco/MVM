@@ -77,14 +77,5 @@ export class MVM extends Event {
             new Computed(vm, key, vm.$options.computed[key])
         }
 
-        let components = vm._components = {}
-        for (let key in vm.$options.components) {
-            if (R.is(Object, vm.$options.components[key])) {
-                components[key] = vm.$options._base.extend(vm.$options.components[key])
-            } else {
-                components[key] = vm.$options.components[key]
-            }
-        }
-
     }
 }

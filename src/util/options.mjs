@@ -10,6 +10,12 @@ export function mergeOptions(parent, child) {
     // 统一先取 child 中的数据，放到新对象中
     let options = R.mergeAll([{}, parent, child])
 
+    if (child.mixins) {
+        for (let i = 0, l = child.mixins.length; i < l; i++) {
+            options = mergeOptions(options, child.mixins[i])
+        }
+    }
+
     normalizeComponent(child, options._base)
 
     // 合并 data

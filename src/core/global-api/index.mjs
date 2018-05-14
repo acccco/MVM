@@ -1,4 +1,5 @@
 import {initExtend} from "./extend";
+import {initMixin} from "./mixin";
 
 export function initGlobalApi(MVM) {
 
@@ -11,5 +12,8 @@ export function initGlobalApi(MVM) {
 
     // 实现子类生成方法
     initExtend(MVM)
+
+    // 实现全局混入
+    initMixin(MVM)
 
 }
