@@ -8,7 +8,16 @@ export default class Dep {
     }
 
     addSub(sub) {
-        this.subs.push(sub)
+        let flag = false
+        for (let i = 0; i < this.subs.length; i++) {
+            if (this.subs[i].id === sub.id) {
+                flag = true
+                break
+            }
+        }
+        if (!flag) {
+            this.subs.push(sub)
+        }
     }
 
     removeSub(sub) {
