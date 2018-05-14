@@ -9,7 +9,7 @@ export function defineReactive(object, key, value) {
     Object.defineProperty(object, key, {
         configurable: true,
         enumerable: true,
-        get: function () {
+        get() {
             if (Dep.target) {
                 dep.addSub(Dep.target)
                 Dep.target.addDep(dep)
@@ -20,7 +20,7 @@ export function defineReactive(object, key, value) {
             }
             return value
         },
-        set: function (newValue) {
+        set(newValue) {
             if (newValue !== value) {
                 value = newValue
                 dep.notify()

@@ -3,7 +3,8 @@ import {observe} from "../../toolbox/Observe"
 import {Watcher} from "../../toolbox/Watcher"
 import {Computed} from "../../toolbox/Computed"
 import {mergeOptions} from "../../util/options"
-import {proxy, getProvideForInject, initComponents} from "../../util/util"
+import {proxy, getProvideForInject} from "../../util/util"
+import R from "ramda"
 
 let uid = 0
 
@@ -76,8 +77,13 @@ export class MVM extends Event {
             new Computed(vm, key, vm.$options.computed[key])
         }
 
+        let components = vm._components = {}
         for (let key in vm.$options.components) {
-            initComponents(vm, key, vm.$options.components[key])
+            if (R.is(Object, vm.$options.components[key])) {
+                components[key] = vm.$options._base.extend(vm.$options.components[key])
+            } else {
+                components[key] = vm.$options.components[key]
+            }
         }
 
     }
