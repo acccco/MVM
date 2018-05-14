@@ -10,7 +10,7 @@ let index = 0
 
 export function watcherQueue(watcher) {
     const id = watcher.id
-    if (has[id] == null) {
+    if (has[id]) {
         has[id] = true
         if (!flushing) {
             queue.push(watcher)
@@ -22,7 +22,7 @@ export function watcherQueue(watcher) {
             }
             queue.splice(i + 1, 0, watcher)
         }
-        // 队列还没有执行，就执行
+        // 执行队列
         if (!waiting) {
             waiting = true
             flushSchedulerQueue()

@@ -13,7 +13,7 @@ export class Watcher {
         if (options) {
             this.lazy = !!options.lazy
             this.deep = !!options.deep
-            // 仅仅是监听（只要set就触发）还是值变化才触发
+            // 判断 value 是否需要变化才执行 update
             this.ignoreChange = !!options.ignoreChange
         } else {
             this.lazy = this.deep = false
@@ -51,7 +51,7 @@ export class Watcher {
             if (
                 this.ignoreChange ||
                 value !== this.value ||
-                // 深度监听对象,只要是触发了就要执行，不需要判断值有没有变化
+                // 深度监听对象,触发了就要执行，不需要判断值有没有变化
                 this.deep
             ) {
                 // 设置新值
