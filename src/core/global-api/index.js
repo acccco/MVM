@@ -1,5 +1,6 @@
 import {initExtend} from "./extend"
 import {initMixin} from "./mixin"
+import {initUse} from "./use";
 
 export function initGlobalApi(MVM) {
 
@@ -15,5 +16,8 @@ export function initGlobalApi(MVM) {
 
     // 实现全局混入
     initMixin(MVM)
+
+    // 实现扩展
+    initUse(MVM)
 
 }
