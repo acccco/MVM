@@ -3,9 +3,13 @@ import {noop} from "./util"
 
 export function mergeOptions(parent, child) {
 
+    normalizeComputed(parent)
+
     normalizeProps(child)
 
     normalizeInject(child)
+
+    normalizeComputed(child)
 
     // 统一先取 child 中的数据，放到新对象中
     let options = R.mergeAll([{}, parent, child])
@@ -28,7 +32,6 @@ export function mergeOptions(parent, child) {
     options.method = R.merge(parent.method, child.method)
 
     // 合并 computed 同名覆盖
-    normalizeComputed(child)
     options.computed = R.merge(parent.computed, child.computed)
 
     return options
@@ -42,6 +45,11 @@ function mergeData(parentValue = noop, childValue = noop) {
 
 function mergeWatch(parentVal = {}, childVal = {}) {
     let watchers = R.clone(parentVal)
+    for (let key in watchers) {
+        if (!R.is(Array, watchers[key])) {
+            watchers[key] = [normalizeWatcher(watchers[key])]
+        }
+    }
     for (let key in childVal) {
         let parent = watchers[key]
         let child = normalizeWatcher(childVal[key])
@@ -53,6 +61,14 @@ function mergeWatch(parentVal = {}, childVal = {}) {
     return watchers
 }
 
+/**
+ *
+ * @param watcher
+ * returns {
+ *   handler: Function,
+ *   ...
+ * }
+ */
 function normalizeWatcher(watcher) {
     if (R.is(Function, watcher)) {
         return {
@@ -65,10 +81,12 @@ function normalizeWatcher(watcher) {
 /**
  * 处理 props 返回统一结构
  * @param options
- * return [{
- *     type: xxx
+ * returns {
+ *   key: {
+ *     type: String|Number|...,
  *     ...
- * }]
+ *   }
+ * }
  */
 
 function normalizeProps(options) {
@@ -90,10 +108,12 @@ function normalizeProps(options) {
 /**
  * 处理 inject 返回统一结构
  * @param options
- * return [{
- *     from: xxx
+ * returns {
+ *   key: {
+ *     from: xxx,
  *     ...
- * }]
+ *   }
+ * }
  */
 
 function normalizeInject(options) {
@@ -116,7 +136,7 @@ function normalizeInject(options) {
 function normalizeComponent(options, MVM) {
     let components = options.components
     for (let key in components) {
-        if (R.is(Object, components[key])) {
+        if (!R.is(Function, components[key])) {
             components[key] = MVM.extend(components[key])
         }
     }

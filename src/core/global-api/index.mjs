@@ -1,10 +1,10 @@
-import {initExtend} from "./extend";
-import {initMixin} from "./mixin";
+import {initExtend} from "./extend"
+import {initMixin} from "./mixin"
 
 export function initGlobalApi(MVM) {
 
     // 设置 option 为一个对象
-    MVM.options = Object.create(null)
+    MVM.options = {}
 
     // 保存原始 Vue 类对象
     MVM.options._base = MVM
