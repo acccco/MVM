@@ -30,8 +30,8 @@ export class MVM extends Event {
         vm.$root = parent ? parent.$root : vm
         vm.$children = []
 
-        for (let key in vm.$options.methods) {
-            vm[key] = vm.$options.methods[key].bind(vm)
+        for (let key in vm.$options.method) {
+            vm[key] = vm.$options.method[key].bind(vm)
         }
 
         let data = vm._data = vm.$options.data ? vm.$options.data.call(vm) : {}

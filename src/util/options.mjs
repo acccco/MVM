@@ -25,9 +25,10 @@ export function mergeOptions(parent, child) {
     options.watch = mergeWatch(parent.watch, child.watch)
 
     // 合并 methods 同名覆盖
-    options.methods = R.merge(parent.methods, child.methods)
+    options.method = R.merge(parent.method, child.method)
 
     // 合并 computed 同名覆盖
+    normalizeComputed(child)
     options.computed = R.merge(parent.computed, child.computed)
 
     return options
@@ -45,9 +46,9 @@ function mergeWatch(parentVal = {}, childVal = {}) {
         let parent = watchers[key]
         let child = normalizeWatcher(childVal[key])
         if (!parent) {
-            parent = []
+            parent = watchers[key] = []
         }
-        watchers[key] = parent.push(child)
+        parent.push(child)
     }
     return watchers
 }
@@ -117,6 +118,28 @@ function normalizeComponent(options, MVM) {
     for (let key in components) {
         if (R.is(Object, components[key])) {
             components[key] = MVM.extend(components[key])
+        }
+    }
+}
+
+/**
+ * 处理 computed 返回统一结构
+ * @param options
+ * return {
+ *   key: {
+ *     get: Function,
+ *     set: Function
+ *   }
+ * }
+ */
+function normalizeComputed(options) {
+    let computed = options.computed
+    for (let key in computed) {
+        if (R.is(Function, computed[key])) {
+            options.computed[key] = {
+                get: computed[key],
+                set: noop
+            }
         }
     }
 }

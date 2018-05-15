@@ -10,7 +10,7 @@ let index = 0
 
 export function watcherQueue(watcher) {
     const id = watcher.id
-    if (has[id]) {
+    if (!has[id]) {
         has[id] = true
         if (!flushing) {
             queue.push(watcher)
