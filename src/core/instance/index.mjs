@@ -4,7 +4,6 @@ import {Watcher} from "../../toolbox/Watcher"
 import {Computed} from "../../toolbox/Computed"
 import {mergeOptions} from "../../util/options"
 import {proxy, getProvideForInject} from "../../util/util"
-import R from "ramda"
 
 let uid = 0
 
