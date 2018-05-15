@@ -1,7 +1,7 @@
-import R from 'ramda'
+import {mergeAll, merge, clone, is} from 'ramda'
 import {noop} from "./util"
 
-export function mergeOptions(parent, child) {
+export function mergeOptions(parent = {}, child = {}) {
 
     normalizeComputed(parent)
 
@@ -12,7 +12,7 @@ export function mergeOptions(parent, child) {
     normalizeComputed(child)
 
     // 统一先取 child 中的数据，放到新对象中
-    let options = R.mergeAll([{}, parent, child])
+    let options = mergeAll([{}, parent, child])
 
     if (child.mixins) {
         for (let i = 0, l = child.mixins.length; i < l; i++) {
@@ -29,24 +29,24 @@ export function mergeOptions(parent, child) {
     options.watch = mergeWatch(parent.watch, child.watch)
 
     // 合并 methods 同名覆盖
-    options.method = R.merge(parent.method, child.method)
+    options.method = merge(parent.method, child.method)
 
     // 合并 computed 同名覆盖
-    options.computed = R.merge(parent.computed, child.computed)
+    options.computed = merge(parent.computed, child.computed)
 
     return options
 }
 
 function mergeData(parentValue = noop, childValue = noop) {
     return function mergeFnc() {
-        return R.merge(parentValue.call(this), childValue.call(this))
+        return merge(parentValue.call(this), childValue.call(this))
     }
 }
 
 function mergeWatch(parentVal = {}, childVal = {}) {
-    let watchers = R.clone(parentVal)
+    let watchers = clone(parentVal)
     for (let key in watchers) {
-        if (!R.is(Array, watchers[key])) {
+        if (!is(Array, watchers[key])) {
             watchers[key] = [normalizeWatcher(watchers[key])]
         }
     }
@@ -70,7 +70,7 @@ function mergeWatch(parentVal = {}, childVal = {}) {
  * }
  */
 function normalizeWatcher(watcher) {
-    if (R.is(Function, watcher)) {
+    if (is(Function, watcher)) {
         return {
             handler: watcher
         }
@@ -92,7 +92,7 @@ function normalizeWatcher(watcher) {
 function normalizeProps(options) {
     let props = options.props
     let normalProps = options.props = {}
-    if (R.is(Array, props)) {
+    if (is(Array, props)) {
         props.forEach(prop => {
             normalProps[prop] = {
                 type: null
@@ -100,7 +100,7 @@ function normalizeProps(options) {
         })
     } else {
         for (let key in props) {
-            normalProps[key] = R.merge({type: null}, props[key])
+            normalProps[key] = merge({type: null}, props[key])
         }
     }
 }
@@ -118,7 +118,7 @@ function normalizeProps(options) {
 
 function normalizeInject(options) {
     let inject = options.inject
-    if (R.is(Array, inject)) {
+    if (is(Array, inject)) {
         let normalInject = options.inject = {}
         inject.forEach(key => {
             normalInject[key] = {
@@ -136,7 +136,7 @@ function normalizeInject(options) {
 function normalizeComponent(options, MVM) {
     let components = options.components
     for (let key in components) {
-        if (!R.is(Function, components[key])) {
+        if (!is(Function, components[key])) {
             components[key] = MVM.extend(components[key])
         }
     }
@@ -155,7 +155,7 @@ function normalizeComponent(options, MVM) {
 function normalizeComputed(options) {
     let computed = options.computed
     for (let key in computed) {
-        if (R.is(Function, computed[key])) {
+        if (is(Function, computed[key])) {
             options.computed[key] = {
                 get: computed[key],
                 set: noop

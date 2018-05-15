@@ -9,7 +9,8 @@
     "url": "git+https://github.com/acccco/MVM.git"
   },
   "scripts": {
-    "test": "karma start test/karma.config.js"
+    "test": "karma start test/karma.config.js",
+    "build": "webpack"
   },
   "dependencies": {
     "ramda": "^0.25.0"
@@ -23,6 +24,7 @@
     "karma-jasmine": "^1.1.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^3.0.0",
-    "webpack": "^4.8.3"
+    "webpack": "^4.8.3",
+    "webpack-cli": "^2.1.3"
   }
 }

@@ -1,4 +1,4 @@
-import R from 'ramda'
+import {is} from 'ramda'
 
 const seenObjects = new Set()
 
@@ -13,7 +13,7 @@ export function traverse(val) {
 function _traverse(val, seen) {
     let i, keys
     const isA = Array.isArray(val)
-    if ((!isA && !R.is(Object, val)) || Object.isFrozen(val)) {
+    if ((!isA && !is(Object, val)) || Object.isFrozen(val)) {
         return
     }
     if (val.__ob__) {

@@ -7,7 +7,7 @@ import {proxy, getProvideForInject} from "../../util/util"
 
 let uid = 0
 
-export class MVM extends Event {
+export class Mvm extends Event {
     constructor(options) {
         super()
         this.id = uid++
