@@ -22,7 +22,7 @@ module.exports = function (config) {
         singleRun: true,
         frameworks: ['jasmine'],
         files: [
-            './*.js'
+            './options.spec.js'
         ],
         preprocessors: {
             './*.js': ['webpack', 'sourcemap']
