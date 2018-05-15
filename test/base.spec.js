@@ -1,6 +1,8 @@
 import MVM from '../src/index'
 
-let watchTestValue
+let watchTestNum
+let watchTestValue1
+let watchTestValue2
 
 let mvm = new MVM({
     data() {
@@ -8,7 +10,9 @@ let mvm = new MVM({
             testNum: 1,
             watcherNum: 1,
             objTest: {
-                param: 'param'
+                param: 'param',
+                watcherValue1: 'aco',
+                watcherValue2: 'aco'
             }
         }
     },
@@ -24,7 +28,16 @@ let mvm = new MVM({
     },
     watch: {
         'watcherNum'(newValue) {
-            watchTestValue = newValue
+            watchTestNum = newValue
+        },
+        'objTest.watcherValue1'(newValue) {
+            watchTestValue1 = newValue
+        },
+        'objTest': {
+            handler(newValue) {
+                watchTestValue2 = 'deepChange'
+            },
+            deep: true
         }
     }
 })
@@ -43,9 +56,19 @@ describe('base test', function () {
         expect(mvm.doubleNum).toEqual(2)
     })
 
-    it(' expect watchTestValue equal 2 ', () => {
+    it(' expect watchTestNum equal 2 ', () => {
         mvm.watcherNum = 2
-        expect(watchTestValue).toEqual(2)
+        expect(watchTestNum).toEqual(2)
+    })
+
+    it(' expect watchTestValue1 equal 2 ', () => {
+        mvm.objTest.watcherValue1 = 'acccco'
+        expect(watchTestValue1).toEqual('acccco')
+    })
+
+    it(' expect watchTestValue2 equal deepChange ', () => {
+        mvm.objTest.watcherValue2 = 'acccco'
+        expect(watchTestValue2).toEqual('deepChange')
     })
 
     it(' expect methodTest() equal methodTest ', () => {

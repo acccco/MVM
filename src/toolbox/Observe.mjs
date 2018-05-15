@@ -33,9 +33,9 @@ export class Observer {
 
     constructor(value) {
         this.id = uid++
+        this.dep = new Dep()
         // 处理数组
         if (Array.isArray(value)) {
-            this.dep = new Dep()
             const augment = ('__proto__' in {})
                 ? protoAugment
                 : copyAugment

@@ -13,7 +13,7 @@ export function traverse(val) {
 function _traverse(val, seen) {
     let i, keys
     const isA = Array.isArray(val)
-    if ((!isA && R.is(Object, val)) || Object.isFrozen(val)) {
+    if ((!isA && !R.is(Object, val)) || Object.isFrozen(val)) {
         return
     }
     if (val.__ob__) {

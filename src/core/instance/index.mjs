@@ -65,11 +65,11 @@ export class MVM extends Event {
         }
 
         for (let key in vm.$options.watch) {
-            new Watcher(vm, () => {
-                return key.split('.').reduce((obj, name) => obj[name], vm)
-            }, (newValue, oldValue) => {
-                vm.$options.watch[key].forEach(({handler}) => handler(newValue, oldValue))
-            }, vm.$options.watch[key])
+            vm.$options.watch[key].forEach(option => {
+                new Watcher(vm, () => {
+                    return key.split('.').reduce((obj, name) => obj[name], vm)
+                }, option.handler, option)
+            })
         }
 
         for (let key in vm.$options.computed) {
