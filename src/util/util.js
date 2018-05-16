@@ -1,3 +1,7 @@
+import {mergeAll, merge, clone, is, always} from 'ramda'
+
+export {mergeAll, merge, clone, is} from 'ramda'
+
 export function proxy(target, sourceKey, key) {
     let sharedPropertyDefinition = {
         enumerable: true,
@@ -16,7 +20,7 @@ export function proxy(target, sourceKey, key) {
     Object.defineProperty(target, key, sharedPropertyDefinition)
 }
 
-export function proxyObject(target, proxyObj) {
+export function proxyObject(target, proxyObj, cb = always(true)) {
     let sharedPropertyDefinition = {
         enumerable: true,
         configurable: true,
@@ -26,6 +30,10 @@ export function proxyObject(target, proxyObj) {
         }
     }
     for (let key in proxyObj) {
+        let needProxy = cb(key)
+        if (needProxy === false) {
+            break
+        }
         sharedPropertyDefinition.get = function proxyGetter() {
             return proxyObj[key]
         }
@@ -51,4 +59,9 @@ export function getProvideForInject(ctx, key, defaultValue) {
         parent = parent.$parent
     }
     return value
+}
+
+export function warn(msg, vm) {
+    console.log(msg)
+    console.log(vm)
 }

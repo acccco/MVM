@@ -1,5 +1,4 @@
-import {mergeAll, merge, clone, is} from 'ramda'
-import {noop} from "./util"
+import {noop, mergeAll, merge, clone, is} from "./util"
 
 export function mergeOptions(parent = {}, child = {}) {
 
