@@ -1,7 +1,7 @@
 import {Event} from "../../toolbox/Event"
 import {mergeOptions} from "../../util/options"
 import {initState} from "./state";
-import {initProperties} from "./properties";
+import {initProperties} from "./properties"
 
 let uid = 0
 
