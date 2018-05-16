@@ -1,4 +1,4 @@
-import {mergeAll, merge, clone, is, always} from 'ramda'
+import {always} from 'ramda'
 
 export {mergeAll, merge, clone, is} from 'ramda'
 
@@ -32,7 +32,7 @@ export function proxyObject(target, proxyObj, cb = always(true)) {
     for (let key in proxyObj) {
         let needProxy = cb(key)
         if (needProxy === false) {
-            break
+            continue
         }
         sharedPropertyDefinition.get = function proxyGetter() {
             return proxyObj[key]

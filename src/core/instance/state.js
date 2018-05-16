@@ -5,6 +5,12 @@ import {observe} from "../../toolbox/Observe"
 
 export function initState(vm) {
     let opts = vm.$options
+
+    vm._inject = {}
+    vm._prop = {}
+    vm._data = {}
+    vm._provide = {}
+    
     if (opts.inject) initInject(vm)
     if (opts.prop) initProp(vm)
     if (opts.method) initMethod(vm)
