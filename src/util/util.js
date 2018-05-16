@@ -16,6 +16,26 @@ export function proxy(target, sourceKey, key) {
     Object.defineProperty(target, key, sharedPropertyDefinition)
 }
 
+export function proxyObject(target, proxyObj) {
+    let sharedPropertyDefinition = {
+        enumerable: true,
+        configurable: true,
+        get() {
+        },
+        set() {
+        }
+    }
+    for (let key in proxyObj) {
+        sharedPropertyDefinition.get = function proxyGetter() {
+            return proxyObj[key]
+        }
+        sharedPropertyDefinition.set = function proxySetter(val) {
+            proxyObj[key] = val
+        }
+        Object.defineProperty(target, key, sharedPropertyDefinition)
+    }
+}
+
 export function noop() {
 
 }

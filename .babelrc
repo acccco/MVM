@@ -1,0 +1,12 @@
+{
+  "plugins": [
+    [
+      "import",
+      {
+        "libraryName": "ramda",
+        "libraryDirectory": "src",
+        "camel2DashComponentName": false
+      }
+    ]
+  ]
+}

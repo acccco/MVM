@@ -1,13 +1,12 @@
 var path = require('path');
 var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
-var webpack = require('webpack');
 
 module.exports = {
     mode: 'production',
     entry: './src/index.js',
     output: {
         filename: 'Mvm.js',
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'package'),
         library: "Mvm",
         libraryTarget: 'umd',
         libraryExport: "default"
@@ -21,6 +20,6 @@ module.exports = {
         ]
     },
     plugins: [
-        new UglifyJsPlugin(),
+        new UglifyJsPlugin()
     ]
 };
