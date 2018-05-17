@@ -7,7 +7,7 @@ var createElement = vnode.vDom.create
 
 var html = `<div class="base">
     <p v-bind:class="{on:b}" class="base">{{str1}}</p>
-    <p v-bind:class="{on:a}" class="base">{{method()}}</p>
+    <p v-bind:class="{on:a}" class="base">{{method()}}{{str2}}</p>
 </div>`
 
 var result = parse.parse(html)
@@ -27,7 +27,7 @@ var tree = {
     rootNode: null
 }
 
-var textRe = /{{(\S*)}}/g
+var textRe = /{{([^\s{}]*)}}/g
 
 function getVnode(ast, ctx) {
     if (ast.length === 0) {
