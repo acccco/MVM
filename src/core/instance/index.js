@@ -2,7 +2,7 @@ import {Event} from "../../toolbox/Event"
 import {mergeOptions} from "../../util/options"
 import {initState} from "./state";
 import {initProperties} from "./properties"
-import {initPatch} from "./patch";
+import {Watcher} from "../../toolbox/Watcher";
 
 let uid = 0
 
@@ -24,8 +24,10 @@ export class Mvm extends Event {
         initProperties(vm)
         initState(vm)
 
-        initPatch(vm)
+    }
 
+    $watch(getter, callback, option) {
+        return new Watcher(this, getter, callback, option)
     }
 
 }

@@ -10,7 +10,7 @@ var replaceTextRe = /{{([^\s{}]*)}}/g
 var bindPropRe = /(v-bind)?:(\S+)/
 
 function formatJson(json) {
-    return json.replace(/\s*(['"])?\s*([a-zA-Z0-9]+)\s*(['"])?\s*:\s*(['"])?\s*([a-zA-Z0-9]+)\s*(['"])?\s*/g, '"$2":"$5"')
+    return json.replace(/\s*(['"])?\s*([a-zA-Z0-9]+)\s*(['"])?\s*:\s*(['"])?\s*([^\s{}]+)\s*(['"])?\s*/g, '"$2":"$5"')
 }
 
 function getCtxParam(path, ctx) {
@@ -22,8 +22,13 @@ function getClassName(attr, ctx) {
     var className = ''
 
     if ('class' in attr) {
-        className += attr['class']
+        if (replaceTextRe.test(attr['class'])) {
+            className += getText(attr['class'], ctx)
+        } else {
+            className += attr['class']
+        }
     }
+
     var classAttr = ''
     if ('v-bind:class' in attr) {
         classAttr = 'v-bind:class'
@@ -31,11 +36,13 @@ function getClassName(attr, ctx) {
     if (':class' in attr) {
         classAttr = ':class'
     }
+
     if (classAttr) {
         var classValue = attr[classAttr]
         if (pathRe.test(classValue)) {
             className += ` ${getCtxParam(classValue, ctx)}`
         } else {
+            console.log(formatJson(attr[classAttr]))
             let obj = JSON.parse(formatJson(attr[classAttr]))
             for (var key in obj) {
                 if (getCtxParam(obj[key], ctx)) {
@@ -48,6 +55,9 @@ function getClassName(attr, ctx) {
     return className
 }
 
+export function runCode(str, ctx) {
+    return (new Function('return "' + str + '"').call(ctx))
+}
 
 function getText(str, ctx) {
     return (new Function('return "' + str.replace(replaceTextRe, '"+this.$1+"') + '"').call(ctx))

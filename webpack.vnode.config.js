@@ -3,7 +3,7 @@ var UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 
 module.exports = {
     mode: 'production',
-    entry: './vnode/index.js',
+    entry: './vnode/src/index.js',
     output: {
         filename: 'vnode.js',
         path: path.resolve(__dirname, 'package'),
