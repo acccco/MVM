@@ -1,5 +1,5 @@
 {
-  "name": "MVM",
+  "name": "RD",
   "version": "1.0.0",
   "main": "src/index.js",
   "author": "aco <wwsxuan@163.com>",
@@ -11,12 +11,10 @@
   "scripts": {
     "test": "karma start test/karma.config.js",
     "build": "webpack --config webpack.config.js",
-    "vnode": "webpack --config webpack.vnode.config.js",
     "start:demo": "webpack-dev-server --config webpack.demo.config.js"
   },
   "dependencies": {
     "html-parse-stringify": "^1.0.2",
-    "html-webpack-plugin": "^3.2.0",
     "ramda": "^0.25.0",
     "virtual-dom": "^2.1.1"
   },
@@ -26,6 +24,7 @@
     "babel-plugin-import": "^1.7.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
+    "html-webpack-plugin": "^3.2.0",
     "jasmine": "^3.1.0",
     "karma": "^2.0.2",
     "karma-chrome-launcher": "^2.2.0",

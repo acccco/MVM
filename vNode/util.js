@@ -50,7 +50,6 @@ export function getClassName(attr, ctx) {
 }
 
 export function getProperties(attr, ctx) {
-    console.log(attr)
     let prop = {}
 
     for (let key in attr) {
