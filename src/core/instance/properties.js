@@ -1,3 +1,6 @@
+import {LIFECYCLE_HOOKS} from "./lifecycle";
+
+
 export function initProperties(rd) {
     let parent = rd.$options.parent
     if (parent) {
@@ -9,4 +12,8 @@ export function initProperties(rd) {
 
     rd._watcher = []
     rd._computed = []
+
+    LIFECYCLE_HOOKS.forEach(name => {
+        rd[name] = []
+    })
 }

@@ -1,14 +1,14 @@
 var template = `<p :class="{on:cFlag,off:!cFlag}">{{test}}</p>`
 
-Mvm.use(vnode, Mvm)
+RD.use(vnode, RD)
 
-var mvm = new Mvm({
+var rd = new RD({
     data() {
         return {
             test: 'test',
-            cFlag: true
+            flag: true
         }
     }
 })
 
-mvm.$mount(document.getElementById('app'), template)
+rd.$mount(document.getElementById('app'), template)

@@ -17,12 +17,12 @@ export class RD extends Event {
 
     _init(options) {
         let rd = this
-        callHook(rd, 'beforeCreate')
 
         rd.$options = mergeOptions(
             this.constructor.options,
             options
         )
+        callHook(rd, 'beforeCreate')
 
         initProperties(rd)
         initState(rd)
