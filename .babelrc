@@ -1,14 +1,8 @@
 {
   "presets": [
-    [
-      "env",
-      {
-        "modules": false
-      }
-    ]
+    "env"
   ],
   "plugins": [
-    "transform-remove-strict-mode",
     [
       "import",
       {
@@ -17,5 +11,8 @@
         "camel2DashComponentName": false
       }
     ]
+  ],
+  "ignore": [
+    "vnode/outStrictMode.js"
   ]
 }

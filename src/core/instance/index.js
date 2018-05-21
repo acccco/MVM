@@ -4,6 +4,7 @@ import {initState} from "./state"
 import {initProperties} from "./properties"
 import {Watcher} from "../../toolbox/Watcher"
 import {callHook} from "./lifecycle"
+import {warn} from "../../util/util";
 
 let uid = 0
 
@@ -27,6 +28,16 @@ export class RD extends Event {
 
         initState(rd)
         callHook(rd, 'created')
+
+        rd._proxy = new Proxy(rd, {
+            get(target, key) {
+                console.log('get in')
+                if (typeof key === 'string' && !(key in target)) {
+                    warn(`data/prop/method 下未定义 ${key}`, target)
+                }
+                return target[key]
+            }
+        })
 
     }
 

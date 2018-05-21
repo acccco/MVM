@@ -1,3 +1,5 @@
+import {runCode} from "./outStrictMode"
+
 export let pathRe = /^[\w.]+$/
 export let runCodeRe = /{{([\s\S]*)}}/g
 export let bindPropRe = /(v-bind)?:(\S+)/
@@ -48,6 +50,7 @@ export function getClassName(attr, ctx) {
 }
 
 export function getProperties(attr, ctx) {
+    console.log(attr)
     let prop = {}
 
     for (let key in attr) {

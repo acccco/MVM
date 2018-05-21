@@ -1,6 +1,7 @@
 import {VNode, VText, create, diff, patch} from 'virtual-dom'
-import {parse} from 'html-parse-stringify'
+import {parse} from '../html-parse-stringify'
 import {getProperties, runCodeRe} from "./util"
+import {runCode} from "./outStrictMode"
 
 function getVnode(ast, ctx) {
     if (ast.length === 0) {
@@ -26,8 +27,8 @@ function getVnode(ast, ctx) {
 }
 
 export default {
-    install(Mvm) {
-        Mvm.prototype.$mount = function (el, template) {
+    install(RD) {
+        RD.prototype.$mount = function (el, template) {
             this.ASTtemplate = parse(template)
             this.$watch(() => {
                 return getVnode(this.ASTtemplate, this)[0]
@@ -37,8 +38,8 @@ export default {
             this.nodeTree = getVnode(this.ASTtemplate, this)[0]
             this.rootNode = create(this.nodeTree)
             el.appendChild(this.rootNode)
-        };
-        Mvm.prototype.$patch = function (newTree) {
+        }
+        RD.prototype.$patch = function (newTree) {
             newTree = newTree ? newTree : getVnode(this.ASTtemplate, this)[0]
             let patches = diff(this.nodeTree, newTree)
             this.rootNode = patch(this.rootNode, patches)
