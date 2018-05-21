@@ -3,11 +3,11 @@ import {mergeOptions} from "../../util/options"
 import {initState} from "./state"
 import {initProperties} from "./properties"
 import {Watcher} from "../../toolbox/Watcher"
-import {callHook} from "./lifecycle";
+import {callHook} from "./lifecycle"
 
 let uid = 0
 
-export class Mvm extends Event {
+export class RD extends Event {
     constructor(options) {
         super()
         this.id = uid++
@@ -16,17 +16,17 @@ export class Mvm extends Event {
     }
 
     _init(options) {
-        let vm = this
-        callHook(vm, 'beforeCreate')
+        let rd = this
+        callHook(rd, 'beforeCreate')
 
-        vm.$options = mergeOptions(
+        rd.$options = mergeOptions(
             this.constructor.options,
             options
         )
 
-        initProperties(vm)
-        initState(vm)
-        callHook(vm, 'created')
+        initProperties(rd)
+        initState(rd)
+        callHook(rd, 'created')
 
     }
 
@@ -36,31 +36,31 @@ export class Mvm extends Event {
 
     $destory() {
         if (this.active) {
-            let vm = this
-            callHook(vm, 'beforeDestroy')
+            let rd = this
+            callHook(rd, 'beforeDestroy')
 
-            let parent = vm.$parent
-            parent.$children.splice(parent.$children.indexOf(vm), 1)
-            vm.$parent = null
+            let parent = rd.$parent
+            parent.$children.splice(parent.$children.indexOf(rd), 1)
+            rd.$parent = null
 
-            while (vm._watch.length) {
-                let watcher = vm._watch.shift()
+            while (rd._watcher.length) {
+                let watcher = rd._watcher.shift()
                 watcher.teardown()
             }
 
-            while (vm._computed.length) {
-                let computed = vm._computed.shift()
+            while (rd._computed.length) {
+                let computed = rd._computed.shift()
                 computed.teardown()
             }
 
-            vm.$off()
+            rd.$off()
 
-            while (vm.$children.length !== 0) {
-                let child = vm.$children.pop()
+            while (rd.$children.length !== 0) {
+                let child = rd.$children.pop()
                 child.$destory()
             }
 
-            callHook(vm, 'destroyed')
+            callHook(rd, 'destroyed')
             this.active = false
         }
 

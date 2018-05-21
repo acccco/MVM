@@ -5,12 +5,12 @@ export const LIFECYCLE_HOOKS = [
     'destroyed'
 ]
 
-export function callHook(vm, hook) {
-    const handlers = vm.$options[hook]
+export function callHook(rd, hook) {
+    const handlers = rd.$options[hook]
     if (handlers) {
         for (let i = 0, j = handlers.length; i < j; i++) {
-            handlers[i].call(vm)
+            handlers[i].call(rd)
         }
     }
-    vm.$emit('hook:' + hook)
+    rd.$emit('hook:' + hook)
 }

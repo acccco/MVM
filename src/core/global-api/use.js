@@ -1,5 +1,5 @@
-export function initUse(Mvm) {
-    Mvm.use = function (plugin, ...args) {
+export function initUse(RD) {
+    RD.use = function (plugin, ...args) {
         // 保存已生效的插件
         const installedPlugins = (this._installedPlugins || (this._installedPlugins = []))
         if (installedPlugins.indexOf(plugin) > -1) {

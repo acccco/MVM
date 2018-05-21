@@ -1,12 +1,12 @@
-export function initProperties(vm) {
-    let parent = vm.$options.parent
+export function initProperties(rd) {
+    let parent = rd.$options.parent
     if (parent) {
-        parent.$children.push(vm)
+        parent.$children.push(rd)
     }
-    vm.$parent = parent
-    vm.$root = parent ? parent.$root : vm
-    vm.$children = []
+    rd.$parent = parent
+    rd.$root = parent ? parent.$root : rd
+    rd.$children = []
 
-    vm._watch = []
-    vm._computed = []
+    rd._watcher = []
+    rd._computed = []
 }

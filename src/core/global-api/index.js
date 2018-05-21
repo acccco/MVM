@@ -1,23 +1,23 @@
 import {initExtend} from "./extend"
 import {initMixin} from "./mixin"
-import {initUse} from "./use";
+import {initUse} from "./use"
 
-export function initGlobalApi(Mvm) {
+export function initGlobalApi(RD) {
 
     // 设置 option 为一个对象
-    Mvm.options = {}
+    RD.options = {}
 
     // 保存原始 Vue 类对象
-    Mvm.options._base = Mvm
-    Mvm.options.components = {}
+    RD.options._base = RD
+    RD.options.components = {}
 
     // 实现子类生成方法
-    initExtend(Mvm)
+    initExtend(RD)
 
     // 实现全局混入
-    initMixin(Mvm)
+    initMixin(RD)
 
     // 实现扩展
-    initUse(Mvm)
+    initUse(RD)
 
 }

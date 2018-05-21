@@ -1,7 +1,7 @@
 import {mergeOptions} from "../../util/options"
 
-export function initExtend(Mvm) {
-    Mvm.extend = function (extendOptions) {
+export function initExtend(RD) {
+    RD.extend = function (extendOptions) {
         const Super = this
 
         class Sub extends Super {
