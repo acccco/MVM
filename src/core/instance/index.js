@@ -22,9 +22,9 @@ export class RD extends Event {
             this.constructor.options,
             options
         )
+        initProperties(rd)
         callHook(rd, 'beforeCreate')
 
-        initProperties(rd)
         initState(rd)
         callHook(rd, 'created')
 

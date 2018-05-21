@@ -11,7 +11,7 @@ var webpackConfig = {
             }
         ]
     },
-    devtool: '#inline-source-map'
+    devtool: '#source-map'
 }
 
 // shared config for all unit tests
@@ -22,7 +22,7 @@ module.exports = function (config) {
         singleRun: true,
         frameworks: ['jasmine'],
         files: [
-            './*.spec.js'
+            './base.spec.js'
         ],
         preprocessors: {
             './*.js': ['webpack', 'sourcemap']

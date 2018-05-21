@@ -15,7 +15,7 @@ export function mergeOptions(parent = {}, child = {}) {
     let options = mergeAll([{}, parent, child])
 
     LIFECYCLE_HOOKS.forEach(name => {
-        options[name] = mergeLifecycle(options, parent[name], child[name], name)
+        mergeLifecycle(options, parent[name], child[name], name)
     })
 
     if (child.mixins) {
@@ -66,7 +66,6 @@ function mergeWatch(parentVal = {}, childVal = {}) {
 }
 
 function mergeLifecycle(options, parentVal, childVal, name) {
-    options[name] = []
     if (parentVal) {
         options[name].push(parentVal)
     }

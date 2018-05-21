@@ -1,10 +1,10 @@
-import MVM from '../src/index'
+import RD from '../src/index'
 
 let watchTestNum
 let watchTestValue1
 let watchTestValue2
 
-let mvm = new MVM({
+let rd = new RD({
     data() {
         return {
             testNum: 1,
@@ -44,35 +44,35 @@ let mvm = new MVM({
 
 describe('base test', function () {
 
-    it(' expect mvm.testNum equal 1 ', () => {
-        expect(mvm.testNum).toEqual(1)
+    it(' expect rd.testNum equal 1 ', () => {
+        expect(rd.testNum).toEqual(1)
     })
 
-    it(' expect mvm.objTest.param equal param ', () => {
-        expect(mvm.objTest.param).toEqual('param')
+    it(' expect rd.objTest.param equal param ', () => {
+        expect(rd.objTest.param).toEqual('param')
     })
 
-    it(' expect mvm.doubleNum equal 2 ', () => {
-        expect(mvm.doubleNum).toEqual(2)
+    it(' expect rd.doubleNum equal 2 ', () => {
+        expect(rd.doubleNum).toEqual(2)
     })
 
     it(' expect watchTestNum equal 2 ', () => {
-        mvm.watcherNum = 2
+        rd.watcherNum = 2
         expect(watchTestNum).toEqual(2)
     })
 
     it(' expect watchTestValue1 equal 2 ', () => {
-        mvm.objTest.watcherValue1 = 'acccco'
+        rd.objTest.watcherValue1 = 'acccco'
         expect(watchTestValue1).toEqual('acccco')
     })
 
     it(' expect watchTestValue2 equal deepChange ', () => {
-        mvm.objTest.watcherValue2 = 'acccco'
+        rd.objTest.watcherValue2 = 'acccco'
         expect(watchTestValue2).toEqual('deepChange')
     })
 
     it(' expect methodTest() equal methodTest ', () => {
-        expect(mvm.methodTest()).toEqual('methodTest')
+        expect(rd.methodTest()).toEqual('methodTest')
     })
 
 })

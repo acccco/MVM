@@ -49,7 +49,6 @@ function initProp(rd) {
 function initMethod(rd) {
     for (let key in rd.$options.method) {
         let usedType
-        console.log(rd._inject, rd._prop)
         if (key in rd._inject) usedType = 'inject'
         if (key in rd._prop) usedType = 'prop'
         if (usedType) {
@@ -93,7 +92,7 @@ function initComputed(rd) {
 function initWatch(rd) {
     for (let key in rd.$options.watch) {
         rd.$options.watch[key].forEach(option => {
-            rd._watch.push(new Watcher(rd, () => {
+            rd._watcher.push(new Watcher(rd, () => {
                 return key.split('.').reduce((obj, name) => obj[name], rd)
             }, option.handler, option))
         })
