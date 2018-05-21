@@ -12,11 +12,6 @@ function getVnode(ast, ctx) {
         if (item.type === 'text') {
             if (item.content.trim()) {
                 if (runCodeRe.test(item.content)) {
-                    ctx.$watch(() => {
-                        return runCode(item.content.replace(runCodeRe, '$1'), ctx)
-                    }, () => {
-                        ctx.$patch()
-                    })
                     children.push(new VText(runCode(item.content.replace(runCodeRe, '$1'), ctx)))
                 } else {
                     children.push(new VText(item.content))
@@ -34,12 +29,17 @@ export default {
     install(Mvm) {
         Mvm.prototype.$mount = function (el, template) {
             this.ASTtemplate = parse(template)
+            this.$watch(() => {
+                return getVnode(this.ASTtemplate, this)[0]
+            }, (newTree) => {
+                this.$patch(newTree)
+            })
             this.nodeTree = getVnode(this.ASTtemplate, this)[0]
             this.rootNode = create(this.nodeTree)
             el.appendChild(this.rootNode)
         };
-        Mvm.prototype.$patch = function () {
-            let newTree = getVnode(this.ASTtemplate, this)[0]
+        Mvm.prototype.$patch = function (newTree) {
+            newTree = newTree ? newTree : getVnode(this.ASTtemplate, this)[0]
             let patches = diff(this.nodeTree, newTree)
             this.rootNode = patch(this.rootNode, patches)
             this.nodeTree = newTree
