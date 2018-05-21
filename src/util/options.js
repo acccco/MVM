@@ -1,4 +1,5 @@
 import {noop, mergeAll, merge, clone, is} from "./util"
+import {LIFECYCLE_HOOKS} from '../core/instance/lifecycle'
 
 export function mergeOptions(parent = {}, child = {}) {
 
@@ -12,6 +13,10 @@ export function mergeOptions(parent = {}, child = {}) {
 
     // 统一先取 child 中的数据，放到新对象中
     let options = mergeAll([{}, parent, child])
+
+    LIFECYCLE_HOOKS.forEach(name => {
+        options[name] = mergeLifecycle(options, parent[name], child[name], name)
+    })
 
     if (child.mixins) {
         for (let i = 0, l = child.mixins.length; i < l; i++) {
@@ -60,10 +65,20 @@ function mergeWatch(parentVal = {}, childVal = {}) {
     return watchers
 }
 
+function mergeLifecycle(options, parentVal, childVal, name) {
+    options[name] = []
+    if (parentVal) {
+        options[name].push(parentVal)
+    }
+    if (childVal) {
+        options[name].push(childVal)
+    }
+}
+
 /**
  *
  * @param watcher
- * returns {
+ * return {
  *   handler: Function,
  *   ...
  * }
@@ -80,7 +95,7 @@ function normalizeWatcher(watcher) {
 /**
  * 处理 props 返回统一结构
  * @param options
- * returns {
+ * return {
  *   key: {
  *     type: String|Number|...,
  *     ...

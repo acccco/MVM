@@ -1,6 +1,6 @@
 import {VNode, VText, create, diff, patch} from 'virtual-dom'
 import {parse} from 'html-parse-stringify'
-import {getProperties, runCode, runCodeRe} from "./util"
+import {getProperties, runCodeRe} from "./util"
 
 function getVnode(ast, ctx) {
     if (ast.length === 0) {
@@ -13,11 +13,11 @@ function getVnode(ast, ctx) {
             if (item.content.trim()) {
                 if (runCodeRe.test(item.content)) {
                     ctx.$watch(() => {
-                        return runCode(item.content, ctx)
+                        return runCode(item.content.replace(runCodeRe, '$1'), ctx)
                     }, () => {
                         ctx.$patch()
                     })
-                    children.push(new VText(runCode(item.content, ctx)))
+                    children.push(new VText(runCode(item.content.replace(runCodeRe, '$1'), ctx)))
                 } else {
                     children.push(new VText(item.content))
                 }

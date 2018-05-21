@@ -6,4 +6,7 @@ export function initProperties(vm) {
     vm.$parent = parent
     vm.$root = parent ? parent.$root : vm
     vm.$children = []
+
+    vm._watch = []
+    vm._computed = []
 }

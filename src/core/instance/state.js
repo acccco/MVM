@@ -10,7 +10,7 @@ export function initState(vm) {
     vm._prop = {}
     vm._data = {}
     vm._provide = {}
-    
+
     if (opts.inject) initInject(vm)
     if (opts.prop) initProp(vm)
     if (opts.method) initMethod(vm)
@@ -86,17 +86,16 @@ function initComputed(vm) {
             warn(`${usedType} 下已有 ${key} 属性`, vm)
             break
         }
-
-        new Computed(vm, key, vm.$options.computed[key])
+        vm._computed.push(new Computed(vm, key, vm.$options.computed[key]))
     }
 }
 
 function initWatch(vm) {
     for (let key in vm.$options.watch) {
         vm.$options.watch[key].forEach(option => {
-            new Watcher(vm, () => {
+            vm._watch.push(new Watcher(vm, () => {
                 return key.split('.').reduce((obj, name) => obj[name], vm)
-            }, option.handler, option)
+            }, option.handler, option))
         })
     }
 }

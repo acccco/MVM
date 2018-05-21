@@ -9,11 +9,13 @@ export class Computed {
         this.ctx = ctx
         this.key = key
         this.option = option
+        this.active = true
+        this.watcher = null
         this.init()
     }
 
     init() {
-        let watcher = new Watcher(
+        let watcher = this.watcher = new Watcher(
             this.ctx,
             this.option.get || noop,
             noop,
@@ -31,5 +33,11 @@ export class Computed {
                 return watcher.value
             }
         })
+    }
+
+    teardown() {
+        if (this.active) {
+            this.watcher.teardown()
+        }
     }
 }

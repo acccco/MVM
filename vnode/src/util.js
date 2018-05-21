@@ -3,7 +3,7 @@ export let runCodeRe = /{{([\s\S]*)}}/g
 export let bindPropRe = /(v-bind)?:(\S+)/
 
 export function formatJson(json) {
-    return json.replace(/\s*(['"])?\s*([a-zA-Z0-9]+)\s*(['"])?\s*:\s*(['"])?\s*([^\s{}]+)\s*(['"])?\s*/g, '"$2":"$5"')
+    return json.replace(/\s*(['"])?\s*([a-zA-Z0-9]+)\s*(['"])?\s*:\s*(['"])?\s*([^\s{},]+)\s*(['"])?\s*/g, '"$2":"$5"')
 }
 
 export function getCtxParam(path, ctx) {
@@ -16,7 +16,7 @@ export function getClassName(attr, ctx) {
 
     if ('class' in attr) {
         if (runCodeRe.test(attr['class'])) {
-            className += runCode(attr['class'], ctx)
+            className += runCode(attr['class'].replace(runCodeRe, '$1'), ctx)
         } else {
             className += attr['class']
         }
@@ -47,12 +47,6 @@ export function getClassName(attr, ctx) {
     return className
 }
 
-export function runCode(str, ctx) {
-    with (ctx) {
-        return eval(str)
-    }
-}
-
 export function getProperties(attr, ctx) {
     let prop = {}
 
@@ -66,7 +60,7 @@ export function getProperties(attr, ctx) {
 
         if (!bindPropRe.test(key)) {
             if (runCodeRe.test(attr[key])) {
-                prop[key] = runCode(attr[key], ctx)
+                prop[key] = runCode(attr[key].replace(runCodeRe, '$1'), ctx)
             } else {
                 prop[key] = attr[key]
             }

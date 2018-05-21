@@ -4,11 +4,16 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-        .on{
+        .on {
             background: #000;
         }
-        .off{
+
+        .off {
             background: #123;
+        }
+
+        p {
+            color: #fff;
         }
     </style>
 </head>
@@ -17,5 +22,12 @@
 </body>
 <script src="../package/Mvm.js"></script>
 <script src="../package/vnode.js"></script>
+<script>
+    window.runCode = function (str, ctx) {
+        with (ctx) {
+            return eval(str);
+        }
+    }
+</script>
 <script src="./test.js"></script>
 </html>
