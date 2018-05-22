@@ -61,6 +61,25 @@ export function getProvideForInject(ctx, key, defaultValue) {
     return value
 }
 
+export const allowedGlobals = makeMap(
+    'Infinity,undefined,NaN,isFinite,isNaN,' +
+    'parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,' +
+    'Math,Number,Date,Array,Object,Boolean,String,RegExp,Map,Set,JSON,Intl,' +
+    'eval,codeWillRun,' +
+    'require' // for Webpack/Browserify
+)
+
+export function makeMap(str, expectsLowerCase) {
+    const map = Object.create(null)
+    const list = str.split(',')
+    for (let i = 0; i < list.length; i++) {
+        map[list[i]] = true
+    }
+    return expectsLowerCase
+        ? val => map[val.toLowerCase()]
+        : val => map[val]
+}
+
 export function warn(msg, vm) {
     console.log(msg)
     console.log(vm)

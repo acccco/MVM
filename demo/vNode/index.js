@@ -1,5 +1,5 @@
 import {VNode, VText, create, diff, patch} from 'virtual-dom'
-import {parse} from '../html-parse-stringify'
+import {parse} from '../html-parse-stringify/index'
 import {getProperties, runCodeRe} from "./util"
 import {runCode} from "./outStrictMode"
 
