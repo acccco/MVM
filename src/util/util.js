@@ -65,7 +65,7 @@ export const allowedGlobals = makeMap(
     'Infinity,undefined,NaN,isFinite,isNaN,' +
     'parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,' +
     'Math,Number,Date,Array,Object,Boolean,String,RegExp,Map,Set,JSON,Intl,' +
-    'eval,codeWillRun,' +
+    'eval,codeWillRun,$index,' +
     'require' // for Webpack/Browserify
 )
 

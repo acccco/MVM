@@ -1,0 +1,67 @@
+@charset "UTF-8";
+@mixin makeContainer($container_name,$row:7,$col:9) {
+  #{$container_name} .animation-item {
+    width: 100%/$col;
+    height: 100%/$row;
+
+    .child {
+      width: $col*100%;
+      height: $row*100%;
+    }
+  }
+  @for $i from 1 through $row {
+    @for $j from 1 through $col {
+      #{$container_name} .item-#{$i}-#{$j} {
+        top: 100%/$row*($i - 1);
+        left: 100%/$col*($j - 1);
+
+        .child {
+          top: -100%*($i - 1);
+          left: -100%*($j - 1);
+        }
+      }
+    }
+  }
+}
+
+.animation-item {
+  position: absolute;
+  overflow: hidden;
+  z-index: 2;
+  transition-timing-function: linear;
+  transition: 1.4s;
+
+  .child {
+    background-size: cover;
+    display: block;
+    position: absolute;
+    z-index: 1;
+    background-position: 50% 50%;
+  }
+
+  &.start-change {
+    transform: scale(0);
+  }
+  $timeList: 4, 6, 8, 10, 12, 14, 16, 18, 20;
+  @each $time in $timeList {
+    &.duration-#{$time} {
+      transition: #{$time/10}s;
+    }
+  }
+}
+
+@include makeContainer('.wrap-contain', 7, 9)
+
+.child {
+  background-image: url("http://7xse2z.com1.z0.glb.clouddn.com/257453.jpg");
+}
+
+html, body, #app {
+  height: 100%;
+  width: 100%;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}

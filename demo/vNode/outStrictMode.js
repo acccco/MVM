@@ -1,5 +1,5 @@
-module.exports.runCode = function (codeWillRun, ctx) {
-    with (ctx._proxy) {
-        return eval(codeWillRun)
-    }
+module.exports.runCode = function (codeWillRun, ctx, $index) {
+  with (ctx._proxy) {
+    return eval(codeWillRun)
+  }
 }
