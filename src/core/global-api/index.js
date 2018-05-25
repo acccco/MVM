@@ -7,7 +7,7 @@ export function initGlobalApi(RD) {
   // 设置 option 为一个对象
   RD.options = {}
 
-  // 保存原始 Vue 类对象
+  // 保存原始 RD 类对象
   RD.options._base = RD
   RD.options.components = {}
 
