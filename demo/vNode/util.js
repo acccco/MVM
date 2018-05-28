@@ -49,14 +49,23 @@ export function getClassName(attr, ctx, $index) {
   return className
 }
 
+export function getStyle(attr, ctx, $index) {
+  return runCode(attr[':style'], ctx, $index)
+}
+
 export function getProperties(attr, ctx, $index) {
   let prop = {}
 
   for (let key in attr) {
-    // class 和 style 单独处理
+    // 处理 class
     if (/class/.test(key)) {
       if (!prop.className)
         prop.className = getClassName(attr, ctx, $index)
+      continue
+    }
+    // 处理 style
+    if (/style/.test(key)) {
+      prop.style = getStyle(attr, ctx, $index)
       continue
     }
 

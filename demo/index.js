@@ -2,21 +2,21 @@ import RD from '../src/index'
 import vNode from './vNode/index'
 import './index.scss'
 
+RD.use(vNode, RD)
+
 var template = `
 <div class="wrap-contain">
-  <div for="row * col" class="{{getClassName($index)}}">
-    <div class="child"></div>
+  <div for="row * col" class="{{getClassName($index)}}" :style="getWrapStyle($index)">
+    <div class="child" :style="getChildStyle($index)"></div>
   </div>
 </div>
 `
 
-RD.use(vNode, RD)
-
 window.rd = new RD({
   data() {
     return {
-      row: 7,
-      col: 9
+      row: 2,
+      col: 2
     }
   },
   created() {
@@ -27,8 +27,27 @@ window.rd = new RD({
   },
   method: {
     getClassName(index) {
-      console.log(index)
       return `animation-item item-${Math.floor(index / this.col)}-${index % this.col}`
+    },
+    getWrapStyle(index) {
+      let row = Math.floor(index / this.col)
+      let col = index % this.col
+      return {
+        top: `${100 / this.row * row}%`,
+        left: `${100 / this.col * col}%`,
+        width: `${100 / this.col}%`,
+        height: `${100 / this.row}%`
+      }
+    },
+    getChildStyle(index) {
+      let row = Math.floor(index / this.col)
+      let col = index % this.col
+      return {
+        top: `${-100 * row}%`,
+        left: `${-100 * col}%`,
+        width: `${100 * this.col}%`,
+        height: `${100 * this.row}%`
+      }
     }
   }
 })

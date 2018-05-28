@@ -30,7 +30,7 @@ function getVnode(ast, ctx, $index) {
           })(i)
         }
       } else {
-        children.push(new VNode(item.name, getProperties(item.attrs, ctx), getVnode(item.children, ctx)))
+        children.push(new VNode(item.name, getProperties(item.attrs, ctx, $index), getVnode(item.children, ctx, $index)))
       }
     }
   })

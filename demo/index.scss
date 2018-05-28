@@ -1,8 +1,6 @@
 @charset "UTF-8";
-@mixin makeContainer($container_name,$row:7,$col:9) {
+@mixin makeContainer($container_name) {
   #{$container_name} .animation-item {
-    width: 100%/$col;
-    height: 100%/$row;
     position: absolute;
     overflow: hidden;
     z-index: 2;
@@ -20,8 +18,6 @@
     }
 
     .child {
-      width: $col*100%;
-      height: $row*100%;
       background-size: cover;
       display: block;
       position: absolute;
@@ -29,22 +25,9 @@
       background-position: 50% 50%;
     }
   }
-  @for $i from 0 to $row {
-    @for $j from 0 to $col {
-      #{$container_name} .item-#{$i}-#{$j} {
-        top: 100%/$row*($i);
-        left: 100%/$col*($j);
-
-        .child {
-          top: -100%*($i);
-          left: -100%*($j);
-        }
-      }
-    }
-  }
 }
 
-@include makeContainer('.wrap-contain', 7, 9)
+@include makeContainer('.wrap-contain')
 
 .child {
   background-image: url("http://7xse2z.com1.z0.glb.clouddn.com/257453.jpg");
