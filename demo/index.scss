@@ -33,6 +33,11 @@
   background-image: url("http://7xse2z.com1.z0.glb.clouddn.com/257453.jpg");
 }
 
+.default-change {
+  transform: scale(0);
+  border-radius: 50%;
+}
+
 html, body, #app {
   height: 100%;
   width: 100%;

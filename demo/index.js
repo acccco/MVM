@@ -15,19 +15,25 @@ var template = `
 window.rd = new RD({
   data() {
     return {
-      row: 2,
-      col: 2
+      row: 7,
+      col: 9,
+      i: 0,
+      j: 0
     }
   },
   created() {
     let rd = this
     setInterval(() => {
-      rd.num = Math.ceil(Math.random() * 63)
-    }, 800)
+      rd.i = Math.floor(Math.random() * rd.row)
+      rd.j = Math.floor(Math.random() * rd.col)
+    }, 600)
   },
   method: {
+    checkPoint(index) {
+      return index % this.row === this.i || index % this.col === this.j ? 'default-change' : ''
+    },
     getClassName(index) {
-      return `animation-item item-${Math.floor(index / this.col)}-${index % this.col}`
+      return `animation-item item-${Math.floor(index / this.col)}-${index % this.col} ${this.checkPoint(index)}`
     },
     getWrapStyle(index) {
       let row = Math.floor(index / this.col)
