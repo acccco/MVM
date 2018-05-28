@@ -4,7 +4,7 @@ import './index.scss'
 
 var template = `
 <div class="wrap-contain">
-  <div for="63" class="{{getClassName($index)}}" :class="{start-change:num === $index}">
+  <div for="row * col" class="{{getClassName($index)}}">
     <div class="child"></div>
   </div>
 </div>
@@ -15,7 +15,8 @@ RD.use(vNode, RD)
 window.rd = new RD({
   data() {
     return {
-      num: 1
+      row: 7,
+      col: 9
     }
   },
   created() {
@@ -26,7 +27,8 @@ window.rd = new RD({
   },
   method: {
     getClassName(index) {
-      return `animation-item item-${Math.ceil(index / 9)}-${(index - 1) % 9 + 1}`
+      console.log(index)
+      return `animation-item item-${Math.floor(index / this.col)}-${index % this.col}`
     }
   }
 })

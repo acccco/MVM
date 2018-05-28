@@ -20,15 +20,17 @@ function getVnode(ast, ctx, $index) {
       }
     }
     if (item.type === 'tag') {
-      let len = 1
       if ('for' in item.attrs) {
-        len = +item.attrs['for']
-      }
-      while (len > 0) {
-        (function ($index) {
-          children.push(new VNode(item.name, getProperties(item.attrs, ctx, $index), getVnode(item.children, ctx, $index)))
-          len--
-        })(len)
+        let len = +runCode(item.attrs['for'], ctx, $index)
+        let i = 0
+        while (len > i) {
+          (function ($index) {
+            children.push(new VNode(item.name, getProperties(item.attrs, ctx, $index), getVnode(item.children, ctx, $index)))
+            i++
+          })(i)
+        }
+      } else {
+        children.push(new VNode(item.name, getProperties(item.attrs, ctx), getVnode(item.children, ctx)))
       }
     }
   })

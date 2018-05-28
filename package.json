@@ -11,7 +11,7 @@
   "scripts": {
     "test": "karma start test/karma.config.js",
     "build": "webpack --config webpack.config.js",
-    "start:demo": "webpack-dev-server --config webpack.demo.config.js"
+    "start:demo": "webpack-dev-server --hot --config webpack.demo.config.js"
   },
   "dependencies": {
     "html-parse-stringify": "^1.0.2",
