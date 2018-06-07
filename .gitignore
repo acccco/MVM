@@ -10,3 +10,5 @@ RELEASE_NOTE*.md
 dist/*.js
 .vscode
 .idea
+es
+cjs

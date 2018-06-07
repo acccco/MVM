@@ -1,28 +1,4 @@
 {
-  "presets": [
-    "env"
-  ],
-  "plugins": [
-    [
-      "transform-runtime",
-      {
-        "helpers": false,
-        "polyfill": false,
-        "regenerator": true,
-        "moduleName": "babel-runtime"
-      }
-    ],
-    [
-      "import",
-      {
-        "libraryName": "ramda",
-        "libraryDirectory": "src"
-      }
-    ]
-  ],
-  "ignore": [
-    "vnode/outStrictMode.js"
-  ],
   "env": {
     "cjs": {
       "plugins": [
@@ -36,6 +12,32 @@
     },
     "es": {
       "plugins": [
+      ]
+    },
+    "webpack": {
+      "presets": [
+        "env"
+      ],
+      "plugins": [
+        [
+          "transform-runtime",
+          {
+            "helpers": false,
+            "polyfill": false,
+            "regenerator": true,
+            "moduleName": "babel-runtime"
+          }
+        ],
+        [
+          "import",
+          {
+            "libraryName": "ramda",
+            "libraryDirectory": "src"
+          }
+        ]
+      ],
+      "ignore": [
+        "vnode/outStrictMode.js"
       ]
     }
   }
