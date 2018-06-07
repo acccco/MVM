@@ -11,7 +11,9 @@
   "scripts": {
     "test": "karma start test/karma.config.js",
     "build": "webpack --config webpack.config.js",
-    "start:demo": "webpack-dev-server --hot --config webpack.demo.config.js"
+    "start:demo": "webpack-dev-server --hot --config webpack.demo.config.js",
+    "analyseJson": "webpack --config webpack.config.js --profile --json > analyse.json",
+    "analyse": "webpack-bundle-analyzer analyse.json"
   },
   "dependencies": {
     "html-parse-stringify": "^1.0.2",

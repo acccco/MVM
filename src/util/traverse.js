@@ -1,4 +1,4 @@
-import {is} from 'ramda'
+import {is} from 'util'
 
 const seenObjects = new Set()
 

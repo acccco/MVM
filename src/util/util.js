@@ -1,6 +1,11 @@
-import {always} from 'ramda'
+import always from 'ramda/src/always'
+import mergeAll from 'ramda/src/mergeAll'
+import merge from 'ramda/src/merge'
+import clone from 'ramda/src/clone'
+import is from 'ramda/src/is'
 
-export {mergeAll, merge, clone, is} from 'ramda'
+export {mergeAll, merge, clone, is}
+
 
 export function proxy(target, sourceKey, key) {
   let sharedPropertyDefinition = {
