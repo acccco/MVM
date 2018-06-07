@@ -1,4 +1,4 @@
-import Dep from './Dep'
+import {Dep} from './Dep'
 import {traverse} from "../util/traverse"
 import {watcherQueue} from "../util/watcherQueue"
 

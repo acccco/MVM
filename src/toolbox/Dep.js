@@ -1,6 +1,6 @@
 let uid = 0
 
-export default class Dep {
+export class Dep {
 
   constructor() {
     this.id = ++uid
