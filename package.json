@@ -18,7 +18,8 @@
   "dependencies": {
     "html-parse-stringify": "^1.0.2",
     "ramda": "^0.25.0",
-    "virtual-dom": "^2.1.1"
+    "virtual-dom": "^2.1.1",
+    "webpack-node-externals": "^1.7.2"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",

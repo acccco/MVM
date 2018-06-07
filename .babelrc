@@ -22,5 +22,21 @@
   ],
   "ignore": [
     "vnode/outStrictMode.js"
-  ]
+  ],
+  "env": {
+    "cjs": {
+      "plugins": [
+        [
+          "transform-es2015-modules-commonjs",
+          {
+            "strict": true
+          }
+        ]
+      ]
+    },
+    "es": {
+      "plugins": [
+      ]
+    }
+  }
 }

@@ -5,4 +5,4 @@ initGlobalApi(RD)
 
 RD.version = '0.0.0'
 
-export default RD
+export {RD}
