@@ -1,9 +1,9 @@
 import RD from '../src/index'
 import './index.scss'
 import {h} from 'virtual-dom'
-import jsxVnode from './jsxVnode'
+import vNode from './vNode/'
 
-RD.use(jsxVnode, RD)
+RD.use(vNode, RD)
 
 /** @jsx h */
 
