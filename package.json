@@ -12,13 +12,12 @@
     "build": "cross-env BABEL_ENV=webpack webpack --config webpack.config.js",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir cjs",
-    "start:demo": "webpack-dev-server --hot --config webpack.demo.config.js",
+    "start:demo": "cross-env BABEL_ENV=webpack webpack-dev-server --hot --config webpack.demo.config.js",
     "test": "karma start test/karma.config.js",
     "analyseJson": "webpack --config webpack.config.js --profile --json > analyse.json",
     "analyse": "webpack-bundle-analyzer analyse.json"
   },
   "dependencies": {
-    "html-parse-stringify": "^1.0.2",
     "ramda": "^0.25.0",
     "virtual-dom": "^2.1.1"
   },
@@ -27,10 +26,11 @@
     "babel-loader": "^7.1.4",
     "babel-plugin-import": "^1.7.0",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-plugin-transform-react-jsx": "^6.24.1",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.7.0",
-    "css-loader": "^0.28.11",
     "cross-env": "^5.1.6",
+    "css-loader": "^0.28.11",
     "html-webpack-plugin": "^3.2.0",
     "jasmine": "^3.1.0",
     "karma": "^2.0.2",

@@ -19,6 +19,7 @@
         "env"
       ],
       "plugins": [
+        "transform-react-jsx",
         [
           "transform-runtime",
           {

@@ -1,5 +1,5 @@
-import Dep from './Dep'
-import {arrayMethods} from "../util/array"
+import {Dep} from './Dep'
+import {arrayMethods} from '../util/array'
 
 const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 

@@ -1,18 +1,16 @@
 import RD from '../src/index'
-import vNode from './vNode/index'
 import './index.scss'
+import {h} from 'virtual-dom'
+import jsxVnode from './jsxVnode'
 
-RD.use(vNode, RD)
+RD.use(jsxVnode, RD)
 
-var template = `
-<div class="wrap-contain">
-  <div for="row * col" class="{{getClassName($index)}}" :style="getWrapStyle($index)">
-    <div class="child" :style="getChildStyle($index)"></div>
-  </div>
-</div>
-`
+/** @jsx h */
 
 window.rd = new RD({
+  render() {
+    return <div onclick={this.test} style={{color: '#ff9'}}>{this.row}</div>
+  },
   data() {
     return {
       row: 7,
@@ -54,8 +52,11 @@ window.rd = new RD({
         width: `${100 * this.col}%`,
         height: `${100 * this.row}%`
       }
+    },
+    test() {
+      console.log(this.row)
     }
   }
 })
 
-rd.$mount(document.getElementById('app'), template)
+rd.$mount(document.getElementById('app'))
