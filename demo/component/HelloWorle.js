@@ -1,17 +1,14 @@
-import RD from '../src/index'
-import './index.scss'
-import {h} from './virtual-dom'
-import vNode from './vNode/'
-import {HelloWorld} from './component/HelloWorle'
-
-RD.use(vNode, RD)
+import RD from '../../src/index'
+import {h} from '../virtual-dom'
 
 /** @jsx h */
 
-window.rd = new RD({
+let HelloWorld = new RD({
   render() {
     return <div>
-      <HelloWorld></HelloWorld>
+      <p>hello {this.msg}</p>
+      <p>my name is {this.fullName}</p>
+      <button onclick={this.handle}>Click me</button>
     </div>
   },
   data() {
@@ -33,4 +30,6 @@ window.rd = new RD({
   }
 })
 
-rd.$mount(document.getElementById('app'))
+export {
+  HelloWorld
+}

@@ -3,12 +3,14 @@ import {create, diff, patch} from "virtual-dom";
 export default {
   install(RD) {
     RD.prototype.$mount = function (el) {
+      let nodeTree = null
       this.$watch(() => {
-        return this.$options.render.call(this)
+        nodeTree = this.$options.render.call(this)
+        return nodeTree
       }, (newTree) => {
         this.$patch(newTree)
       })
-      this.nodeTree = this.$options.render.call(this)
+      this.nodeTree = nodeTree
       this.rootNode = create(this.nodeTree)
       el.appendChild(this.rootNode)
     }
