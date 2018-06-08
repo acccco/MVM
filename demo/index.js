@@ -1,8 +1,9 @@
 import RD from '../src/index'
-import './index.scss'
 import {h} from './virtual-dom'
 import vNode from './vNode/'
-import {HelloWorld} from './component/HelloWorle'
+import HelloWorld from './component/HelloWorle'
+import PropsTest from './component/PropsTest'
+import './index.scss'
 
 RD.use(vNode, RD)
 
@@ -11,19 +12,34 @@ RD.use(vNode, RD)
 window.rd = new RD({
   render() {
     return <div>
-      <HelloWorld></HelloWorld>
+      <p>{this.text}</p>
+      <HelloWorld parent={this}></HelloWorld>
+      <PropsTest parent={this} propText={this.propText} propObject={this.propObject}
+                 style={{color: '#ff00ff'}}></PropsTest>
+      <input type="text" value={this.inputValue} oninput={(e) => {
+        this.inputValue = e.target.value
+      }}/>
     </div>
   },
   data() {
     return {
-      msg: 'world',
-      firstName: 'aco',
-      lastName: 'yang'
+      text: 'this is ReactiveData demo',
+      propText: 'this is propText',
+      propObject: {
+        firstName: 'aco',
+        lastName: 'yang'
+      },
+      inputValue: ''
     }
   },
   computed: {
     fullName() {
       return `${this.firstName} ${this.lastName}`
+    }
+  },
+  watch: {
+    'inputValue'(newValue, oldValue) {
+      console.log(`inputValue change: ${oldValue} => ${newValue}`)
     }
   },
   method: {

@@ -15,7 +15,7 @@ export function mergeOptions(parent = {}, child = {}) {
   let options = mergeAll([{}, parent, child])
 
   LIFECYCLE_HOOKS.forEach(name => {
-    mergeLifecycle(options, parent[name], child[name], name)
+    normalizeLifecycle(child, name)
   })
 
   if (child.mixins) {
@@ -23,8 +23,6 @@ export function mergeOptions(parent = {}, child = {}) {
       options = mergeOptions(options, child.mixins[i])
     }
   }
-
-  normalizeComponent(child, options._base)
 
   // 合并 data
   options.data = mergeData(parent.data, child.data)
@@ -65,13 +63,13 @@ function mergeWatch(parentVal = {}, childVal = {}) {
   return watchers
 }
 
-function mergeLifecycle(options, parentVal, childVal, name) {
-  options[name] = []
-  if (parentVal) {
-    options[name].push(parentVal)
+function normalizeLifecycle(child, name) {
+  if (undefined === child[name]) {
+    child[name] = []
+    return
   }
-  if (childVal) {
-    options[name].push(childVal)
+  if (!is(Array, child[name])) {
+    child[name] = [child[name]]
   }
 }
 
@@ -139,20 +137,6 @@ function normalizeInject(options) {
         from: key
       }
     })
-  }
-}
-
-/**
- * 处理 components 返回构造函数
- * @param options
- * @param MVM
- */
-function normalizeComponent(options, MVM) {
-  let components = options.components
-  for (let key in components) {
-    if (!is(Function, components[key])) {
-      components[key] = MVM.extend(components[key])
-    }
   }
 }
 

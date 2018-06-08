@@ -17,8 +17,11 @@ var evHook = require('./hooks/ev-hook.js');
 module.exports = h;
 
 function h(tagName, properties, ...children) {
-    if (typeof tagName === 'object') {
-        return tagName.$options.render.call(tagName)
+    if (typeof tagName === 'function') {
+        var parent = properties.parent
+        delete properties.parent
+        var comp = new tagName({parent: parent, propData: properties})
+        return comp.$getNodeTree()
     }
 
     var childNodes = [];

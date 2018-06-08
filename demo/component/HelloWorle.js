@@ -3,7 +3,7 @@ import {h} from '../virtual-dom'
 
 /** @jsx h */
 
-let HelloWorld = new RD({
+let HelloWorld = RD.extend({
   render() {
     return <div>
       <p>hello {this.msg}</p>
@@ -30,6 +30,4 @@ let HelloWorld = new RD({
   }
 })
 
-export {
-  HelloWorld
-}
+export default HelloWorld

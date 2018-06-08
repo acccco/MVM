@@ -34,7 +34,7 @@ function initProp(rd) {
   for (let key in rd.$options.prop) {
     let value = propData[key]
     if (!value) {
-      value = rd.$options.props[key].default
+      value = rd.$options.prop[key].default
     }
     prop[key] = value
   }
@@ -42,7 +42,9 @@ function initProp(rd) {
   proxyObject(rd, prop, (key) => {
     let usedType
     if (key in rd._inject) usedType = 'inject'
-    warn(`${usedType} 下已有 ${key} 属性`, rd)
+    if (usedType) {
+      warn(`${usedType} 下已有 ${key} 属性`, rd)
+    }
   })
 }
 

@@ -1,4 +1,4 @@
-import {create, diff, patch} from "virtual-dom";
+import {create, diff, patch} from "../virtual-dom";
 
 export default {
   install(RD) {
@@ -8,6 +8,7 @@ export default {
         nodeTree = this.$options.render.call(this)
         return nodeTree
       }, (newTree) => {
+        console.log(123123123)
         this.$patch(newTree)
       })
       this.nodeTree = nodeTree
@@ -18,6 +19,15 @@ export default {
       let patches = diff(this.nodeTree, newTree)
       this.rootNode = patch(this.rootNode, patches)
       this.nodeTree = newTree
+    }
+    RD.prototype.$getNodeTree = function () {
+      let nodeTree = null
+      this.$watch(() => {
+        nodeTree = this.$options.render.call(this)
+      }, () => {
+        this.$patch(this.$root.$getNodeTree())
+      })
+      return nodeTree
     }
   }
 }
