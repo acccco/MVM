@@ -21,6 +21,7 @@ export function defineReactive(object, key, value) {
       return value
     },
     set(newValue) {
+      console.log(newValue, dep)
       value = newValue
       dep.notify()
     }

@@ -23,17 +23,18 @@ export class Watcher {
     this.cb = callback.bind(ctx)
     this.deps = []
     this.value = this.init()
-    this.dirty = this.lazy
+    this.dirty = false
   }
 
   init() {
+    let oldTarget = Dep.target
     Dep.target = this
     let value = this.getter()
     if (this.deep) {
       // 对其子项添加依赖
       traverse(value)
     }
-    Dep.target = null
+    Dep.target = oldTarget
     return value
   }
 

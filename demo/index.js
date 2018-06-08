@@ -13,8 +13,8 @@ window.rd = new RD({
   render() {
     return <div>
       <p>{this.text}</p>
-      <HelloWorld parent={this}></HelloWorld>
-      <PropsTest parent={this} propText={this.propText} propObject={this.propObject}
+      <HelloWorld parent={this} key='1'></HelloWorld>
+      <PropsTest parent={this} key='1' propText={this.propText} propObject={this.propObject}
                  style={{color: '#ff00ff'}}></PropsTest>
       <input type="text" value={this.inputValue} oninput={(e) => {
         this.inputValue = e.target.value
@@ -30,11 +30,6 @@ window.rd = new RD({
         lastName: 'yang'
       },
       inputValue: ''
-    }
-  },
-  computed: {
-    fullName() {
-      return `${this.firstName} ${this.lastName}`
     }
   },
   watch: {

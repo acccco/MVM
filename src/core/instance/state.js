@@ -38,7 +38,7 @@ function initProp(rd) {
     }
     prop[key] = value
   }
-  observe(prop)
+  //observe(prop)
   proxyObject(rd, prop, (key) => {
     let usedType
     if (key in rd._inject) usedType = 'inject'

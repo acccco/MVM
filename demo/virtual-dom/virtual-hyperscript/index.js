@@ -20,8 +20,24 @@ function h(tagName, properties, ...children) {
     if (typeof tagName === 'function') {
         var parent = properties.parent
         delete properties.parent
-        var comp = new tagName({parent: parent, propData: properties})
-        return comp.$getNodeTree()
+        var key = properties.key
+        delete properties.key
+        var comp = null
+
+        if (!parent.component) {
+            parent.component = {}
+        }
+        if (!parent.component[tagName.cid]) {
+            parent.component[tagName.cid] = {}
+        }
+        if (key in parent.component[tagName.cid]) {
+            comp = parent.component[tagName.cid][key]
+        } else {
+            comp = new tagName({parent: parent, propData: properties})
+            parent.component[tagName.cid][key] = comp
+        }
+
+        return comp.$getNodeTree(properties)
     }
 
     var childNodes = [];

@@ -4,7 +4,7 @@ import {noop} from "../util/util"
 let uid = 0
 
 export class Computed {
-  constructor(ctx, key, option,) {
+  constructor(ctx, key, option) {
     this.id = uid++
     this.ctx = ctx
     this.key = key
