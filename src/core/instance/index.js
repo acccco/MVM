@@ -43,6 +43,19 @@ export class RD extends Event {
 
   }
 
+  // 处理传入的 prop
+  initProp(prop) {
+    // TODO 有效性验证
+    let rd = this
+    for (let key in rd.$options.prop) {
+      let value = prop[key]
+      if (!value) {
+        value = rd.$options.prop[key].default
+      }
+      rd[key] = value
+    }
+  }
+
   $watch(getter, callback, option) {
     return new Watcher(this, getter, callback, option)
   }

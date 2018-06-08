@@ -1,21 +1,20 @@
+import createElement from './vNode/createElement'
 import RD from '../src/index'
-import {h} from './virtual-dom'
 import vNode from './vNode/'
 import HelloWorld from './component/HelloWorle'
-import PropsTest from './component/PropsTest'
+import PropTest from './component/PropTest'
 import './index.scss'
 
 RD.use(vNode, RD)
 
-/** @jsx h */
+/** @jsx createElement */
 
-window.rd = new RD({
+let rd = window.rd = new RD({
   render() {
     return <div>
       <p>{this.text}</p>
-      <HelloWorld parent={this} key='1'></HelloWorld>
-      <PropsTest parent={this} key='1' propText={this.propText} propObject={this.propObject}
-                 style={{color: '#ff00ff'}}></PropsTest>
+      <HelloWorld key='1'></HelloWorld>
+      <PropTest key='1' propText={this.propText} propObject={this.propObject} style={{color: '#ff00ff'}}></PropTest>
       <input type="text" value={this.inputValue} oninput={(e) => {
         this.inputValue = e.target.value
       }}/>
@@ -43,5 +42,8 @@ window.rd = new RD({
     }
   }
 })
+
+HelloWorld.parent = rd
+PropTest.parent = rd
 
 rd.$mount(document.getElementById('app'))

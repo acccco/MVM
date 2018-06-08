@@ -1,9 +1,9 @@
+import createElement from '../vNode/createElement'
 import RD from '../../src/index'
-import {h} from '../virtual-dom'
 
-/** @jsx h */
+/** @jsx createElement */
 
-let HelloWorld = RD.extend({
+let PropTest = RD.extend({
   render() {
     return <div>
       <p>{this.defaultTest}</p>
@@ -40,4 +40,4 @@ let HelloWorld = RD.extend({
   }
 })
 
-export default HelloWorld
+export default PropTest

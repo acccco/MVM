@@ -1,47 +1,51 @@
-import {create, diff, patch} from "../virtual-dom";
+import {create, diff, patch} from 'virtual-dom'
+import createElement from './createElement'
 
 export default {
   install(RD) {
-    RD.prototype.render = function (prop) {
-      let rd = this
-      for (let key in rd.$options.prop) {
-        let value = prop[key]
-        if (!value) {
-          value = rd.$options.prop[key].default
-        }
-        rd[key] = value
-      }
-      return rd.$options.render.call(rd)
+    RD.prototype.render = function (prop = {}) {
+      this.initProp(prop)
+      let old = createElement.componentParent
+      createElement.componentParent = this
+      let nodeTree = this.$options.render.call(this)
+      createElement.componentParent = old
+      return nodeTree
     }
 
-    RD.prototype.$mount = function (el) {
-      let nodeTree = this.$options.render.call(this)
+    RD.prototype.$mount = function (el, prop) {
+      let nodeTree = null
       this.$watch(() => {
-        nodeTree = this.$options.render.call(this)
-        return nodeTree
-      }, (newTree) => {
-        this.$patch(newTree)
+        nodeTree = this.render.call(this, prop)
+      }, () => {
+        this.$patch()
+      }, {
+        ignoreChange: true
       })
       this.nodeTree = nodeTree
+      console.log(nodeTree)
       this.rootNode = create(this.nodeTree)
       el.appendChild(this.rootNode)
     }
 
-    RD.prototype.$patch = function (newTree) {
+    RD.prototype.$patch = function () {
+      let newTree = this.$options.render.call(this)
       let patches = diff(this.nodeTree, newTree)
       this.rootNode = patch(this.rootNode, patches)
       this.nodeTree = newTree
     }
 
-    RD.prototype.$getNodeTree = function (prop) {
-      let nodeTree = this.render.call(this, prop)
+    RD.prototype.$initWatch = function () {
       this.$watch(() => {
-        this.$options.render.call(this)
+        this.render.call(this)
       }, () => {
-        console.log(123123)
-        this.$root.$patch(this.$root.$options.render.call(this.$root))
+        this.$root.$patch()
+      }, {
+        ignoreChange: true
       })
-      return nodeTree
+    }
+
+    RD.prototype.$getNodeTree = function (prop) {
+      return this.render.call(this, prop)
     }
   }
 }

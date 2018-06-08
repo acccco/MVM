@@ -13,7 +13,7 @@ export class Watcher {
     if (options) {
       this.lazy = !!options.lazy
       this.deep = !!options.deep
-      // 判断 value 是否需要变化才执行 update
+      // 为 true 即为: 不需要判断 getter 的返回值是否变化，当有绑定属性变化时，直接执行 callback
       this.ignoreChange = !!options.ignoreChange
     } else {
       this.lazy = this.deep = false

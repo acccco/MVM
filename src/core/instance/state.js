@@ -38,7 +38,8 @@ function initProp(rd) {
     }
     prop[key] = value
   }
-  //observe(prop)
+  // 父组件已经监控变化，这里不需要
+  // observe(prop)
   proxyObject(rd, prop, (key) => {
     let usedType
     if (key in rd._inject) usedType = 'inject'
