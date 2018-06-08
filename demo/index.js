@@ -12,12 +12,14 @@ RD.use(vNode, RD)
 let rd = window.rd = new RD({
   render() {
     return <div>
-      <p>{this.text}</p>
-      <HelloWorld key='1'></HelloWorld>
-      <PropTest key='1' propText={this.propText} propObject={this.propObject} style={{color: '#ff00ff'}}></PropTest>
+      {this.text}
+      <p style={{color: '#ff00ff'}}>{this.text}</p>
+      <HelloWorld key='hd1'></HelloWorld>
+      <PropTest key='pt' propText={this.propText} propObject={this.propObject}></PropTest>
       <input type="text" value={this.inputValue} oninput={(e) => {
         this.inputValue = e.target.value
       }}/>
+      <HelloWorld key='hd2'></HelloWorld>
     </div>
   },
   data() {

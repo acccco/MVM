@@ -48,13 +48,12 @@ export class Watcher {
 
   run() {
     if (this.active) {
-      const value = this.getter()
-      if (
-        this.ignoreChange ||
-        value !== this.value ||
-        // 深度监听对象,触发了就要执行，不需要判断值有没有变化
-        this.deep
-      ) {
+      let value
+      // 深度监听对象,触发了就要执行，不需要判断值有没有变化
+      if (!this.ignoreChange || this.deep) {
+        value = this.getter()
+      }
+      if (value !== this.value || this.ignoreChange || this.deep) {
         // 设置新值
         const oldValue = this.value
         this.value = value

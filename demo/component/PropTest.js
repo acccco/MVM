@@ -1,5 +1,6 @@
 import createElement from '../vNode/createElement'
 import RD from '../../src/index'
+import HelloWorld from './HelloWorle'
 
 /** @jsx createElement */
 
@@ -9,6 +10,7 @@ let PropTest = RD.extend({
       <p>{this.defaultTest}</p>
       <p>{this.propText}</p>
       <p>{this.fullName}</p>
+      <HelloWorld key='hd'></HelloWorld>
     </div>
   },
   prop: {

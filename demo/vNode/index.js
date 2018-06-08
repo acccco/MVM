@@ -12,31 +12,33 @@ export default {
       return nodeTree
     }
 
-    RD.prototype.$mount = function (el, prop) {
+    RD.prototype.$mount = function (el) {
       let nodeTree = null
       this.$watch(() => {
-        nodeTree = this.render.call(this, prop)
+        nodeTree = this.render.call(this, this.propData)
+        nodeTree.nid = this.id
+        nodeTree.component = this
       }, () => {
         this.$patch()
       }, {
         ignoreChange: true
       })
+
       this.nodeTree = nodeTree
-      console.log(nodeTree)
       this.rootNode = create(this.nodeTree)
       el.appendChild(this.rootNode)
     }
 
     RD.prototype.$patch = function () {
-      let newTree = this.$options.render.call(this)
+      let newTree = this.render.call(this)
       let patches = diff(this.nodeTree, newTree)
       this.rootNode = patch(this.rootNode, patches)
       this.nodeTree = newTree
     }
 
-    RD.prototype.$initWatch = function () {
+    RD.prototype.initWatch = function (prop) {
       this.$watch(() => {
-        this.render.call(this)
+        this.render.call(this, prop)
       }, () => {
         this.$root.$patch()
       }, {
@@ -44,8 +46,9 @@ export default {
       })
     }
 
-    RD.prototype.$getNodeTree = function (prop) {
-      return this.render.call(this, prop)
+    RD.prototype.$createNodeTree = function (prop) {
+      this.nodeTree = this.render.call(this, prop)
+      return this.nodeTree
     }
   }
 }

@@ -1,27 +1,25 @@
 import {h} from 'virtual-dom'
 
 export default function createElement(tagName, properties, ...children) {
-  if (typeof tagName === 'function') {
-    var parent = createElement.componentParent
-    var key = properties.key
-    delete properties.key
-    var comp = null
 
-    if (parent && !parent.component) {
-      parent.component = {}
+  if (typeof tagName === 'function') {
+    let parent = createElement.componentParent
+    if (parent.componentList === undefined) {
+      parent.componentList = {}
     }
-    if (!parent.component[tagName.cid]) {
-      parent.component[tagName.cid] = {}
-    }
-    if (key in parent.component[tagName.cid]) {
-      comp = parent.component[tagName.cid][key]
+    let comp = null
+    if (parent.componentList[properties.key]) {
+      comp = parent.componentList[properties.key]
     } else {
       comp = new tagName({parent: parent, propData: properties})
-      comp.$initWatch()
-      parent.component[tagName.cid][key] = comp
+      comp.initWatch()
+      parent.componentList[properties.key] = comp
     }
-
-    return comp.$getNodeTree(properties)
+    let nodeTree = comp.$createNodeTree(properties)
+    nodeTree.component = comp
+    nodeTree.nid = comp.id
+    return nodeTree
   }
+
   return h(tagName, properties, children)
 }
