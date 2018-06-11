@@ -1,12 +1,11 @@
-import {Computed} from "../../toolbox/Computed"
-import {Watcher} from "../../toolbox/Watcher"
-import {getProvideForInject, proxyObject, is, warn} from "../../util/util"
-import {observe} from "../../toolbox/Observe"
+import {Computed} from '../../toolbox/Computed'
+import {Watcher} from '../../toolbox/Watcher'
+import {getProvideForInject, proxyObject, is, checkProp} from '../../util/util'
+import {observe} from '../../toolbox/Observe'
 
 export function initState(rd) {
   let opts = rd.$options
 
-  rd._inject = {}
   rd._prop = {}
   rd._data = {}
   rd._provide = {}
@@ -41,24 +40,15 @@ function initProp(rd) {
   // 父组件已经监控变化，这里不需要
   // observe(prop)
   proxyObject(rd, prop, (key) => {
-    let usedType
-    if (key in rd._inject) usedType = 'inject'
-    if (usedType) {
-      warn(`${usedType} 下已有 ${key} 属性`, rd)
-    }
+    return checkProp(key, 'prop', rd)
   })
 }
 
 function initMethod(rd) {
   for (let key in rd.$options.method) {
-    let usedType
-    if (key in rd._inject) usedType = 'inject'
-    if (key in rd._prop) usedType = 'prop'
-    if (usedType) {
-      warn(`${usedType} 下已有 ${key} 属性`, rd)
+    if (checkProp(key, 'method', rd)) {
       break
     }
-    rd[key] = rd.$options.method[key].bind(rd)
   }
 }
 
@@ -67,12 +57,7 @@ function initData(rd) {
   let data = rd._data = rd.$options.data ? rd.$options.data.call(rd) : {}
   observe(data)
   proxyObject(rd, data, (key) => {
-    let usedType
-    if (key in rd._inject) usedType = 'inject'
-    if (key in rd._prop) usedType = 'prop'
-    if (key in rd.$options.method) usedType = 'method'
-    if (usedType)
-      warn(`${usedType} 下已有 ${key} 属性`, rd)
+    return checkProp(key, 'data', rd)
   })
 }
 
@@ -83,14 +68,7 @@ function initComputed(rd) {
   }
   observe(computed)
   proxyObject(rd, computed, (key) => {
-    let usedType
-    if (key in rd._inject) usedType = 'inject'
-    if (key in rd._prop) usedType = 'prop'
-    if (key in rd.$options.method) usedType = 'method'
-    if (key in rd._data) usedType = 'data'
-    if (usedType) {
-      warn(`${usedType} 下已有 ${key} 属性`, rd)
-    }
+    return checkProp(key, 'computed', rd)
   })
 }
 

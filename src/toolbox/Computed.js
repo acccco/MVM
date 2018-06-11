@@ -1,5 +1,5 @@
 import {Watcher} from './Watcher'
-import {noop} from "../util/util"
+import {noop} from '../util/util'
 
 let uid = 0
 

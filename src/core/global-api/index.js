@@ -1,6 +1,6 @@
-import {initExtend} from "./extend"
-import {initMixin} from "./mixin"
-import {initUse} from "./use"
+import {initExtend} from './extend'
+import {initMixin} from './mixin'
+import {initUse} from './use'
 
 export function initGlobalApi(RD) {
 

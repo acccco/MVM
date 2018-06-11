@@ -1,4 +1,4 @@
-import {noop, mergeAll, merge, clone, is} from "./util"
+import {noop, mergeAll, merge, clone, is} from './util'
 import {LIFECYCLE_HOOKS} from '../core/instance/lifecycle'
 
 export function mergeOptions(parent = {}, child = {}) {

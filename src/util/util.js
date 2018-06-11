@@ -6,7 +6,6 @@ import is from 'ramda/src/is'
 
 export {mergeAll, merge, clone, is}
 
-
 export function proxy(target, sourceKey, key) {
   let sharedPropertyDefinition = {
     enumerable: true,
@@ -85,7 +84,20 @@ export function makeMap(str, expectsLowerCase) {
     : val => map[val]
 }
 
-export function warn(msg, vm) {
+export function warn(msg, rd) {
   console.log(msg)
-  console.log(vm)
+  console.log(rd)
+}
+
+export function checkProp(name, type, ctx) {
+  let usedType
+  if (name in ctx._inject) usedType = 'inject'
+  if (type !== 'prop' && name in ctx._prop) usedType = 'prop'
+  if (type !== 'method' && name in ctx.$options.method) usedType = 'method'
+  if (type !== 'data' && name in ctx._data) usedType = 'data'
+  if (usedType) {
+    warn(`${usedType} 下已有 ${name} 属性`, ctx)
+    return false
+  }
+  return true
 }

@@ -1,5 +1,5 @@
 import {RD} from './core/instance'
-import {initGlobalApi} from "./core/global-api/index"
+import {initGlobalApi} from './core/global-api/index'
 
 initGlobalApi(RD)
 
