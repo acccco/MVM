@@ -11,7 +11,6 @@ RD.use(vNode, RD)
 
 let rd = window.rd = new RD({
   render() {
-    console.log('index render')
     return <div>
       {this.text}
       <p style={{color: '#ff00ff'}}>{this.text}</p>

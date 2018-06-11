@@ -5,7 +5,6 @@ import RD from '../../src/index'
 
 let PropTest = RD.extend({
   render() {
-    console.log('render')
     return <div>
       <p>{this.defaultTest}</p>
       <p>{this.propText}</p>
