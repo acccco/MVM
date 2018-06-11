@@ -36,11 +36,6 @@ let rd = window.rd = new RD({
     'inputValue'(newValue, oldValue) {
       console.log(`inputValue change: ${oldValue} => ${newValue}`)
     }
-  },
-  method: {
-    handle() {
-      alert('Oh You Click Me !')
-    }
   }
 })
 
