@@ -1,9 +1,9 @@
 import {noop, merge, clone, is} from './util'
-import {LIFECYCLE_HOOKS} from '../core/instance/lifecycle'
+import {LIFECYCLE_HOOK} from '../core/instance/lifecycle'
 
 function needMerge(key) {
   let list = [
-    ...LIFECYCLE_HOOKS,
+    ...LIFECYCLE_HOOK,
     'mixin',
     'data',
     'watch',
@@ -24,7 +24,7 @@ export function mergeOption(parent = {}, child = {}) {
 
   let option = merge({}, parent)
 
-  LIFECYCLE_HOOKS.forEach(name => {
+  LIFECYCLE_HOOK.forEach(name => {
     normalizeLifecycle(child, name)
     normalizeLifecycle(option, name)
     option[name] = [].concat(option[name]).concat(child[name])

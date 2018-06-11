@@ -1,4 +1,4 @@
-export const LIFECYCLE_HOOKS = [
+export const LIFECYCLE_HOOK = [
   'beforeCreate',
   'created',
   'beforeDestroy',
