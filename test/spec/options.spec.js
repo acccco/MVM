@@ -257,3 +257,81 @@ describe('option lifecycle test', () => {
     expect(childD).toEqual(true)
   })
 })
+
+describe('option mixin test', () => {
+  it('mixin test', () => {
+    let lifecycle = 0
+    let mixin = {
+      created() {
+        lifecycle++
+      },
+      data() {
+        return {
+          mixinParent: true,
+          mixinChild: false
+        }
+      },
+      method: {
+        mixinMethod() {
+          return true
+        },
+        mergeByChild() {
+          return false
+        },
+        coverParent() {
+          return true
+        }
+      }
+    }
+    let parent = {
+      created() {
+        lifecycle++
+      },
+      data() {
+        return {
+          mixinParent: false
+        }
+      },
+      method: {
+        coverParent() {
+          return false
+        },
+        parentMethod() {
+          return true
+        }
+      }
+    }
+    let child = {
+      created() {
+        lifecycle++
+      },
+      mixin: [mixin],
+      data() {
+        return {
+          mixinChild: true
+        }
+      },
+      method: {
+        mergeByChild() {
+          return true
+        },
+        childMethod() {
+          return true
+        }
+      }
+    }
+    let merge = mergeOption(parent, child)
+    expect(merge.data()).toEqual({
+      mixinParent: true,
+      mixinChild: true
+    })
+    merge['created'].forEach(fnc => fnc())
+    expect(merge.method.parentMethod()).toEqual(true)
+    expect(merge.method.coverParent()).toEqual(true)
+    expect(merge.method.mixinMethod()).toEqual(true)
+    expect(merge.method.mergeByChild()).toEqual(true)
+    expect(merge.method.childMethod()).toEqual(true)
+    expect(lifecycle).toEqual(3)
+
+  })
+})

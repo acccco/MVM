@@ -25,7 +25,7 @@ module.exports = function (config) {
       'spec/options.spec.js'
     ],
     preprocessors: {
-      './spec/*.js': ['webpack', 'sourcemap']
+      './spec/*.js': ['webpack']
     },
     webpack: webpackConfig,
     webpackMiddleware: {

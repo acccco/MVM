@@ -1,23 +1,33 @@
-import {noop, mergeAll, merge, clone, is} from './util'
+import {noop, merge, clone, is} from './util'
 import {LIFECYCLE_HOOKS} from '../core/instance/lifecycle'
+
+function needMerge(key) {
+  let list = [
+    ...LIFECYCLE_HOOKS,
+    'mixin',
+    'data',
+    'watch',
+    'method',
+    'computed'
+  ]
+  return list.indexOf(key) === -1
+}
 
 export function mergeOption(parent = {}, child = {}) {
 
   normalizeComputed(parent)
+  normalizeComputed(child)
 
   normalizeProp(child)
 
   normalizeInject(child)
 
-  normalizeComputed(child)
-
-  // 统一先取 child 中的数据，放到新对象中
-  let option = mergeAll([{}, parent, child])
+  let option = merge({}, parent)
 
   LIFECYCLE_HOOKS.forEach(name => {
     normalizeLifecycle(child, name)
-    normalizeLifecycle(parent, name)
-    option[name] = [].concat(parent[name]).concat(child[name])
+    normalizeLifecycle(option, name)
+    option[name] = [].concat(option[name]).concat(child[name])
   })
 
   if (child.mixin) {
@@ -27,16 +37,23 @@ export function mergeOption(parent = {}, child = {}) {
   }
 
   // 合并 data
-  option.data = mergeData(parent.data, child.data)
+  option.data = mergeData(option.data, child.data)
 
   // 合并 watcher 同名合并成一个数组
-  option.watch = mergeWatch(parent.watch, child.watch)
+  option.watch = mergeWatch(option.watch, child.watch)
 
   // 合并 methods 同名覆盖
-  option.method = merge(parent.method, child.method)
+  option.method = merge(option.method, child.method)
 
   // 合并 computed 同名覆盖
-  option.computed = merge(parent.computed, child.computed)
+  option.computed = merge(option.computed, child.computed)
+
+  // 其他属性合并
+  for (let key in child) {
+    if (needMerge(key)) {
+      option[key] = child[key]
+    }
+  }
 
   return option
 }
