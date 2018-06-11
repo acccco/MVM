@@ -1,5 +1,5 @@
 import {Event} from '../../toolbox/Event'
-import {mergeOptions} from '../../util/options'
+import {mergeOption} from '../../util/option'
 import {initState} from './state'
 import {initProperties} from './properties'
 import {Watcher} from '../../toolbox/Watcher'
@@ -16,12 +16,12 @@ export class RD extends Event {
     this.active = true
   }
 
-  _init(options) {
+  _init(option) {
     let rd = this
 
-    rd.$options = mergeOptions(
-      this.constructor.options,
-      options
+    rd.$option = mergeOption(
+      this.constructor.option,
+      option
     )
     initProperties(rd)
     callHook(rd, 'beforeCreate')
@@ -35,7 +35,7 @@ export class RD extends Event {
       },
       get(target, key) {
         if (typeof key === 'string' && !(key in target)) {
-          warn(`data/prop/method 下未定义 ${key}`, target)
+          warn(`data/prop/method/computed 下未定义 ${key}`, target)
         }
         return target[key]
       }
@@ -47,10 +47,10 @@ export class RD extends Event {
   initProp(prop) {
     // TODO 有效性验证
     let rd = this
-    for (let key in rd.$options.prop) {
+    for (let key in rd.$option.prop) {
       let value = prop[key]
       if (!value) {
-        value = rd.$options.prop[key].default
+        value = rd.$option.prop[key].default
       }
       rd[key] = value
     }

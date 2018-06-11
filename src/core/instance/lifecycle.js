@@ -6,10 +6,10 @@ export const LIFECYCLE_HOOKS = [
 ]
 
 export function callHook(rd, hook) {
-  const handlers = rd.$options[hook]
-  if (handlers) {
-    for (let i = 0, j = handlers.length; i < j; i++) {
-      handlers[i].call(rd)
+  const handler = rd.$option[hook]
+  if (handler) {
+    for (let i = 0, j = handler.length; i < j; i++) {
+      handler[i].call(rd)
     }
   }
   rd.$emit('hook:' + hook)

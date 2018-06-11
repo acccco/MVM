@@ -7,7 +7,7 @@ export default {
       this.initProp(prop)
       let old = createElement.componentParent
       createElement.componentParent = this
-      let nodeTree = this.$options.render.call(this)
+      let nodeTree = this.$option.render.call(this)
       createElement.componentParent = old
       return nodeTree
     }

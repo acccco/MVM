@@ -1,7 +1,6 @@
 import createElement from './vNode/createElement'
 import RD from '../src/index'
 import vNode from './vNode/'
-import HelloWorld from './component/HelloWorle'
 import PropTest from './component/PropTest'
 import './index.scss'
 

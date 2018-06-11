@@ -1,42 +1,44 @@
 import {noop, mergeAll, merge, clone, is} from './util'
 import {LIFECYCLE_HOOKS} from '../core/instance/lifecycle'
 
-export function mergeOptions(parent = {}, child = {}) {
+export function mergeOption(parent = {}, child = {}) {
 
   normalizeComputed(parent)
 
-  normalizeProps(child)
+  normalizeProp(child)
 
   normalizeInject(child)
 
   normalizeComputed(child)
 
   // 统一先取 child 中的数据，放到新对象中
-  let options = mergeAll([{}, parent, child])
+  let option = mergeAll([{}, parent, child])
 
   LIFECYCLE_HOOKS.forEach(name => {
     normalizeLifecycle(child, name)
+    normalizeLifecycle(parent, name)
+    option[name] = [].concat(parent[name]).concat(child[name])
   })
 
-  if (child.mixins) {
-    for (let i = 0, l = child.mixins.length; i < l; i++) {
-      options = mergeOptions(options, child.mixins[i])
+  if (child.mixin) {
+    for (let i = 0, l = child.mixin.length; i < l; i++) {
+      option = mergeOption(option, child.mixin[i])
     }
   }
 
   // 合并 data
-  options.data = mergeData(parent.data, child.data)
+  option.data = mergeData(parent.data, child.data)
 
   // 合并 watcher 同名合并成一个数组
-  options.watch = mergeWatch(parent.watch, child.watch)
+  option.watch = mergeWatch(parent.watch, child.watch)
 
   // 合并 methods 同名覆盖
-  options.method = merge(parent.method, child.method)
+  option.method = merge(parent.method, child.method)
 
   // 合并 computed 同名覆盖
-  options.computed = merge(parent.computed, child.computed)
+  option.computed = merge(parent.computed, child.computed)
 
-  return options
+  return option
 }
 
 function mergeData(parentValue = noop, childValue = noop) {
@@ -63,13 +65,13 @@ function mergeWatch(parentVal = {}, childVal = {}) {
   return watchers
 }
 
-function normalizeLifecycle(child, name) {
-  if (undefined === child[name]) {
-    child[name] = []
+function normalizeLifecycle(option, name) {
+  if (undefined === option[name]) {
+    option[name] = []
     return
   }
-  if (!is(Array, child[name])) {
-    child[name] = [child[name]]
+  if (!is(Array, option[name])) {
+    option[name] = [option[name]]
   }
 }
 
@@ -91,8 +93,8 @@ function normalizeWatcher(watcher) {
 }
 
 /**
- * 处理 props 返回统一结构
- * @param options
+ * 处理 prop 返回统一结构
+ * @param option
  * return {
  *   key: {
  *     type: String|Number|...,
@@ -101,25 +103,28 @@ function normalizeWatcher(watcher) {
  * }
  */
 
-function normalizeProps(options) {
-  let props = options.props
-  let normalProps = options.props = {}
-  if (is(Array, props)) {
-    props.forEach(prop => {
+function normalizeProp(option) {
+  if (!option.prop) {
+    return
+  }
+  let prop = option.prop
+  let normalProps = option.prop = {}
+  if (is(Array, prop)) {
+    prop.forEach(prop => {
       normalProps[prop] = {
         type: null
       }
     })
   } else {
-    for (let key in props) {
-      normalProps[key] = merge({type: null}, props[key])
+    for (let key in prop) {
+      normalProps[key] = merge({type: null}, prop[key])
     }
   }
 }
 
 /**
  * 处理 inject 返回统一结构
- * @param options
+ * @param option
  * returns {
  *   key: {
  *     from: xxx,
@@ -128,10 +133,10 @@ function normalizeProps(options) {
  * }
  */
 
-function normalizeInject(options) {
-  let inject = options.inject
+function normalizeInject(option) {
+  let inject = option.inject
   if (is(Array, inject)) {
-    let normalInject = options.inject = {}
+    let normalInject = option.inject = {}
     inject.forEach(key => {
       normalInject[key] = {
         from: key
@@ -142,7 +147,7 @@ function normalizeInject(options) {
 
 /**
  * 处理 computed 返回统一结构
- * @param options
+ * @param option
  * return {
  *   key: {
  *     get: Function,
@@ -150,11 +155,11 @@ function normalizeInject(options) {
  *   }
  * }
  */
-function normalizeComputed(options) {
-  let computed = options.computed
+function normalizeComputed(option) {
+  let computed = option.computed
   for (let key in computed) {
     if (is(Function, computed[key])) {
-      options.computed[key] = {
+      option.computed[key] = {
         get: computed[key],
         set: noop
       }

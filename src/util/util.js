@@ -91,10 +91,10 @@ export function warn(msg, rd) {
 
 export function checkProp(name, type, ctx) {
   let usedType
-  if (name in ctx._inject) usedType = 'inject'
-  if (type !== 'prop' && name in ctx._prop) usedType = 'prop'
-  if (type !== 'method' && name in ctx.$options.method) usedType = 'method'
-  if (type !== 'data' && name in ctx._data) usedType = 'data'
+  if (ctx._inject && name in ctx._inject) usedType = 'inject'
+  if (ctx._prop && type !== 'prop' && name in ctx._prop) usedType = 'prop'
+  if (ctx.$option.method && type !== 'method' && name in ctx.$option.method) usedType = 'method'
+  if (ctx._data && type !== 'data' && name in ctx._data) usedType = 'data'
   if (usedType) {
     warn(`${usedType} 下已有 ${name} 属性`, ctx)
     return false

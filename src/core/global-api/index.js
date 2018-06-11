@@ -4,12 +4,11 @@ import {initUse} from './use'
 
 export function initGlobalApi(RD) {
 
-  // 设置 option 为一个对象
-  RD.options = {}
+  // 初始化 options 用于合并参数
+  RD.option = {}
 
   // 保存原始 RD 类对象
-  RD.options._base = RD
-  RD.options.components = {}
+  RD.option._base = RD
 
   // 实现子类生成方法
   initExtend(RD)

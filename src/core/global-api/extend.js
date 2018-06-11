@@ -1,21 +1,21 @@
-import {mergeOptions} from '../../util/options'
+import {mergeOption} from '../../util/option'
 
 let cid = 0
 
 export function initExtend(RD) {
   RD.cid = cid++
-  RD.extend = function (extendOptions) {
+  RD.extend = function (extendOption) {
     const Super = this
 
     class Sub extends Super {
-      constructor(options) {
-        super(options)
+      constructor(option) {
+        super(option)
       }
     }
 
-    Sub.options = mergeOptions(
-      Super.options,
-      extendOptions
+    Sub.option = mergeOption(
+      Super.option,
+      extendOption
     )
 
     Sub.super = Super

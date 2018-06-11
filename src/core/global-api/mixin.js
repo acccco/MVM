@@ -1,8 +1,8 @@
-import {mergeOptions} from '../../util/options'
+import {mergeOption} from '../../util/option'
 
 export function initMixin(RD) {
   RD.mixin = function (mixin) {
-    this.options = mergeOptions(this.options, mixin)
+    this.option = mergeOption(this.option, mixin)
     return this
   }
 }

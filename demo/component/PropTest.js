@@ -1,6 +1,5 @@
 import createElement from '../vNode/createElement'
 import RD from '../../src/index'
-import HelloWorld from './HelloWorle'
 
 /** @jsx createElement */
 

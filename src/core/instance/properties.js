@@ -1,5 +1,5 @@
 export function initProperties(rd) {
-  let parent = rd.$options.parent
+  let parent = rd.$option.parent
   if (parent) {
     parent.$children.push(rd)
   }
