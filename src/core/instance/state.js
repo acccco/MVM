@@ -47,6 +47,7 @@ function initProp(rd) {
 function initMethod(rd) {
   for (let key in rd.$option.method) {
     if (checkProp(key, 'method', rd)) {
+      rd[key] = rd.$option.method[key]
       break
     }
   }
