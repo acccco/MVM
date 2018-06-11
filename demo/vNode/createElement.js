@@ -1,8 +1,8 @@
 import {h} from 'virtual-dom'
 
-export default function createElement(tagName, properties, ...children) {
+export default function createElement(tag, properties, ...children) {
 
-  if (typeof tagName === 'function') {
+  if (typeof tag === 'function') {
     let parent = createElement.componentParent
     if (parent.componentList === undefined) {
       parent.componentList = {}
@@ -11,15 +11,12 @@ export default function createElement(tagName, properties, ...children) {
     if (parent.componentList[properties.key]) {
       comp = parent.componentList[properties.key]
     } else {
-      comp = new tagName({parent: parent, propData: properties})
+      comp = new tag({parent: parent, propData: properties})
       comp.initWatch()
       parent.componentList[properties.key] = comp
     }
-    let nodeTree = comp.$createNodeTree(properties)
-    nodeTree.component = comp
-    nodeTree.nid = comp.id
-    return nodeTree
+    return comp.$createNodeTree(properties)
   }
 
-  return h(tagName, properties, children)
+  return h(tag, properties, children)
 }

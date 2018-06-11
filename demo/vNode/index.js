@@ -16,8 +16,6 @@ export default {
       let nodeTree = null
       this.$watch(() => {
         nodeTree = this.render.call(this, this.propData)
-        nodeTree.nid = this.id
-        nodeTree.component = this
       }, () => {
         this.$patch()
       }, {
