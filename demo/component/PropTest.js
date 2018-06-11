@@ -6,11 +6,11 @@ import HelloWorld from './HelloWorle'
 
 let PropTest = RD.extend({
   render() {
+    console.log('render')
     return <div>
       <p>{this.defaultTest}</p>
       <p>{this.propText}</p>
       <p>{this.fullName}</p>
-      <HelloWorld key='hd'></HelloWorld>
     </div>
   },
   prop: {

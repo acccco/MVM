@@ -11,20 +11,22 @@ RD.use(vNode, RD)
 
 let rd = window.rd = new RD({
   render() {
+    console.log('index render')
     return <div>
       {this.text}
-      <p style={{color: '#ff00ff'}}>{this.text}</p>
-      <HelloWorld key='hd1'></HelloWorld>
+      <p style={{color: '#ff00ff'}}>{this.fullname}</p>
       <PropTest key='pt' propText={this.propText} propObject={this.propObject}></PropTest>
       <input type="text" value={this.inputValue} oninput={(e) => {
         this.inputValue = e.target.value
       }}/>
-      <HelloWorld key='hd2'></HelloWorld>
     </div>
   },
   data() {
     return {
       text: 'this is ReactiveData demo',
+      computedTest: {
+        name: 'hello'
+      },
       propText: 'this is propText',
       propObject: {
         firstName: 'aco',
@@ -38,14 +40,16 @@ let rd = window.rd = new RD({
       console.log(`inputValue change: ${oldValue} => ${newValue}`)
     }
   },
+  computed: {
+    fullname() {
+      return this.computedTest.name + ' world'
+    }
+  },
   method: {
     handle() {
       alert('Oh You Click Me !')
     }
   }
 })
-
-HelloWorld.parent = rd
-PropTest.parent = rd
 
 rd.$mount(document.getElementById('app'))

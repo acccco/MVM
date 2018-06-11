@@ -4,7 +4,7 @@ import {initState} from "./state"
 import {initProperties} from "./properties"
 import {Watcher} from "../../toolbox/Watcher"
 import {callHook} from "./lifecycle"
-import {warn, allowedGlobals} from "../../util/util"
+import {warn, allowedGlobals, is} from "../../util/util"
 
 let uid = 0
 

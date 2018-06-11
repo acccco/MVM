@@ -77,8 +77,12 @@ function initData(rd) {
 }
 
 function initComputed(rd) {
+  let computed = rd._computed = {}
   for (let key in rd.$options.computed) {
-
+    computed[key] = (new Computed(rd, key, rd.$options.computed[key])).value
+  }
+  observe(computed)
+  proxyObject(rd, computed, (key) => {
     let usedType
     if (key in rd._inject) usedType = 'inject'
     if (key in rd._prop) usedType = 'prop'
@@ -86,10 +90,8 @@ function initComputed(rd) {
     if (key in rd._data) usedType = 'data'
     if (usedType) {
       warn(`${usedType} 下已有 ${key} 属性`, rd)
-      break
     }
-    rd._computed.push(new Computed(rd, key, rd.$options.computed[key]))
-  }
+  })
 }
 
 function initWatch(rd) {

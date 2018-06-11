@@ -8,14 +8,23 @@ export default function createElement(tag, properties, ...children) {
       parent.componentList = {}
     }
     let comp = null
+    let nodeTree = null
     if (parent.componentList[properties.key]) {
       comp = parent.componentList[properties.key]
+      nodeTree = comp.$createNodeTree(properties)
     } else {
       comp = new tag({parent: parent, propData: properties})
-      comp.initWatch()
+      comp.$watch(() => {
+        nodeTree = comp.$createNodeTree(properties)
+      }, () => {
+        console.log('child call')
+        comp.$root.$patch()
+      }, {
+        ignoreChange: true
+      })
       parent.componentList[properties.key] = comp
     }
-    return comp.$createNodeTree(properties)
+    return nodeTree
   }
 
   return h(tag, properties, children)

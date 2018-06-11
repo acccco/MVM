@@ -11,28 +11,20 @@ export class Computed {
     this.option = option
     this.active = true
     this.watcher = null
+    this.value = null
     this.init()
   }
 
   init() {
+    let rd = this.ctx
     let watcher = this.watcher = new Watcher(
-      this.ctx,
+      rd,
       this.option.get || noop,
-      noop,
-      {lazy: true}
-    )
-
-    Object.defineProperty(this.ctx, this.key, {
-      enumerable: true,
-      configurable: true,
-      set: this.option.set || noop,
-      get() {
-        if (watcher.dirty) {
-          watcher.evaluate()
-        }
-        return watcher.value
+      (newValue) => {
+        rd[this.key] = newValue
       }
-    })
+    )
+    this.value = watcher.value
   }
 
   teardown() {

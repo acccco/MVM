@@ -8,5 +8,4 @@ export function initProperties(rd) {
   rd.$children = []
 
   rd._watcher = []
-  rd._computed = []
 }

@@ -17,11 +17,11 @@ export default {
       this.$watch(() => {
         nodeTree = this.render.call(this, this.propData)
       }, () => {
+        console.log('watch call')
         this.$patch()
       }, {
         ignoreChange: true
       })
-
       this.nodeTree = nodeTree
       this.rootNode = create(this.nodeTree)
       el.appendChild(this.rootNode)
@@ -32,16 +32,6 @@ export default {
       let patches = diff(this.nodeTree, newTree)
       this.rootNode = patch(this.rootNode, patches)
       this.nodeTree = newTree
-    }
-
-    RD.prototype.initWatch = function (prop) {
-      this.$watch(() => {
-        this.render.call(this, prop)
-      }, () => {
-        this.$root.$patch()
-      }, {
-        ignoreChange: true
-      })
     }
 
     RD.prototype.$createNodeTree = function (prop) {
