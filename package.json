@@ -12,7 +12,7 @@
     "build": "cross-env BABEL_ENV=webpack webpack --config build/webpack.config.js",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir cjs",
-    "start:jsxDemo": "cross-env BABEL_ENV=webpack webpack-dev-server --hot --config build/webpack.jsx.config.js",
+    "start:demo": "cross-env BABEL_ENV=webpack webpack-dev-server --hot --config build/webpack.jsx.config.js",
     "test": "karma start test/karma.config.js",
     "analyseJson": "webpack --config webpack.config.js --profile --json > analyse.json",
     "analyse": "webpack-bundle-analyzer analyse.json"

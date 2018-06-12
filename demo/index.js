@@ -26,7 +26,7 @@ let rd = new RD({
         </div>
         <div className='item-wrap row'>
           <input className='input' type='text'
-                 placeholder='What do you need to do now ?'
+                 placeholder='记点什么'
                  value={this.inputValue}
                  oninput={(e) => {
                    this.inputValue = e.target.value
