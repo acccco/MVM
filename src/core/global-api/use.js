@@ -6,7 +6,7 @@ export function initUse(RD) {
       return this
     }
 
-    // plugin.install 是一个函数的话说明 plugin 为一个对象，则将需要的上下文环境传入
+    // plugin.install 绑定执行函数的上下文环境
     if (typeof plugin.install === 'function') {
       plugin.install.apply(plugin, args)
     } else if (typeof plugin === 'function') {

@@ -19,7 +19,12 @@
         "env"
       ],
       "plugins": [
-        "transform-react-jsx",
+        [
+          "transform-react-jsx",
+          {
+            "pragma": "createElement"
+          }
+        ],
         [
           "transform-runtime",
           {

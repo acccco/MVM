@@ -1,8 +1,6 @@
 import createElement from '../jsxPlugin/createElement'
 import RD from '../../src/index'
 
-/** @jsx createElement */
-
 let TodoTask = RD.extend({
   render() {
     return (
