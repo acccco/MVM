@@ -17,7 +17,6 @@ export default {
       this.$watch(() => {
         nodeTree = this.render.call(this, this.propData)
       }, () => {
-        console.log('watch call')
         this.$patch()
       }, {
         ignoreChange: true

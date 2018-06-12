@@ -17,7 +17,6 @@ export default function createElement(tag, properties, ...children) {
       comp.$watch(() => {
         nodeTree = comp.$createNodeTree(properties)
       }, () => {
-        console.log('child call')
         comp.$root.$patch()
       }, {
         ignoreChange: true

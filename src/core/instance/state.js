@@ -37,8 +37,6 @@ function initProp(rd) {
     }
     prop[key] = value
   }
-  // 父组件已经监控变化，这里不需要
-  // observe(prop)
   proxyObject(rd, prop, (key) => {
     return checkProp(key, 'prop', rd)
   })
@@ -48,7 +46,6 @@ function initMethod(rd) {
   for (let key in rd.$option.method) {
     if (checkProp(key, 'method', rd)) {
       rd[key] = rd.$option.method[key]
-      break
     }
   }
 }

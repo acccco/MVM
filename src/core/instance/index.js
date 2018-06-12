@@ -2,9 +2,11 @@ import {Event} from '../../toolbox/Event'
 import {mergeOption} from '../../util/option'
 import {initState} from './state'
 import {initProperties} from './properties'
+import {initEvent} from './event'
 import {Watcher} from '../../toolbox/Watcher'
 import {callHook} from './lifecycle'
 import {warn, allowedGlobals} from '../../util/util'
+import {Dep} from "../../toolbox/Dep";
 
 let uid = 0
 
@@ -28,6 +30,7 @@ export class RD extends Event {
 
     initState(rd)
     callHook(rd, 'created')
+    initEvent(rd)
 
     rd._proxy = new Proxy(rd, {
       has(target, key) {
@@ -54,6 +57,20 @@ export class RD extends Event {
       }
       rd[key] = value
     }
+  }
+
+  // 用于取消特定的属性监听
+  cancelWatch(getter) {
+    let old = Dep.target
+    Dep.target = null
+    let value = null
+    if (typeof getter === 'string') {
+      value = getter.split('.').reduce((res, name) => res[name], this)
+    } else if (typeof getter === 'function') {
+      value = getter.call(this)
+    }
+    Dep.target = old
+    return value
   }
 
   $watch(getter, callback, option) {

@@ -1,49 +1,100 @@
 @charset "UTF-8";
-@mixin makeContainer($container_name) {
-  #{$container_name} .animation-item {
-    position: absolute;
-    overflow: hidden;
-    z-index: 2;
-    transition-timing-function: linear;
-    transition: 1.4s;
-
-    &:before {
-      position: absolute;
-      content: '';
-      width: 100%;
-      height: 100%;
-      box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5);
-      z-index: 3;
-      box-sizing: border-box;
-    }
-
-    .child {
-      background-size: cover;
-      display: block;
-      position: absolute;
-      z-index: 1;
-      background-position: 50% 50%;
-    }
-  }
-}
-
-@include makeContainer('.wrap-contain')
-
-.child {
-  background-image: url("http://7xse2z.com1.z0.glb.clouddn.com/257453.jpg");
-}
-
-.default-change {
-  transform: scale(0);
-  border-radius: 50%;
-}
 
 html, body, #app {
   height: 100%;
   width: 100%;
+  overflow: hidden;
 }
 
 * {
   padding: 0;
   margin: 0;
+}
+
+.todo-wrap {
+  width: 400px;
+  margin: 50px auto 0;
+  border: 1px solid #cfcfcf;
+  background: #f0f0f0;
+  border-radius: 4px;
+  padding: 0 30px;
+  .title {
+    text-align: center;
+    font-size: 22px;
+    padding: 20px;
+  }
+  .item-wrap {
+    border: 1px solid #cfcfcf;
+    border-radius: 4px;
+    overflow: auto;
+    margin-bottom: 20px;
+    max-height: 400px;
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .todo-item {
+    background: #fff;
+    height: 40px;
+    font-size: 14px;
+    &:not(:last-of-type) {
+      border-bottom: 1px solid #cfcfcf;
+    }
+    .col-1 {
+      flex: 0 0 40px;
+      text-align: center;
+    }
+    .col-2 {
+      flex: auto;
+      &.on {
+        text-decoration: line-through;
+        color: #666;
+      }
+    }
+    .col-3 {
+      flex: 0 0 66px;
+      text-align: center;
+      .btn {
+        border: 1px solid #cfcfcf;
+        padding: 3px 10px;
+        border-radius: 4px;
+        font-size: 12px;
+        cursor: pointer;
+        user-select: none;
+        background: #f0f0f0;
+        color: #666;
+        transition: .4s;
+        &:hover {
+          background: #ff8c28;
+          color: #fff;
+          border-color: #ff6c3c;
+        }
+      }
+    }
+  }
+  .input {
+    flex: auto;
+    line-height: 34px;
+    border: none;
+    outline: none;
+    padding: 0 10px;
+  }
+  .save {
+    flex: 0 0 60px;
+    text-align: center;
+    background: #5abaff;
+    line-height: 34px;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+  }
+  .no-task {
+    background: #fff;
+    text-align: center;
+    line-height: 40px;
+    font-size: 14px;
+    color: #666;
+  }
 }
