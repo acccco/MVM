@@ -4,7 +4,7 @@ var webpack = require('webpack')
 
 module.exports = {
   mode: 'none',
-  entry: './demo/JSX/index.js',
+  entry: './demo/index.js',
   output: {
     filename: 'test.js',
     path: path.resolve(__dirname, 'demo/dist/JSX'),
@@ -31,7 +31,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'demo/JSX/index.html',
+      template: 'demo/index.html',
       inject: true
     }),
   ]

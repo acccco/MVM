@@ -1,15 +1,15 @@
-import createElement from './vNode/createElement'
-import RD from '../../src/index'
-import vNode from './vNode/index'
+import createElement from './jsxPlugin/createElement'
+import RD from '../src/index'
+import jsxPlugin from './jsxPlugin/index'
 import TodoTask from './component/TodoTask'
 import NoTask from './component/NoTask'
 import './index.scss'
 
-RD.use(vNode, RD)
+RD.use(jsxPlugin, RD)
 
 /** @jsx createElement */
 
-let rd = window.rd = new RD({
+let rd = new RD({
   render() {
     let todoList = this.todoList.map((item) =>
       <TodoTask key={item.id}
@@ -26,7 +26,7 @@ let rd = window.rd = new RD({
         </div>
         <div className='item-wrap row'>
           <input className='input' type='text'
-                 placeholder='记点什么'
+                 placeholder='What do you need to do now ?'
                  value={this.inputValue}
                  oninput={(e) => {
                    this.inputValue = e.target.value
