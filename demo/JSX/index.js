@@ -1,6 +1,6 @@
 import createElement from './vNode/createElement'
-import RD from '../src/index'
-import vNode from './vNode/'
+import RD from '../../src/index'
+import vNode from './vNode/index'
 import TodoTask from './component/TodoTask'
 import NoTask from './component/NoTask'
 import './index.scss'

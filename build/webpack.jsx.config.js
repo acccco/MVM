@@ -4,10 +4,10 @@ var webpack = require('webpack')
 
 module.exports = {
   mode: 'none',
-  entry: './demo/index.js',
+  entry: './demo/JSX/index.js',
   output: {
     filename: 'test.js',
-    path: path.resolve(__dirname, 'demo/dist'),
+    path: path.resolve(__dirname, 'demo/dist/JSX'),
   },
   devtool: "eval-source-map",
   module: {
@@ -31,7 +31,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'demo/index.html',
+      template: 'demo/JSX/index.html',
       inject: true
     }),
   ]

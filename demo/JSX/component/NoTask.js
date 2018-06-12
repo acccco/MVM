@@ -1,5 +1,5 @@
 import createElement from '../vNode/createElement'
-import RD from '../../src/index'
+import RD from '../../../src/index'
 
 /** @jsx createElement */
 
