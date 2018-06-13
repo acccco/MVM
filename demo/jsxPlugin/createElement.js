@@ -1,29 +1,16 @@
-import {h} from 'virtual-dom'
+import {h, VNode} from 'virtual-dom'
 
-export default function createElement(tag, properties, ...children) {
+export default function createElement(ctx, tag, properties, ...children) {
 
   if (typeof tag === 'function') {
-    let parent = createElement.componentParent
-    if (parent.componentList === undefined) {
-      parent.componentList = {}
-    }
-    let comp = null
-    let nodeTree = null
-    if (parent.componentList[properties.key]) {
-      comp = parent.componentList[properties.key]
-      nodeTree = comp.$createNodeTree(properties)
-    } else {
-      comp = new tag({parent: parent, propData: properties})
-      comp.$watch(() => {
-        nodeTree = comp.$createNodeTree(properties)
-      }, () => {
-        comp.$root.$patch()
-      }, {
-        ignoreChange: true
-      })
-      parent.componentList[properties.key] = comp
-    }
-    return nodeTree
+    let node = new VNode()
+    node.tagName = `component-${tag.cid}`
+    node.properties = properties
+    node.children = children
+    node.parent = ctx
+    node.isComponent = true
+    node.componentClass = tag
+    return node
   }
 
   return h(tag, properties, children)

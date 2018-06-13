@@ -22,7 +22,7 @@
         [
           "transform-react-jsx",
           {
-            "pragma": "createElement"
+            "pragma": "h"
           }
         ],
         [

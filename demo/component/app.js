@@ -1,10 +1,10 @@
-import createElement from '../jsxPlugin/createElement'
 import RD from '../../src/index'
 import TodoTask from './TodoTask'
 import NoTask from './NoTask'
 
 export default new RD({
-  render() {
+  render(h) {
+    console.log('app render')
     let todoList = this.todoList.map((item) =>
       <TodoTask key={item.id}
                 task={item}/>
@@ -14,7 +14,7 @@ export default new RD({
     }
     return (
       <div className='todo-wrap'>
-        <p className='title'>{this.text}</p>
+        <p className='title'>{this.title}</p>
         <div className='item-wrap'>
           {todoList}
         </div>
@@ -50,7 +50,7 @@ export default new RD({
   },
   data() {
     return {
-      text: 'RD with jsx TodoList',
+      title: 'RD with jsx TodoList',
       todoList: [],
       inputValue: ''
     }

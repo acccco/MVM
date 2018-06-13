@@ -1,11 +1,16 @@
-import createElement from '../jsxPlugin/createElement'
 import RD from '../../src/index'
 
 let noTask = RD.extend({
-  render() {
+  render(h) {
+    console.log('no task render')
     return (
-      <div className="no-task">暂无 TodoList</div>
+      <div className="no-task">{this.info}</div>
     )
+  },
+  data() {
+    return {
+      info: '暂无 TodoList'
+    }
   }
 })
 
