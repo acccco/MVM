@@ -4,7 +4,7 @@ import {arrayMethods} from '../util/array'
 const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 
 export function defineReactive(object, key, value) {
-  let dep = new Dep()
+  let dep = new Dep(object, key)
   let childOb = observe(value)
   Object.defineProperty(object, key, {
     configurable: true,
@@ -33,7 +33,7 @@ export class Observer {
 
   constructor(value) {
     this.id = uid++
-    this.dep = new Dep()
+    this.dep = new Dep(value, 'this')
     // 处理数组
     if (Array.isArray(value)) {
       const augment = ('__proto__' in {})

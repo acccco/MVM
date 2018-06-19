@@ -6,11 +6,10 @@ export default new RD({
   render(h) {
     console.log('app render')
     let todoList = this.todoList.map((item) =>
-      <TodoTask key={item.id}
-                task={item}/>
+      <TodoTask task={item}/>
     )
     if (todoList.length === 0) {
-      todoList = <NoTask/>
+      todoList = <NoTask noTaskInfo={this.noTaskInfo}/>
     }
     return (
       <div className='todo-wrap'>
@@ -52,7 +51,8 @@ export default new RD({
     return {
       title: 'RD with jsx TodoList',
       todoList: [],
-      inputValue: ''
+      inputValue: '',
+      noTaskInfo: '暂无 TodoList'
     }
   },
   method: {

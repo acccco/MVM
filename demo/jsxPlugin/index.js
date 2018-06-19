@@ -20,11 +20,21 @@ export default {
         template = this.render.call(this, this.propData)
         return template
       }, (newTemplate) => {
-        console.log('root watch')
         this.$patch(newTemplate)
       })
       this.$patch(template)
       el.appendChild(this.$el)
+    }
+
+    RD.prototype.$createComponentVNode = function (prop) {
+      let template = null
+      this.$renderWatch = this.$watch(() => {
+        template = this.render.call(this, prop)
+        return template
+      }, (newTemplate) => {
+        this.$patch(newTemplate)
+      })
+      return template
     }
 
     RD.prototype.$patch = function (newTemplate) {
@@ -36,18 +46,19 @@ export default {
       }
       this.$vnode = newTemplate
       this._vnode = newTree
+      this.$initDOMBind(this.$el, newTemplate)
     }
 
-    RD.prototype.$createComponentVNode = function (prop) {
-      let template = null
-      this.$renderWatch = this.$watch(() => {
-        template = this.render.call(this, prop)
-        return template
-      }, (newTemplate) => {
-        console.log('component watch')
-        this.$patch(newTemplate)
-      })
-      return template
+    RD.prototype.$initDOMBind = function (rootDom, vNodeTemplate) {
+      if (!vNodeTemplate.children || vNodeTemplate.children.length === 0) return
+      for (let i = 0, len = vNodeTemplate.children.length; i < len; i++) {
+        if (vNodeTemplate.children[i].isComponent) {
+          vNodeTemplate.children[i].component.$el = rootDom.childNodes[i]
+          this.$initDOMBind(rootDom.childNodes[i], vNodeTemplate.children[i].component.$vnode)
+        } else {
+          this.$initDOMBind(rootDom.childNodes[i], vNodeTemplate.children[i])
+        }
+      }
     }
   }
 }

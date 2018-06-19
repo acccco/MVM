@@ -1,17 +1,11 @@
-import RD from '../../src/index'
-
-let noTask = RD.extend({
+let NoTask = {
   render(h) {
     console.log('no task render')
     return (
-      <div className="no-task">{this.info}</div>
+      <div className="no-task">{this.noTaskInfo}</div>
     )
   },
-  data() {
-    return {
-      info: '暂无 TodoList'
-    }
-  }
-})
+  prop: ['noTaskInfo']
+}
 
-export default noTask
+export default NoTask

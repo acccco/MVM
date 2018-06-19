@@ -24,7 +24,7 @@ function initInject(rd) {
 
 function initProp(rd) {
   let prop = rd._prop = {}
-  let propData = rd.$option.propData
+  let propData = rd.$option.propData || {}
   for (let key in rd.$option.prop) {
     let value = propData[key]
     if (!value) {
@@ -51,7 +51,7 @@ function initData(rd) {
     return
   }
   let data = rd._data = rd.$option.data ? rd.$option.data.call(rd) : {}
-  if (!isNil(data)) {
+  if (isNil(data)) {
     warn('data 函数的返回值必须是一个对象', rd)
     return
   }

@@ -2,8 +2,12 @@ let uid = 0
 
 export class Dep {
 
-  constructor() {
-    this.id = ++uid
+  constructor(object, key) {
+    this.id = uid++
+    this.monitor = {
+      object,
+      key
+    }
     this.subs = []
   }
 
