@@ -1,5 +1,5 @@
-import {create, VNode} from 'virtual-dom'
-import {Dep} from "../../src/toolbox/Dep";
+import {VNode, VText} from 'virtual-dom'
+import {equals} from 'ramda'
 
 function extend(source, extend) {
   for (let key in extend) {
@@ -17,21 +17,13 @@ function createTree(template) {
         node.component = new node.componentClass({parent: node.parent, propData: node.properties})
         node.component.$vnode = node.component.$createNodeTree(node.properties)
         treeNode = node.component.$vnode
+        treeNode.component = node.component
       }
       if (treeNode.children) {
         treeNode = createTree(treeNode)
       }
       if (node.isComponent) {
         node.component._vnode = treeNode
-        Object.defineProperty(node.component, '$el', {
-          configurable: true,
-          enumerable: true,
-          get() {
-            return treeNode.$el
-          },
-          set(el) {
-          }
-        })
       }
       return treeNode
     })
@@ -39,20 +31,11 @@ function createTree(template) {
   return tree
 }
 
-function getOldComponent(list = [], cid) {
+function getOldComponent(list = [], properties, cid) {
   for (let i = 0, len = list.length; i < len; i++) {
-    if (!list[i].used && list[i].componentClass.cid === cid) {
+    if (!list[i].used && list[i].isComponent && list[i].componentClass.cid === cid && equals(properties, list[i].properties)) {
       list[i].used = true
       return list[i].component
-    }
-  }
-}
-
-function getOldTag(list = [], tagName) {
-  for (let i = 0, len = list.length; i < len; i++) {
-    if (!list[i].used && list[i].tagName === tagName) {
-      list[i].used = true
-      return list[i]
     }
   }
 }
@@ -64,41 +47,57 @@ function changeTree(newTemplate, oldTemplate) {
       let treeNode = node
       let isNewComponent = false
       if (treeNode.isComponent) {
-        node.component = getOldComponent(oldTemplate.children, treeNode.componentClass.cid)
+        node.component = getOldComponent(oldTemplate.children, treeNode.properties, treeNode.componentClass.cid)
         if (!node.component) {
           node.component = new node.componentClass({parent: node.parent, propData: node.properties})
           node.component.$vnode = node.component.$createNodeTree(node.properties)
           treeNode = node.component.$vnode
+          treeNode.component = node.component
           isNewComponent = true
         } else {
           treeNode = node.component._vnode
+          treeNode.component = node.component
         }
       }
 
-      if (!(treeNode.children && treeNode.children.length !== 0)) {
+      if (treeNode.children && treeNode.children.length !== 0) {
         if (isNewComponent) {
           treeNode = createTree(treeNode)
         } else {
-          console.log(treeNode)
-          treeNode = changeTree(treeNode, getOldTag(oldTemplate.children, node.tagName))
+          if (oldTemplate && oldTemplate.children) {
+            treeNode = changeTree(treeNode, oldTemplate.children[index])
+          } else {
+            treeNode = createTree(treeNode)
+          }
         }
       }
       if (isNewComponent) {
         node.component._vnode = treeNode
-        Object.defineProperty(node.component, '$el', {
-          configurable: true,
-          enumerable: true,
-          get() {
-            return treeNode.$el
-          },
-          set(el) {
-          }
-        })
       }
       return treeNode
     })
+    if (oldTemplate && oldTemplate.children.length !== 0)
+      for (let i = 0, len = oldTemplate.children.length; i < len; i++) {
+        if (oldTemplate.children[i].isComponent && !oldTemplate.children[i].used) {
+          oldTemplate.children[i].component.$destory()
+        }
+      }
   }
   return tree
+}
+
+function deepClone(node) {
+  if (node.type === 'VirtualNode') {
+    let children = []
+    if (node.children && node.children.length !== 0) {
+      children = node.children.map(node => deepClone(node))
+    }
+    let cloneNode = new VNode(node.tagName, node.properties, children)
+    if (node.component) cloneNode.component = node.component
+    return cloneNode
+  } else if (node.type === 'VirtualText') {
+    return new VText(node.text)
+  }
 }
 
 export default function getTree(newTemplate, oldTemplate) {
@@ -106,8 +105,8 @@ export default function getTree(newTemplate, oldTemplate) {
   if (!oldTemplate) {
     tree = createTree(newTemplate)
   } else {
-    console.log('change')
     tree = changeTree(newTemplate, oldTemplate)
   }
-  return tree
+
+  return deepClone(tree)
 }

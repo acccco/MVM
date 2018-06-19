@@ -10,7 +10,7 @@ export default new RD({
                 task={item}/>
     )
     if (todoList.length === 0) {
-      todoList = <NoTask key="nt"/>
+      todoList = <NoTask/>
     }
     return (
       <div className='todo-wrap'>
