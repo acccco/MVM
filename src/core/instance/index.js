@@ -75,7 +75,9 @@ export class RD extends Event {
   }
 
   $watch(getter, callback, option) {
-    return new Watcher(this, getter, callback, option)
+    let watch = new Watcher(this, getter, callback, option)
+    this._watch.push(watch)
+    return watch
   }
 
   $destory() {
@@ -87,8 +89,8 @@ export class RD extends Event {
       parent.$children.splice(parent.$children.indexOf(rd), 1)
       rd.$parent = null
 
-      while (rd._watcher.length) {
-        let watcher = rd._watcher.shift()
+      while (rd._watch.length) {
+        let watcher = rd._watch.shift()
         watcher.teardown()
       }
 

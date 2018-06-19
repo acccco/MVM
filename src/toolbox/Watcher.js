@@ -7,7 +7,7 @@ let uid = 0
 export class Watcher {
 
   constructor(ctx, getter, callback, options) {
-    this.id = ++uid
+    this.id = uid++
     this.active = true
 
     if (options) {

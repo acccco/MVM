@@ -5,6 +5,18 @@ import getTree from './getTree'
 export default {
   install(RD) {
 
+    RD.$mount = function (el, rd) {
+      let template = null
+      rd.$renderWatch = rd.$watch(() => {
+        template = rd.render.call(rd, rd.propData)
+        return template
+      }, (newTemplate) => {
+        rd.$patch(newTemplate)
+      })
+      rd.$patch(template)
+      el.appendChild(rd.$el)
+    }
+
     RD.prototype.$createElement = function (tag, properties, ...children) {
       return createElement(this, tag, properties, ...children)
     }
@@ -14,24 +26,13 @@ export default {
       return this.$option.render.call(this, this.$createElement.bind(this))
     }
 
-    RD.prototype.$mount = function (el) {
-      let template = null
-      this.$renderWatch = this.$watch(() => {
-        template = this.render.call(this, this.propData)
-        return template
-      }, (newTemplate) => {
-        this.$patch(newTemplate)
-      })
-      this.$patch(template)
-      el.appendChild(this.$el)
-    }
-
     RD.prototype.$createComponentVNode = function (prop) {
       let template = null
       this.$renderWatch = this.$watch(() => {
         template = this.render.call(this, prop)
         return template
       }, (newTemplate) => {
+        console.log('component watch')
         this.$patch(newTemplate)
       })
       return template

@@ -7,5 +7,5 @@ export function initProperties(rd) {
   rd.$root = parent ? parent.$root : rd
   rd.$children = []
 
-  rd._watcher = []
+  rd._watch = []
 }

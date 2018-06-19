@@ -75,7 +75,7 @@ function initComputed(rd) {
 function initWatch(rd) {
   for (let key in rd.$option.watch) {
     rd.$option.watch[key].forEach(option => {
-      rd._watcher.push(new Watcher(rd, () => {
+      rd._watch.push(new Watcher(rd, () => {
         return key.split('.').reduce((obj, name) => obj[name], rd)
       }, option.handler, option))
     })
