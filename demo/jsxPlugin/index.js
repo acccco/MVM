@@ -21,7 +21,9 @@ export default {
       return createElement(this, tag, properties, ...children)
     }
 
-    RD.prototype.render = function (prop = {}) {
+    RD.prototype.render = function (prop) {
+      prop = prop || {}
+      console.log(prop)
       this.initProp(prop)
       return this.$option.render.call(this, this.$createElement.bind(this))
     }

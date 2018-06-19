@@ -1,4 +1,6 @@
-let TodoTask = {
+import RD from '../../src/index'
+
+let TodoTask = RD.extend({
   render(h) {
     console.log('todo task render')
     return (
@@ -31,6 +33,6 @@ let TodoTask = {
       this.$emit('removeById', id)
     }
   }
-}
+})
 
 export default TodoTask

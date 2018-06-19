@@ -5,7 +5,6 @@ import './index.scss'
 
 RD.use(jsxPlugin, RD)
 
-let app = new RD(App)
-window.rd = app
+window.rd = App
 
-RD.$mount(document.getElementById('app'), app)
+RD.$mount(document.getElementById('app'), App)

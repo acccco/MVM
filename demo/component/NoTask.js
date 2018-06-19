@@ -1,4 +1,6 @@
-let NoTask = {
+import RD from '../../src/index'
+
+let NoTask = RD.extend({
   render(h) {
     console.log('no task render')
     return (
@@ -6,6 +8,6 @@ let NoTask = {
     )
   },
   prop: ['noTaskInfo']
-}
+})
 
 export default NoTask

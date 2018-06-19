@@ -15,8 +15,7 @@ function createTree(template) {
       let treeNode = node
       if (node.isComponent) {
         node.component = new node.componentClass({parent: node.parent, propData: node.properties})
-        node.component.$vnode = node.component.$createComponentVNode(node.properties)
-        treeNode = node.component.$vnode
+        treeNode = node.component.$vnode = node.component.$createComponentVNode(node.properties)
         treeNode.component = node.component
       }
       if (treeNode.children) {
@@ -31,9 +30,9 @@ function createTree(template) {
   return tree
 }
 
-function getOldComponent(list = [], properties, cid) {
+function getOldComponent(list = [], cid) {
   for (let i = 0, len = list.length; i < len; i++) {
-    if (!list[i].used && list[i].isComponent && list[i].componentClass.cid === cid && equals(properties, list[i].properties)) {
+    if (!list[i].used && list[i].isComponent && list[i].componentClass.cid === cid) {
       list[i].used = true
       return list[i].component
     }
@@ -47,7 +46,7 @@ function changeTree(newTemplate, oldTemplate) {
       let treeNode = node
       let isNewComponent = false
       if (treeNode.isComponent) {
-        node.component = getOldComponent(oldTemplate.children, treeNode.properties, treeNode.componentClass.cid)
+        node.component = getOldComponent(oldTemplate.children, treeNode.componentClass.cid)
         if (!node.component) {
           node.component = new node.componentClass({parent: node.parent, propData: node.properties})
           node.component.$vnode = node.component.$createComponentVNode(node.properties)
@@ -55,6 +54,7 @@ function changeTree(newTemplate, oldTemplate) {
           treeNode.component = node.component
           isNewComponent = true
         } else {
+          node.component.initProp(node.properties)
           treeNode = node.component._vnode
           treeNode.component = node.component
         }

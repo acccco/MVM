@@ -1,7 +1,8 @@
+import RD from '../../src/index'
 import TodoTask from './TodoTask'
 import NoTask from './NoTask'
 
-export default {
+export default new RD({
   render(h) {
     console.log('app render')
     let todoList = this.todoList.map((item) =>
@@ -64,4 +65,4 @@ export default {
       this.inputValue = ''
     }
   }
-}
+})
