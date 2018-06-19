@@ -16,7 +16,7 @@ export default {
 
     RD.prototype.$mount = function (el) {
       let template = null
-      this.$watch(() => {
+      this.$renderWatch = this.$watch(() => {
         template = this.render.call(this, this.propData)
         return template
       }, (newTemplate) => {
@@ -40,7 +40,7 @@ export default {
 
     RD.prototype.$createComponentVNode = function (prop) {
       let template = null
-      this.$watch(() => {
+      this.$renderWatch = this.$watch(() => {
         template = this.render.call(this, prop)
         return template
       }, (newTemplate) => {

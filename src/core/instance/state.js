@@ -1,15 +1,10 @@
 import {Computed} from '../../toolbox/Computed'
 import {Watcher} from '../../toolbox/Watcher'
-import {getProvideForInject, proxyObject, is, checkProp} from '../../util/util'
+import {getProvideForInject, proxyObject, is, checkProp, warn, isNil} from '../../util/util'
 import {observe} from '../../toolbox/Observe'
 
 export function initState(rd) {
   let opt = rd.$option
-
-  rd._prop = {}
-  rd._data = {}
-  rd._provide = {}
-
   if (opt.inject) initInject(rd)
   if (opt.prop) initProp(rd)
   if (opt.method) initMethod(rd)
@@ -20,15 +15,15 @@ export function initState(rd) {
 }
 
 function initInject(rd) {
-  let inject = rd._inject
-  for (let key in  rd.$option.inject) {
+  let inject = rd._inject = {}
+  for (let key in rd.$option.inject) {
     inject[key] = getProvideForInject(rd, key, rd.$option.inject[key].default)
   }
   proxyObject(rd, inject)
 }
 
 function initProp(rd) {
-  let prop = rd._prop
+  let prop = rd._prop = {}
   let propData = rd.$option.propData
   for (let key in rd.$option.prop) {
     let value = propData[key]
@@ -51,8 +46,15 @@ function initMethod(rd) {
 }
 
 function initData(rd) {
-  // TODO 必须是函数判断，返回值必须是对象判断
+  if (!is(Function, rd.$option.data)) {
+    warn('data 项必须是一个函数', rd)
+    return
+  }
   let data = rd._data = rd.$option.data ? rd.$option.data.call(rd) : {}
+  if (!isNil(data)) {
+    warn('data 函数的返回值必须是一个对象', rd)
+    return
+  }
   observe(data)
   proxyObject(rd, data, (key) => {
     return checkProp(key, 'data', rd)
@@ -81,5 +83,5 @@ function initWatch(rd) {
 }
 
 function initProvide(rd) {
-  rd._provide = is(Function, rd.$option.provide) ? rd.$option.provide.call(rd) : rd.$option.provide
+  rd._provide = is(Function, rd.$option.provide) ? rd.$option.provide.call(rd) : rd.$option.provide || {}
 }
