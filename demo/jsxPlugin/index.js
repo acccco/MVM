@@ -23,7 +23,6 @@ export default {
 
     RD.prototype.render = function (prop) {
       prop = prop || {}
-      console.log(prop)
       this.initProp(prop)
       return this.$option.render.call(this, this.$createElement.bind(this))
     }

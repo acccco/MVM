@@ -5,7 +5,7 @@ import {initProperties} from './properties'
 import {initEvent} from './event'
 import {Watcher} from '../../toolbox/Watcher'
 import {callHook} from './lifecycle'
-import {warn, allowedGlobals, isEmpty} from '../../util/util'
+import {warn, allowedGlobals, isEmpty, equals} from '../../util/util'
 import {Dep} from "../../toolbox/Dep";
 
 let uid = 0
@@ -49,6 +49,7 @@ export class RD extends Event {
 
   // 处理传入的 prop
   initProp(prop) {
+    console.log(prop)
     if (isEmpty(prop)) return
     // TODO 有效性验证
     let rd = this
@@ -57,7 +58,8 @@ export class RD extends Event {
       if (!value) {
         value = rd.$option.prop[key].default
       }
-      rd[key] = value
+      if (!equals(rd[key], value))
+        rd[key] = value
     }
   }
 

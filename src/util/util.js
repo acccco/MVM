@@ -4,8 +4,9 @@ import clone from 'ramda/src/clone'
 import is from 'ramda/src/is'
 import isEmpty from 'ramda/src/isEmpty'
 import isNil from 'ramda/src/isNil'
+import equals from 'ramda/src/equals'
 
-export {merge, clone, is, isEmpty, isNil}
+export {merge, clone, is, isEmpty, isNil, equals}
 
 export function proxy(target, sourceKey, key) {
   let sharedPropertyDefinition = {

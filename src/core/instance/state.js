@@ -32,6 +32,7 @@ function initProp(rd) {
     }
     prop[key] = value
   }
+  observe(prop)
   proxyObject(rd, prop, (key) => {
     return checkProp(key, 'prop', rd)
   })
