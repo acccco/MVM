@@ -20,7 +20,6 @@ export class RD extends Event {
 
   _init(option) {
     let rd = this
-    console.log('rd init')
 
     rd.$option = mergeOption(
       this.constructor.option,

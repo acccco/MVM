@@ -1,10 +1,11 @@
 import RD from '../../src/index'
 import TodoTask from './TodoTask'
 import NoTask from './NoTask'
+import Title from './Title'
+import TodoInput from './TodoInput'
 
 export default new RD({
   render(h) {
-    console.log('app render')
     let todoList = this.todoList.map((item) =>
       <TodoTask task={item}/>
     )
@@ -13,19 +14,11 @@ export default new RD({
     }
     return (
       <div className='todo-wrap'>
-        <p className='title'>{this.title}</p>
+        <Title title={this.title}/>
         <div className='item-wrap'>
           {todoList}
         </div>
-        <div className='item-wrap row'>
-          <input className='input' type='text'
-                 placeholder='记点什么'
-                 value={this.inputValue}
-                 oninput={(e) => {
-                   this.inputValue = e.target.value
-                 }}/>
-          <div className='save' onclick={this.addTodo.bind(this)}>保存</div>
-        </div>
+        <TodoInput placeholder={'记点什么'}/>
       </div>
     )
   },
@@ -46,6 +39,13 @@ export default new RD({
         }
       }
     })
+    this.$on('addTodo', (name) => {
+      this.todoList.unshift({
+        id: this.todoList.length,
+        complete: false,
+        taskName: name
+      })
+    })
   },
   data() {
     return {
@@ -53,16 +53,6 @@ export default new RD({
       todoList: [],
       inputValue: '',
       noTaskInfo: '暂无 TodoList'
-    }
-  },
-  method: {
-    addTodo() {
-      this.todoList.unshift({
-        id: this.todoList.length,
-        complete: false,
-        taskName: this.inputValue
-      })
-      // this.inputValue = ''
     }
   }
 })

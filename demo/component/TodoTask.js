@@ -2,7 +2,6 @@ import RD from '../../src/index'
 
 let TodoTask = RD.extend({
   render(h) {
-    console.log('todo task render')
     return (
       <div className='row todo-item'>
         <div className='col-1 row'>
