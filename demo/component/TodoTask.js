@@ -6,7 +6,7 @@ let TodoTask = RD.extend({
     return (
       <div className='row todo-item'>
         <div className='col-1 row'>
-          <input type='checkbox' checked={this.cancelWatch('task.complete')}
+          <input type='checkbox' checked={this.task.complete}
                  onchange={this.change.bind(this, this.task)}/>
         </div>
         <div className={this.task.complete ? 'col-2 on' : 'col-2'}>{this.task.taskName}</div>

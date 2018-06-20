@@ -6,7 +6,7 @@ import {initEvent} from './event'
 import {Watcher} from '../../toolbox/Watcher'
 import {callHook} from './lifecycle'
 import {warn, allowedGlobals, isEmpty, equals} from '../../util/util'
-import {Dep} from "../../toolbox/Dep";
+import {pushTarget, popTarget} from "../../toolbox/Dep";
 
 let uid = 0
 
@@ -48,8 +48,7 @@ export class RD extends Event {
   }
 
   // 处理传入的 prop
-  initProp(prop) {
-    console.log(prop)
+  $initProp(prop) {
     if (isEmpty(prop)) return
     // TODO 有效性验证
     let rd = this
@@ -64,16 +63,15 @@ export class RD extends Event {
   }
 
   // 用于取消特定的属性监听
-  cancelWatch(getter) {
-    let old = Dep.target
-    Dep.target = null
+  $cancelWatch(getter) {
+    pushTarget(null)
     let value = null
     if (typeof getter === 'string') {
       value = getter.split('.').reduce((res, name) => res[name], this)
     } else if (typeof getter === 'function') {
       value = getter.call(this)
     }
-    Dep.target = old
+    popTarget()
     return value
   }
 
@@ -83,7 +81,7 @@ export class RD extends Event {
     return watch
   }
 
-  $destory() {
+  $destroy() {
     if (this.active) {
       let rd = this
       callHook(rd, 'beforeDestroy')
@@ -106,7 +104,7 @@ export class RD extends Event {
 
       while (rd.$children.length !== 0) {
         let child = rd.$children.pop()
-        child.$destory()
+        child.$destroy()
       }
 
       callHook(rd, 'destroyed')

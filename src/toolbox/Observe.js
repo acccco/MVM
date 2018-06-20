@@ -1,5 +1,6 @@
 import {Dep} from './Dep'
 import {arrayMethods} from '../util/array'
+import {is} from '../util/util'
 
 const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 
@@ -22,6 +23,9 @@ export function defineReactive(object, key, value) {
     },
     set(newValue) {
       value = newValue
+      if (is(Object, newValue)) {
+        observe(newValue)
+      }
       dep.notify()
     }
   })

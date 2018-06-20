@@ -54,7 +54,7 @@ function changeTree(newTemplate, oldTemplate) {
           treeNode.component = node.component
           isNewComponent = true
         } else {
-          node.component.initProp(node.properties)
+          node.component.$initProp(node.properties)
           treeNode = node.component._vnode
           treeNode.component = node.component
         }
@@ -79,7 +79,7 @@ function changeTree(newTemplate, oldTemplate) {
     if (oldTemplate && oldTemplate.children.length !== 0)
       for (let i = 0, len = oldTemplate.children.length; i < len; i++) {
         if (oldTemplate.children[i].isComponent && !oldTemplate.children[i].used) {
-          oldTemplate.children[i].component.$destory()
+          oldTemplate.children[i].component.$destroy()
         }
       }
   }

@@ -7,8 +7,9 @@ export default {
 
     RD.$mount = function (el, rd) {
       let template = null
+      rd.$initProp(rd.propData)
       rd.$renderWatch = rd.$watch(() => {
-        template = rd.render.call(rd, rd.propData)
+        template = rd.render.call(rd)
         return template
       }, (newTemplate) => {
         rd.$patch(newTemplate)
@@ -21,19 +22,17 @@ export default {
       return createElement(this, tag, properties, ...children)
     }
 
-    RD.prototype.render = function (prop) {
-      prop = prop || {}
-      this.initProp(prop)
+    RD.prototype.render = function () {
       return this.$option.render.call(this, this.$createElement.bind(this))
     }
 
     RD.prototype.$createComponentVNode = function (prop) {
       let template = null
+      this.$initProp(prop)
       this.$renderWatch = this.$watch(() => {
-        template = this.render.call(this, prop)
+        template = this.render.call(this)
         return template
       }, (newTemplate) => {
-        console.log('component watch')
         this.$patch(newTemplate)
       })
       return template

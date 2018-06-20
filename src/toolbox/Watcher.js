@@ -1,4 +1,4 @@
-import {Dep} from './Dep'
+import {Dep, pushTarget, popTarget} from './Dep'
 import {traverse} from '../util/traverse'
 import {watcherQueue} from '../util/watcherQueue'
 
@@ -21,20 +21,23 @@ export class Watcher {
 
     this.getter = getter.bind(ctx)
     this.cb = callback.bind(ctx)
-    this.deps = []
-    this.value = this.init()
+    this.dep = []
+    this.depId = new Set()
+    this.newDep = []
+    this.newDepId = new Set()
+    this.value = this.get()
     this.dirty = false
   }
 
-  init() {
-    let oldTarget = Dep.target
-    Dep.target = this
+  get() {
+    pushTarget(this)
     let value = this.getter()
     if (this.deep) {
       // 对其子项添加依赖
       traverse(value)
     }
-    Dep.target = oldTarget
+    popTarget()
+    this.cleanupDep()
     return value
   }
 
@@ -48,11 +51,8 @@ export class Watcher {
 
   run() {
     if (this.active) {
-      let value
-      // 深度监听对象,触发了就要执行，不需要判断值有没有变化
-      if (!this.ignoreChange || this.deep) {
-        value = this.getter()
-      }
+      Dep.target = this
+      let value = this.get()
       if (value !== this.value || this.ignoreChange || this.deep) {
         // 设置新值
         const oldValue = this.value
@@ -71,16 +71,41 @@ export class Watcher {
   }
 
   addDep(dep) {
-    this.deps.push(dep)
+    const id = dep.id
+    if (!this.newDepId.has(id)) {
+      this.newDep.push(dep)
+      this.newDepId.add(id)
+      if (!this.depId.has(id)) {
+        dep.addSub(this)
+      }
+    }
+  }
+
+  cleanupDep() {
+    let i = this.dep.length
+    while (i--) {
+      const dep = this.dep[i]
+      if (!this.newDepId.has(dep.id)) {
+        dep.removeSub(this)
+      }
+    }
+    let tmp = this.depId
+    this.depId = this.newDepId
+    this.newDepId = tmp
+    this.newDepId.clear()
+    tmp = this.dep
+    this.dep = this.newDep
+    this.newDep = tmp
+    this.newDep.length = 0
   }
 
   teardown() {
     if (this.active) {
-      let i = this.deps.length
+      let i = this.dep.length
       while (i--) {
-        this.deps[i].removeSub(this)
+        this.dep[i].removeSub(this)
       }
-      this.deps = []
+      this.dep = []
       this.active = false
     }
   }

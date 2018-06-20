@@ -12,16 +12,12 @@ export class Dep {
   }
 
   addSub(sub) {
-    let flag = false
     for (let i = 0; i < this.subs.length; i++) {
       if (this.subs[i].id === sub.id) {
-        flag = true
-        break
+        return
       }
     }
-    if (!flag) {
-      this.subs.push(sub)
-    }
+    this.subs.push(sub)
   }
 
   removeSub(sub) {
@@ -37,4 +33,15 @@ export class Dep {
 }
 
 Dep.target = null
+
+const targetStack = []
+
+export function pushTarget (target) {
+  if (Dep.target) targetStack.push(Dep.target)
+  Dep.target = target
+}
+
+export function popTarget () {
+  Dep.target = targetStack.pop()
+}
 

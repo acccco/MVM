@@ -62,7 +62,7 @@ export default new RD({
         complete: false,
         taskName: this.inputValue
       })
-      this.inputValue = ''
+      // this.inputValue = ''
     }
   }
 })
