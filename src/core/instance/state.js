@@ -3,6 +3,11 @@ import {Watcher} from '../../toolbox/Watcher'
 import {getProvideForInject, proxyObject, is, checkProp, warn, isNil} from '../../util/util'
 import {observe} from '../../toolbox/Observe'
 
+/**
+ * 使用合并后的 option 初始化实例的状态
+ * inject、prop、method、data、computed、watch、provide
+ * @param rd
+ */
 export function initState(rd) {
   let opt = rd.$option
   if (opt.inject) initInject(rd)

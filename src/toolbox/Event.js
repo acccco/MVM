@@ -1,5 +1,12 @@
 let uid = 0
 
+/**
+ * 事件对象
+ * $on:    添加对应事件名的处理函数
+ * $once:  仅仅触发一次的事件
+ * $off:   花式取消事件
+ * $emit:  触发事件
+ */
 export class Event {
   constructor() {
     this.id = uid++

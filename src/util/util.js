@@ -26,6 +26,12 @@ export function proxy(target, sourceKey, key) {
   Object.defineProperty(target, key, sharedPropertyDefinition)
 }
 
+/**
+ * 将 proxyObj 下的属性代理到 target 对象下，仅仅是代理，不是赋值
+ * @param target
+ * @param proxyObj
+ * @param cb
+ */
 export function proxyObject(target, proxyObj, cb = always(true)) {
   let sharedPropertyDefinition = {
     enumerable: true,
@@ -54,6 +60,13 @@ export function noop() {
 
 }
 
+/**
+ * 从祖先节点上获得最近的 provide
+ * @param ctx
+ * @param key
+ * @param defaultValue
+ * @returns {*}
+ */
 export function getProvideForInject(ctx, key, defaultValue) {
   let parent = ctx.$parent
   let value = defaultValue
@@ -67,6 +80,9 @@ export function getProvideForInject(ctx, key, defaultValue) {
   return value
 }
 
+/**
+ * 一些全局的方法
+ */
 export const allowedGlobals = makeMap(
   'Infinity,undefined,NaN,isFinite,isNaN,' +
   'parseFloat,parseInt,decodeURI,decodeURIComponent,encodeURI,encodeURIComponent,' +
@@ -91,6 +107,13 @@ export function warn(msg, rd) {
   console.log(rd)
 }
 
+/**
+ * 检查属性的覆盖情况
+ * @param name
+ * @param type
+ * @param ctx
+ * @returns {boolean}
+ */
 export function checkProp(name, type, ctx) {
   let usedType
   if (ctx._inject && name in ctx._inject) usedType = 'inject'

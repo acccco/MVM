@@ -13,6 +13,12 @@ function needMerge(key) {
   return list.indexOf(key) === -1
 }
 
+/**
+ * 合并两个 option
+ * @param parent
+ * @param child
+ * @returns {*}
+ */
 export function mergeOption(parent = {}, child = {}) {
 
   normalizeComputed(parent)

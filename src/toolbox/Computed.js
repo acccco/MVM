@@ -3,6 +3,10 @@ import {noop} from '../util/util'
 
 let uid = 0
 
+/**
+ * 实现计算属性的类
+ * 内部还是使用 Watcher 来实现
+ */
 export class Computed {
   constructor(ctx, key, option) {
     this.id = uid++
@@ -10,14 +14,14 @@ export class Computed {
     this.key = key
     this.option = option
     this.active = true
-    this.watcher = null
+    this.watch = null
     this.value = null
     this.init()
   }
 
   init() {
     let rd = this.ctx
-    let watcher = this.watcher = new Watcher(
+    let watcher = this.watch = new Watcher(
       rd,
       this.option.get || noop,
       (newValue) => {
@@ -29,7 +33,7 @@ export class Computed {
 
   teardown() {
     if (this.active) {
-      this.watcher.teardown()
+      this.watch.teardown()
     }
   }
 }

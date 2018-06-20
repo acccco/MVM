@@ -6,6 +6,9 @@ const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 
 let uid = 0
 
+/**
+ * 遍历对象，同时生成一个对象对应的 Dep
+ */
 class Observer {
 
   constructor(value) {
@@ -65,6 +68,13 @@ function copyAugment(target, src, keys) {
   }
 }
 
+/**
+ * 将对象下的某条属性变成可监听结构
+ * @param object
+ * @param key
+ * @param value
+ * @returns {*}
+ */
 export function defineReactive(object, key, value) {
   let dep = new Dep(object, key)
   let childOb = observe(value)
@@ -92,6 +102,11 @@ export function defineReactive(object, key, value) {
   })
 }
 
+/**
+ * 属性遍历器
+ * @param value
+ * @returns {*}
+ */
 export function observe(value) {
   if (typeof value !== 'object') {
     return
