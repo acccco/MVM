@@ -4,36 +4,9 @@ import {is} from '../util/util'
 
 const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 
-export function defineReactive(object, key, value) {
-  let dep = new Dep(object, key)
-  let childOb = observe(value)
-  Object.defineProperty(object, key, {
-    configurable: true,
-    enumerable: true,
-    get() {
-      if (Dep.target) {
-        dep.addSub(Dep.target)
-        Dep.target.addDep(dep)
-        if (Array.isArray(value)) {
-          childOb.dep.addSub(Dep.target)
-          Dep.target.addDep(childOb.dep)
-        }
-      }
-      return value
-    },
-    set(newValue) {
-      value = newValue
-      if (is(Object, newValue)) {
-        observe(newValue)
-      }
-      dep.notify()
-    }
-  })
-}
-
 let uid = 0
 
-export class Observer {
+class Observer {
 
   constructor(value) {
     this.id = uid++
@@ -90,6 +63,33 @@ function copyAugment(target, src, keys) {
       configurable: true
     })
   }
+}
+
+export function defineReactive(object, key, value) {
+  let dep = new Dep(object, key)
+  let childOb = observe(value)
+  Object.defineProperty(object, key, {
+    configurable: true,
+    enumerable: true,
+    get() {
+      if (Dep.target) {
+        dep.addSub(Dep.target)
+        Dep.target.addDep(dep)
+        if (Array.isArray(value)) {
+          childOb.dep.addSub(Dep.target)
+          Dep.target.addDep(childOb.dep)
+        }
+      }
+      return value
+    },
+    set(newValue) {
+      value = newValue
+      if (is(Object, newValue)) {
+        observe(newValue)
+      }
+      dep.notify()
+    }
+  })
 }
 
 export function observe(value) {

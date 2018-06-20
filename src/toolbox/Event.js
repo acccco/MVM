@@ -2,7 +2,7 @@ let uid = 0
 
 export class Event {
   constructor() {
-    this.id = ++uid
+    this.id = uid++
     this._events = {}
   }
 
