@@ -6,8 +6,8 @@ module.exports = {
   mode: 'none',
   entry: './demo/index.js',
   output: {
-    filename: 'test.js',
-    path: path.resolve(__dirname, 'demo/dist/JSX'),
+    filename: 'demo.js',
+    path: path.resolve(__dirname, 'demo/dist'),
   },
   devtool: "eval-source-map",
   module: {

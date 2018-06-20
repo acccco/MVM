@@ -14,11 +14,10 @@
     "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir cjs",
     "start:demo": "cross-env BABEL_ENV=webpack webpack-dev-server --hot --config build/webpack.jsx.config.js",
     "test": "karma start test/karma.config.js",
-    "analyseJson": "webpack --config webpack.config.js --profile --json > analyse.json",
+    "analyse:json": "webpack --config build/webpack.config.js --profile --json > analyse.json",
     "analyse": "webpack-bundle-analyzer analyse.json"
   },
   "dependencies": {
-    "dot": "^1.1.2",
     "ramda": "^0.25.0",
     "virtual-dom": "^2.1.1"
   },
