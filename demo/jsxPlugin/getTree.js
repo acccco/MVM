@@ -1,5 +1,4 @@
 import {VNode, VText} from 'virtual-dom'
-import {equals} from 'ramda'
 
 function extend(source, extend) {
   for (let key in extend) {

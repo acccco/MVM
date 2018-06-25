@@ -48,7 +48,7 @@ export function mergeOption(parent = {}, child = {}) {
   // 合并 watcher 同名合并成一个数组
   option.watch = mergeWatch(option.watch, child.watch)
 
-  // 合并 methods 同名覆盖
+  // 合并 method 同名覆盖
   option.method = merge(option.method, child.method)
 
   // 合并 computed 同名覆盖
@@ -158,13 +158,20 @@ function normalizeProp(option) {
 
 function normalizeInject(option) {
   let inject = option.inject
+  let normalInject = option.inject = {}
   if (is(Array, inject)) {
-    let normalInject = option.inject = {}
     inject.forEach(key => {
       normalInject[key] = {
         from: key
       }
     })
+  }
+  if (is(Object, inject)) {
+    for (let key in inject) {
+      if (!('from' in inject[key])) {
+        inject[key].from = key
+      }
+    }
   }
 }
 
