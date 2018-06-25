@@ -160,8 +160,8 @@ child.foo
 
 - $mount：将实例挂载到摸个 `DOM` 元素下，同时监听 `render` （也就是生成 `VNode` 树）所使用的数据，当相关数据变化时，触发 `$patch` 方法
 - $createElement：`JSX` 模板编译后使用的方法
-- $createComponentVNode：用于创建组件对应的 `VNode` 树，同时监听生成树结构所用到的数据，当数据变动是，触发 `$patch` 方法
+- $createComponentVNode：用于创建组件对应的 `VNode` 树，同时监听生成树结构所用到的数据，当数据变动时，触发 `$patch` 方法
 - $patch：根据传入的新模板，对比老模板（`getTree.js`）进行 `diff & patch`
-- $initDOMBind：绑定每个组件的 `$el`
+- $initDOMBind：绑定每个组件的 `$el`，用于子组件的 `diff & patch`
 
 so 有了 `RD` 手撸一个 `MVVM` 不是梦~~
