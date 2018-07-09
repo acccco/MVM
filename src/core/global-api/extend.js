@@ -8,9 +8,9 @@ export function initExtend(RD) {
     const Super = this
 
     class Sub extends Super {
-      constructor(option) {
+      /* constructor(option) {
         super(option)
-      }
+      } */
     }
 
     Sub.option = mergeOption(

@@ -14,6 +14,5 @@ export function initUse(RD) {
     }
     installedPlugins.push(plugin)
     return this
-
   }
 }

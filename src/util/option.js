@@ -20,12 +20,9 @@ function needMerge(key) {
  * @returns {*}
  */
 export function mergeOption(parent = {}, child = {}) {
-
   normalizeComputed(parent)
   normalizeComputed(child)
-
   normalizeProp(child)
-
   normalizeInject(child)
 
   let option = merge({}, parent)

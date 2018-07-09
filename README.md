@@ -138,7 +138,7 @@ child.foo
 
 说的再多也没用，上个例子，一个简单的 `TodoList`。界面接不过多介绍了，主要说说如何实现一个简单的 `MVVM` 框架
 
-在项目目录下运行 `npm run start:demo` 即可查看。
+在项目目录下运行 `npm run dev` 即可查看。
 
 说说实现思路，`RD` + `JSX` + `VNode` = `MVVM`
 

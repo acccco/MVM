@@ -8,7 +8,6 @@ let uid = 0
  * 如果 monitor.key 为 this 说明该 Dep 对象用于整个对象
  */
 export class Dep {
-
   constructor(object, key) {
     this.id = uid++
     this.monitor = {
@@ -51,4 +50,3 @@ export function pushTarget(target) {
 export function popTarget() {
   Dep.target = targetStack.pop()
 }
-

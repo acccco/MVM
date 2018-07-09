@@ -6,7 +6,7 @@ import {initEvent} from './event'
 import {Watcher} from '../../toolbox/Watcher'
 import {callHook} from './lifecycle'
 import {warn, allowedGlobals, isEmpty, equals} from '../../util/util'
-import {pushTarget, popTarget} from "../../toolbox/Dep";
+import {pushTarget, popTarget} from '../../toolbox/Dep'
 
 let uid = 0
 
@@ -48,7 +48,6 @@ export class RD extends Event {
         return target[key]
       }
     }) : rd
-
   }
 
   // 处理传入的 prop ，当传入的组件的 prop 有更新时
@@ -62,8 +61,9 @@ export class RD extends Event {
       if (!value) {
         value = rd.$option.prop[key].default
       }
-      if (!equals(rd[key], value))
+      if (!equals(rd[key], value)) {
         rd[key] = value
+      }
     }
   }
 
@@ -123,7 +123,5 @@ export class RD extends Event {
       callHook(rd, 'destroyed')
       this.active = false
     }
-
   }
-
 }

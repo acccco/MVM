@@ -10,7 +10,6 @@ let uid = 0
  * 遍历对象，同时生成一个对象对应的 Dep
  */
 class Observer {
-
   constructor(value) {
     this.id = uid++
     this.dep = new Dep(value, 'this')
@@ -47,12 +46,11 @@ class Observer {
       observe(items[i])
     }
   }
-
 }
 
 // 使用 __proto__ 覆盖原数组方法
 function protoAugment(target, src) {
-  target.__proto__ = src
+  target.__proto__ = src // eslint-disable-line
 }
 
 // 直接将数组方法定义在当前对象下，以达到覆盖数组方法的目的

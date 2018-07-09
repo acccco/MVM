@@ -5,7 +5,6 @@ import {watcherQueue} from '../util/watcherQueue'
 let uid = 0
 
 export class Watcher {
-
   constructor(ctx, getter, callback, options) {
     this.id = uid++
     this.active = true
@@ -109,5 +108,4 @@ export class Watcher {
       this.active = false
     }
   }
-
 }
