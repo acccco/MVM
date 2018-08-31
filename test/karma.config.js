@@ -1,5 +1,3 @@
-var webpack = require('webpack')
-
 var webpackConfig = {
   mode: 'development',
   module: {

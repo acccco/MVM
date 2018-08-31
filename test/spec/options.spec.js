@@ -1,6 +1,5 @@
-import {mergeOption} from '../../src/util/option'
-import {LIFECYCLE_HOOKS} from '../../src/core/instance/lifecycle'
-
+import { mergeOption } from '../../src/util/option'
+import { LIFECYCLE_HOOK } from '../../src/core/instance/lifecycle'
 
 describe('option data test', () => {
   it('data function merge', () => {
@@ -244,7 +243,7 @@ describe('option lifecycle test', () => {
       }
     }
     let merge = mergeOption(parent, child)
-    LIFECYCLE_HOOKS.forEach(name => {
+    LIFECYCLE_HOOK.forEach(name => {
       merge[name].forEach(fnc => fnc())
     })
     expect(parentBC).toEqual(true)

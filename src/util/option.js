@@ -162,12 +162,12 @@ function normalizeInject(option) {
         from: key
       }
     })
-  }
-  if (is(Object, inject)) {
+  } else if (is(Object, inject)) {
     for (let key in inject) {
       if (!('from' in inject[key])) {
         inject[key].from = key
       }
+      normalInject[key] = Object.assign({}, inject[key])
     }
   }
 }

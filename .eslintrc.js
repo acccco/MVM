@@ -12,6 +12,7 @@ module.exports = {
   rules: {
     'space-before-function-paren': 'off',
     // allow async-await
-    'generator-star-spacing': 'off'
+    'generator-star-spacing': 'off',
+    'indent': 'off'
   }
 }

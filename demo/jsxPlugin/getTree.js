@@ -1,4 +1,4 @@
-import {VNode, VText} from 'virtual-dom'
+import { VNode, VText } from 'virtual-dom'
 
 function extend(source, extend) {
   for (let key in extend) {
@@ -13,7 +13,7 @@ function createTree(template) {
     tree.children = template.children.map(node => {
       let treeNode = node
       if (node.isComponent) {
-        node.component = new node.componentClass({parent: node.parent, propData: node.properties})
+        node.component = new node.ComponentClass({ parent: node.parent, propData: node.properties })
         treeNode = node.component.$vnode = node.component.$createComponentVNode(node.properties)
         treeNode.component = node.component
       }
@@ -31,7 +31,7 @@ function createTree(template) {
 
 function getOldComponent(list = [], cid) {
   for (let i = 0, len = list.length; i < len; i++) {
-    if (!list[i].used && list[i].isComponent && list[i].componentClass.cid === cid) {
+    if (!list[i].used && list[i].isComponent && list[i].ComponentClass.cid === cid) {
       list[i].used = true
       return list[i].component
     }
@@ -45,9 +45,9 @@ function changeTree(newTemplate, oldTemplate) {
       let treeNode = node
       let isNewComponent = false
       if (treeNode.isComponent) {
-        node.component = getOldComponent(oldTemplate.children, treeNode.componentClass.cid)
+        node.component = getOldComponent(oldTemplate.children, treeNode.ComponentClass.cid)
         if (!node.component) {
-          node.component = new node.componentClass({parent: node.parent, propData: node.properties})
+          node.component = new node.ComponentClass({ parent: node.parent, propData: node.properties })
           node.component.$vnode = node.component.$createComponentVNode(node.properties)
           treeNode = node.component.$vnode
           treeNode.component = node.component
@@ -75,12 +75,13 @@ function changeTree(newTemplate, oldTemplate) {
       }
       return treeNode
     })
-    if (oldTemplate && oldTemplate.children.length !== 0)
+    if (oldTemplate && oldTemplate.children.length !== 0) {
       for (let i = 0, len = oldTemplate.children.length; i < len; i++) {
         if (oldTemplate.children[i].isComponent && !oldTemplate.children[i].used) {
           oldTemplate.children[i].component.$destroy()
         }
       }
+    }
   }
   return tree
 }

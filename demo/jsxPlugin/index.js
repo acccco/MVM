@@ -1,15 +1,14 @@
-import {create, diff, patch} from 'virtual-dom'
+import { create, diff, patch } from 'virtual-dom'
 import createElement from './createElement'
 import getTree from './getTree'
 
 export default {
   install(RD) {
-
     RD.$mount = function (el, rd) {
       let template = null
       rd.$initProp(rd.propData)
       rd.$renderWatch = rd.$watch(() => {
-        template = rd.render.call(rd)
+        template = rd.render(rd)
         return template
       }, (newTemplate) => {
         rd.$patch(newTemplate)
@@ -30,7 +29,7 @@ export default {
       let template = null
       this.$initProp(prop)
       this.$renderWatch = this.$watch(() => {
-        template = this.render.call(this)
+        template = this.render()
         return template
       }, (newTemplate) => {
         this.$patch(newTemplate)

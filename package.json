@@ -13,7 +13,7 @@
     "build": "cross-env BABEL_ENV=webpack webpack --config build/webpack.config.js",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
     "build:cjs": "cross-env BABEL_ENV=cjs babel src --out-dir cjs",
-    "lint": "eslint --ext .js src",
+    "lint": "eslint --ext .js demo",
     "test": "karma start test/karma.config.js",
     "analyse:json": "webpack --config build/webpack.config.js --profile --json > analyse.json",
     "analyse": "webpack-bundle-analyzer analyse.json"
@@ -42,6 +42,7 @@
     "eslint-plugin-standard": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "jasmine": "^3.1.0",
+    "jasmine-core": "^3.2.1",
     "karma": "^3.0.0",
     "karma-chrome-launcher": "^2.2.0",
     "karma-jasmine": "^1.1.2",
@@ -50,10 +51,8 @@
     "node-sass": "^4.9.0",
     "sass-loader": "^7.0.1",
     "style-loader": "^0.23.0",
-    "uglifyjs-webpack-plugin": "^1.2.5",
     "webpack": "^4.8.3",
     "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.4",
-    "webpack-node-externals": "^1.7.2"
+    "webpack-dev-server": "^3.1.7"
   }
 }

@@ -1,8 +1,7 @@
-import {h, VNode} from 'virtual-dom'
+import { h, VNode } from 'virtual-dom'
 import RD from '../../src/index'
 
 export default function createElement(ctx, tag, properties, ...children) {
-
   if (typeof tag === 'function' || typeof tag === 'object') {
     let node = new VNode()
     node.tagName = `component-${tag.cid}`
@@ -11,9 +10,9 @@ export default function createElement(ctx, tag, properties, ...children) {
     node.parent = ctx
     node.isComponent = true
     if (typeof tag === 'function') {
-      node.componentClass = tag
+      node.ComponentClass = tag
     } else {
-      node.componentClass = RD.extend(tag)
+      node.ComponentClass = RD.extend(tag)
     }
     return node
   }
