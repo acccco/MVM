@@ -6,7 +6,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/acccco/MVM.git"
+    "url": "git+https://github.com/acccco/RD.git"
   },
   "scripts": {
     "dev": "cross-env BABEL_ENV=webpack webpack-dev-server --hot --config build/webpack.jsx.config.js",
