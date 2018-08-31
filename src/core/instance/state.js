@@ -1,7 +1,7 @@
-import {Computed} from '../../toolbox/Computed'
-import {Watcher} from '../../toolbox/Watcher'
-import {getProvideForInject, proxyObject, is, checkProp, warn, isNil} from '../../util/util'
-import {observe} from '../../toolbox/Observe'
+import { Computed } from '../../toolbox/Computed'
+import { Watcher } from '../../toolbox/Watcher'
+import { getProvideForInject, proxyObject, is, checkProp, warn, isNil } from '../../util/util'
+import { observe } from '../../toolbox/Observe'
 
 /**
  * 使用合并后的 option 初始化实例的状态

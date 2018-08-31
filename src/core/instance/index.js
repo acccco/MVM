@@ -1,12 +1,12 @@
-import {Event} from '../../toolbox/Event'
-import {mergeOption} from '../../util/option'
-import {initState} from './state'
-import {initProperties} from './properties'
-import {initEvent} from './event'
-import {Watcher} from '../../toolbox/Watcher'
-import {callHook} from './lifecycle'
-import {warn, allowedGlobals, isEmpty, equals} from '../../util/util'
-import {pushTarget, popTarget} from '../../toolbox/Dep'
+import { Event } from '../../toolbox/Event'
+import { mergeOption } from '../../util/option'
+import { initState } from './state'
+import { initProperties } from './properties'
+import { initEvent } from './event'
+import { Watcher } from '../../toolbox/Watcher'
+import { callHook } from './lifecycle'
+import { warn, allowedGlobals, isEmpty, equals } from '../../util/util'
+import { pushTarget, popTarget } from '../../toolbox/Dep'
 
 let uid = 0
 

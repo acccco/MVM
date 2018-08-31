@@ -1,4 +1,4 @@
-import {mergeOption} from '../../util/option'
+import { mergeOption } from '../../util/option'
 
 let cid = 0
 

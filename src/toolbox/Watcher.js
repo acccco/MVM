@@ -1,6 +1,6 @@
-import {Dep, pushTarget, popTarget} from './Dep'
-import {traverse} from '../util/traverse'
-import {watcherQueue} from '../util/watcherQueue'
+import { Dep, pushTarget, popTarget } from './Dep'
+import { traverse } from '../util/traverse'
+import { watcherQueue } from '../util/watcherQueue'
 
 let uid = 0
 

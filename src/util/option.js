@@ -1,5 +1,5 @@
-import {noop, merge, clone, is} from './util'
-import {LIFECYCLE_HOOK} from '../core/instance/lifecycle'
+import { noop, merge, clone, is } from './util'
+import { LIFECYCLE_HOOK } from '../core/instance/lifecycle'
 
 function needMerge(key) {
   let list = [
@@ -137,7 +137,7 @@ function normalizeProp(option) {
     })
   } else {
     for (let key in prop) {
-      normalProps[key] = merge({type: null}, prop[key])
+      normalProps[key] = merge({ type: null }, prop[key])
     }
   }
 }
