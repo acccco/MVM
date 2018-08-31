@@ -3,7 +3,7 @@
     "cjs": {
       "plugins": [
         [
-          "transform-es2015-modules-commonjs",
+          "@babel/plugin-transform-modules-commonjs",
           {
             "strict": true
           }
@@ -16,29 +16,27 @@
     },
     "webpack": {
       "presets": [
-        "env"
+        [
+          "@babel/preset-env",
+          {
+            "useBuiltIns": "entry"
+          }
+        ]
       ],
       "plugins": [
         [
-          "transform-react-jsx",
+          "@babel/plugin-transform-react-jsx",
           {
             "pragma": "h"
           }
         ],
         [
-          "transform-runtime",
+          "@babel/plugin-transform-runtime",
           {
-            "helpers": false,
-            "polyfill": false,
+            "corejs": false,
+            "helpers": true,
             "regenerator": true,
-            "moduleName": "babel-runtime"
-          }
-        ],
-        [
-          "import",
-          {
-            "libraryName": "ramda",
-            "libraryDirectory": "src"
+            "useESModules": false
           }
         ]
       ]

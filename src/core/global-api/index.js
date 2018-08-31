@@ -1,6 +1,6 @@
-import {initExtend} from './extend'
-import {initMixin} from './mixin'
-import {initUse} from './use'
+import { initExtend } from './extend'
+import { initMixin } from './mixin'
+import { initUse } from './use'
 
 export function initGlobalApi(RD) {
   // 初始化 options 用于合并参数
