@@ -43,7 +43,7 @@ export class RD extends Event {
       },
       get(target, key) {
         if (typeof key === 'string' && !(key in target)) {
-          warn(`data/prop/method/computed 下未定义 ${key}`, target)
+          warn(`data/prop/method/computed 下未定义 ${key} 请检查。`, target)
         }
         return target[key]
       }
