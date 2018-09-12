@@ -1,5 +1,4 @@
-import {commomObj} from "../types/commom.d.js"
-import {eventFunType, EventInterface} from "../types/event"
+import {eventFunType, eventGroup, EventInterface} from "../types/event"
 
 let uid = 0
 
@@ -12,14 +11,14 @@ let uid = 0
  */
 export class Event implements EventInterface {
   id: number
-  _events: commomObj
+  _events: eventGroup
 
   constructor() {
     this.id = uid++
     this._events = {}
   }
 
-  $on(eventName, fn) {
+  $on(eventName: Array<string> | string, fn: Array<eventFunType> | eventFunType) {
     if (Array.isArray(eventName)) {
       eventName.forEach(name => this.$on(name, fn))
     } else {
@@ -31,18 +30,18 @@ export class Event implements EventInterface {
     return this
   }
 
-  $once(eventName, fn) {
+  $once(eventName: string, fn: eventFunType) {
     let proxyFun: eventFunType = (...args: Array<any>) => {
-      this.$off(eventName, proxyFun);
-      fn.apply(this, args);
-    };
-    proxyFun.fn = fn;
+      this.$off(eventName, proxyFun)
+      fn.apply(this, args)
+    }
+    proxyFun.fn = fn
 
-    this.$on(eventName, proxyFun);
+    this.$on(eventName, proxyFun)
     return this
   }
 
-  $off(eventName, fn) {
+  $off(eventName: Array<string> | string, fn: eventFunType) {
     // 清空所有事件
     if (!arguments.length) {
       this._events = {}
@@ -83,7 +82,7 @@ export class Event implements EventInterface {
     return this
   }
 
-  $emit(eventName, ...args) {
+  $emit(eventName: string, ...args: Array<any>) {
     let cbs = this._events[eventName]
     if (cbs) {
       cbs.forEach(func => func.apply(this, args))
