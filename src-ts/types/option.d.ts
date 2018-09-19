@@ -3,31 +3,34 @@ type watchObj = {
   handler: watchFun
   deep?: boolean
 }
+type optionWatch = watchFun | watchObj
+export type optionWatchType = optionWatch | Array<optionWatch>
 
 type computedFun = () => any
 type computedObj = {
   get: computedFun
   set: () => any
 }
+export type optionComputedType = computedFun | computedObj
 
 type lifeCycleFun = () => any
-type lifeCycleType = lifeCycleFun | Array<lifeCycleFun>
-
+type optionLifeCycleType = lifeCycleFun | Array<lifeCycleFun>
 
 export type optionType = {
-  data?: () => void
+  data?: () => object
   watch?: {
-    [propName: string]: watchFun | watchObj
+    [propName: string]: optionWatchType
   }
   computed?: {
-    [propName: string]: computedFun | computedObj
+    [propName: string]: optionComputedType
   }
   method?: {
     [propName: string]: () => any
   }
-  beforeCreate?: lifeCycleType
-  created?: lifeCycleType
-  beforeDestroy?: lifeCycleType
-  destroyed?: lifeCycleType
-  mixin?: optionType
+  beforeCreate?: optionLifeCycleType
+  created?: optionLifeCycleType
+  beforeDestroy?: optionLifeCycleType
+  destroyed?: optionLifeCycleType
+  mixin?: Array<optionType>
+  [propName: string]: any
 }

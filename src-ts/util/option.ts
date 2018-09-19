@@ -1,7 +1,14 @@
-import { noop, merge, clone, is } from './util'
-import { LIFECYCLE_HOOK } from '../core/instance/lifecycle'
+import {optionComputedType, optionType, optionWatchType} from "../types/option"
 
-function needMerge(key) {
+import {noop, merge, clone, is} from './util'
+import {LIFECYCLE_HOOK} from '../core/instance/lifecycle'
+
+/**
+ * 判断是否是用户自己写的属性
+ * @param {string} key
+ * @returns {boolean}
+ */
+function isUserPrams(key: string): boolean {
   let list = [
     ...LIFECYCLE_HOOK,
     'mixin',
@@ -19,9 +26,10 @@ function needMerge(key) {
  * @param child
  * @returns {*}
  */
-export function mergeOption(parent = {}, child = {}) {
-  normalizeComputed(parent)
-  normalizeComputed(child)
+export function mergeOption(
+  parent: optionType = {},
+  child: optionType = {}
+): optionType {
   normalizeProp(child)
   normalizeInject(child)
 
@@ -45,15 +53,15 @@ export function mergeOption(parent = {}, child = {}) {
   // 合并 watcher 同名合并成一个数组
   option.watch = mergeWatch(option.watch, child.watch)
 
+  // 合并 computed 同名覆盖
+  option.computed = mergeComputed(option.computed, child.computed)
+
   // 合并 method 同名覆盖
   option.method = merge(option.method, child.method)
 
-  // 合并 computed 同名覆盖
-  option.computed = merge(option.computed, child.computed)
-
   // 其他属性合并
   for (let key in child) {
-    if (needMerge(key)) {
+    if (isUserPrams(key)) {
       option[key] = child[key]
     }
   }
@@ -61,28 +69,48 @@ export function mergeOption(parent = {}, child = {}) {
   return option
 }
 
-function mergeData(parentValue = noop, childValue = noop) {
+function mergeData(
+  parentValue: () => object = noop,
+  childValue: () => object = noop
+) {
   return function mergeFnc() {
     return merge(parentValue.call(this), childValue.call(this))
   }
 }
 
-function mergeWatch(parentVal = {}, childVal = {}) {
-  let watchers = clone(parentVal)
-  for (let key in watchers) {
-    if (!is(Array, watchers[key])) {
-      watchers[key] = [normalizeWatcher(watchers[key])]
+function mergeWatch(
+  parentVal: { [propName: string]: optionWatchType } = {},
+  childVal: { [propName: string]: optionWatchType } = {}
+) {
+  let watcher = clone(parentVal)
+  for (let key in watcher) {
+    if (!is(Array, watcher[key])) {
+      watcher[key] = [normalizeWatcher(watcher[key])]
     }
   }
   for (let key in childVal) {
-    let parent = watchers[key]
+    let parent = watcher[key]
     let child = normalizeWatcher(childVal[key])
     if (!parent) {
-      parent = watchers[key] = []
+      parent = watcher[key] = []
     }
     parent.push(child)
   }
-  return watchers
+  return watcher
+}
+
+function mergeComputed(
+  parentVal: { [propName: string]: optionComputedType } = {},
+  childVal: { [propName: string]: optionComputedType } = {}
+) {
+  let computed = clone(parentVal)
+  for (let key in computed) {
+    computed[key] = normalizeComputed(computed[key])
+  }
+  for (let key in childVal) {
+    computed[key] = normalizeComputed(childVal[key])
+  }
+  return computed
 }
 
 function normalizeLifecycle(option, name) {
@@ -113,6 +141,24 @@ function normalizeWatcher(watcher) {
 }
 
 /**
+ * 处理 computed 返回统一结构
+ * @param computed
+ * return {
+ *   get: Function,
+ *   set: Function
+ * }
+ */
+function normalizeComputed(computed) {
+  if (is(Function, computed)) {
+    return {
+      get: computed,
+      set: noop
+    }
+  }
+  return computed
+}
+
+/**
  * 处理 prop 返回统一结构
  * @param option
  * return {
@@ -137,7 +183,7 @@ function normalizeProp(option) {
     })
   } else {
     for (let key in prop) {
-      normalProps[key] = merge({ type: null }, prop[key])
+      normalProps[key] = merge({type: null}, prop[key])
     }
   }
 }
@@ -172,24 +218,3 @@ function normalizeInject(option) {
   }
 }
 
-/**
- * 处理 computed 返回统一结构
- * @param option
- * return {
- *   key: {
- *     get: Function,
- *     set: Function
- *   }
- * }
- */
-function normalizeComputed(option) {
-  let computed = option.computed
-  for (let key in computed) {
-    if (is(Function, computed[key])) {
-      option.computed[key] = {
-        get: computed[key],
-        set: noop
-      }
-    }
-  }
-}

@@ -1,7 +1,7 @@
 import { noop, merge, clone, is } from './util'
 import { LIFECYCLE_HOOK } from '../core/instance/lifecycle'
 
-function needMerge(key) {
+function isUserPrams(key) {
   let list = [
     ...LIFECYCLE_HOOK,
     'mixin',
@@ -53,7 +53,7 @@ export function mergeOption(parent = {}, child = {}) {
 
   // 其他属性合并
   for (let key in child) {
-    if (needMerge(key)) {
+    if (isUserPrams(key)) {
       option[key] = child[key]
     }
   }

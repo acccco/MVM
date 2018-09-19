@@ -59,7 +59,7 @@ export function proxyObject(target: commomObject, proxyObj: commomObject, cb = a
 }
 
 export function noop() {
-
+  return {}
 }
 
 /**
