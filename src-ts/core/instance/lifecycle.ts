@@ -1,3 +1,5 @@
+import {RD} from "./index"
+
 export const LIFECYCLE_HOOK: Array<string> = [
   'beforeCreate',
   'created',
@@ -10,7 +12,10 @@ export const LIFECYCLE_HOOK: Array<string> = [
  * @param rd
  * @param hook
  */
-export function callHook(rd, hook: string) {
+export function callHook(
+  rd: RD,
+  hook: string
+) {
   const handler = rd.$option[hook]
   if (handler) {
     for (let i = 0, j = handler.length; i < j; i++) {

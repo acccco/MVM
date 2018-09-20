@@ -41,7 +41,7 @@ export class Event implements EventInterface {
     return this
   }
 
-  $off(eventName: Array<string> | string, fn: eventFunType) {
+  $off(eventName?: Array<string> | string, fn?: eventFunType) {
     // 清空所有事件
     if (!arguments.length) {
       this._events = {}

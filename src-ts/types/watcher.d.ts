@@ -1,5 +1,7 @@
 import {DepInterface} from "./dep"
 
+export type watcherCallback = (newValue: any, oldValue: any) => any
+
 export type watcherOption = {
   lazy?: boolean
   deep?: boolean

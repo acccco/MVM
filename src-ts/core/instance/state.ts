@@ -1,14 +1,19 @@
-import { Computed } from '../../toolbox/Computed'
-import { Watcher } from '../../toolbox/Watcher'
-import { getProvideForInject, proxyObject, is, checkProp, warn, isNil } from '../../util/util'
-import { observe } from '../../toolbox/Observe'
+import {injectObj, propObj} from "../../types/option"
+import {RD} from "./index"
+
+import {Computed} from '../../toolbox/Computed'
+import {Watcher} from '../../toolbox/Watcher'
+import {getProvideForInject, proxyObject, is, checkProp, warn, isNil} from '../../util/util'
+import {observe} from '../../toolbox/Observe'
 
 /**
  * 使用合并后的 option 初始化实例的状态
  * inject、prop、method、data、computed、watch、provide
  * @param rd
  */
-export function initState(rd) {
+export function initState(
+  rd: RD
+) {
   let opt = rd.$option
   if (opt.inject) initInject(rd)
   if (opt.prop) initProp(rd)
@@ -19,16 +24,20 @@ export function initState(rd) {
   if (opt.provide) initProvide(rd)
 }
 
-function initInject(rd) {
-  let inject = rd._inject = {}
+function initInject(
+  rd: RD
+) {
+  let inject: injectObj = rd._inject = {}
   for (let key in rd.$option.inject) {
     inject[key] = getProvideForInject(rd, key, rd.$option.inject[key].default)
   }
   proxyObject(rd, inject)
 }
 
-function initProp(rd) {
-  let prop = rd._prop = {}
+function initProp(
+  rd: RD
+) {
+  let prop: propObj = rd._prop = {}
   let propData = rd.$option.propData || {}
   for (let key in rd.$option.prop) {
     let value = propData[key]
@@ -43,7 +52,9 @@ function initProp(rd) {
   })
 }
 
-function initMethod(rd) {
+function initMethod(
+  rd: RD
+) {
   for (let key in rd.$option.method) {
     if (checkProp(key, 'method', rd)) {
       rd[key] = rd.$option.method[key]
@@ -51,7 +62,9 @@ function initMethod(rd) {
   }
 }
 
-function initData(rd) {
+function initData(
+  rd: RD
+) {
   if (!is(Function, rd.$option.data)) {
     warn('data 项必须是一个函数', rd)
     return
@@ -67,10 +80,14 @@ function initData(rd) {
   })
 }
 
-function initComputed(rd) {
-  let computed = rd._computed = {}
+function initComputed(
+  rd: RD
+) {
+  let computed: { [propName: string]: any } = rd._computed = {}
   for (let key in rd.$option.computed) {
-    computed[key] = (new Computed(rd, key, rd.$option.computed[key])).value
+    let newComputed = new Computed(rd, key, rd.$option.computed[key])
+    rd._computedWatcher.push(newComputed)
+    computed[key] = newComputed.value
   }
   observe(computed)
   proxyObject(rd, computed, (key) => {
@@ -78,7 +95,9 @@ function initComputed(rd) {
   })
 }
 
-function initWatch(rd) {
+function initWatch(
+  rd: RD
+) {
   for (let key in rd.$option.watch) {
     rd.$option.watch[key].forEach(option => {
       rd._watch.push(new Watcher(rd, () => {
@@ -88,6 +107,10 @@ function initWatch(rd) {
   }
 }
 
-function initProvide(rd) {
-  rd._provide = is(Function, rd.$option.provide) ? rd.$option.provide.call(rd) : rd.$option.provide || {}
+function initProvide(
+  rd: RD
+) {
+  rd._provide = is(Function, rd.$option.provide) ?
+    rd.$option.provide.call(rd) :
+    rd.$option.provide || {}
 }

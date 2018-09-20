@@ -1,4 +1,15 @@
-import {optionComputedType, optionType, optionWatchType} from "../types/option"
+import {
+  afterMergeOptionType,
+  computedFun,
+  computedObj,
+  injectArray, injectObj,
+  optionComputedType,
+  optionType,
+  optionWatch,
+  optionWatchType,
+  propArray,
+  propObj, watchFun, watchObj
+} from "../types/option"
 
 import {noop, merge, clone, is} from './util'
 import {LIFECYCLE_HOOK} from '../core/instance/lifecycle'
@@ -8,7 +19,9 @@ import {LIFECYCLE_HOOK} from '../core/instance/lifecycle'
  * @param {string} key
  * @returns {boolean}
  */
-function isUserPrams(key: string): boolean {
+function isUserPrams(
+  key: string
+): boolean {
   let list = [
     ...LIFECYCLE_HOOK,
     'mixin',
@@ -29,7 +42,7 @@ function isUserPrams(key: string): boolean {
 export function mergeOption(
   parent: optionType = {},
   child: optionType = {}
-): optionType {
+): afterMergeOptionType {
   normalizeProp(child)
   normalizeInject(child)
 
@@ -72,7 +85,7 @@ export function mergeOption(
 function mergeData(
   parentValue: () => object = noop,
   childValue: () => object = noop
-) {
+): (() => object) {
   return function mergeFnc() {
     return merge(parentValue.call(this), childValue.call(this))
   }
@@ -81,7 +94,9 @@ function mergeData(
 function mergeWatch(
   parentVal: { [propName: string]: optionWatchType } = {},
   childVal: { [propName: string]: optionWatchType } = {}
-) {
+): {
+  [propName: string]: watchObj
+} {
   let watcher = clone(parentVal)
   for (let key in watcher) {
     if (!is(Array, watcher[key])) {
@@ -90,7 +105,7 @@ function mergeWatch(
   }
   for (let key in childVal) {
     let parent = watcher[key]
-    let child = normalizeWatcher(childVal[key])
+    let child = normalizeWatcher(<optionWatch>childVal[key])
     if (!parent) {
       parent = watcher[key] = []
     }
@@ -102,7 +117,9 @@ function mergeWatch(
 function mergeComputed(
   parentVal: { [propName: string]: optionComputedType } = {},
   childVal: { [propName: string]: optionComputedType } = {}
-) {
+): {
+  [propName: string]: computedObj
+} {
   let computed = clone(parentVal)
   for (let key in computed) {
     computed[key] = normalizeComputed(computed[key])
@@ -113,7 +130,10 @@ function mergeComputed(
   return computed
 }
 
-function normalizeLifecycle(option, name) {
+function normalizeLifecycle(
+  option: optionType,
+  name: string
+) {
   if (undefined === option[name]) {
     option[name] = []
     return
@@ -121,41 +141,6 @@ function normalizeLifecycle(option, name) {
   if (!is(Array, option[name])) {
     option[name] = [option[name]]
   }
-}
-
-/**
- *
- * @param watcher
- * return {
- *   handler: Function,
- *   ...
- * }
- */
-function normalizeWatcher(watcher) {
-  if (is(Function, watcher)) {
-    return {
-      handler: watcher
-    }
-  }
-  return watcher
-}
-
-/**
- * 处理 computed 返回统一结构
- * @param computed
- * return {
- *   get: Function,
- *   set: Function
- * }
- */
-function normalizeComputed(computed) {
-  if (is(Function, computed)) {
-    return {
-      get: computed,
-      set: noop
-    }
-  }
-  return computed
 }
 
 /**
@@ -169,21 +154,24 @@ function normalizeComputed(computed) {
  * }
  */
 
-function normalizeProp(option) {
+function normalizeProp(
+  option: optionType
+) {
   if (!option.prop) {
     return
   }
   let prop = option.prop
-  let normalProps = option.prop = {}
+  let normalProps: propObj = option.prop = {}
   if (is(Array, prop)) {
-    prop.forEach(prop => {
+    (<propArray>prop).forEach((prop: string) => {
       normalProps[prop] = {
         type: null
       }
     })
-  } else {
-    for (let key in prop) {
-      normalProps[key] = merge({type: null}, prop[key])
+  } else if (is(Object, prop)) {
+    let propTs = <propObj>prop
+    for (let key in propTs) {
+      normalProps[key] = merge({type: null}, propTs[key])
     }
   }
 }
@@ -199,22 +187,64 @@ function normalizeProp(option) {
  * }
  */
 
-function normalizeInject(option) {
+function normalizeInject(
+  option: optionType
+) {
   let inject = option.inject
-  let normalInject = option.inject = {}
+  let normalInject: injectObj = option.inject = {}
   if (is(Array, inject)) {
-    inject.forEach(key => {
+    (<injectArray>inject).forEach((key: string) => {
       normalInject[key] = {
         from: key
       }
     })
   } else if (is(Object, inject)) {
-    for (let key in inject) {
-      if (!('from' in inject[key])) {
-        inject[key].from = key
+    let injectTs = <injectObj>inject
+    for (let key in injectTs) {
+      if (!('from' in injectTs[key])) {
+        injectTs[key].from = key
       }
-      normalInject[key] = Object.assign({}, inject[key])
+      normalInject[key] = Object.assign({}, injectTs[key])
     }
   }
+}
+
+/**
+ *
+ * @param watcher
+ * return {
+ *   handler: Function,
+ *   ...
+ * }
+ */
+function normalizeWatcher(
+  watcher: optionWatch
+): watchObj {
+  if (is(Function, watcher)) {
+    return {
+      handler: <watchFun>watcher
+    }
+  }
+  return <watchObj>watcher
+}
+
+/**
+ * 处理 computed 返回统一结构
+ * @param computed
+ * return {
+ *   get: Function,
+ *   set: Function
+ * }
+ */
+function normalizeComputed(
+  computed: optionComputedType
+): computedObj {
+  if (is(Function, computed)) {
+    return {
+      get: <computedFun>computed,
+      set: noop
+    }
+  }
+  return <computedObj>computed
 }
 

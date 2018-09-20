@@ -11,18 +11,14 @@ import equals from 'ramda/src/equals'
 export {merge, clone, is, isEmpty, isNil, equals}
 
 export function proxy(target: commomObject, sourceKey: string, key: string) {
-  let sharedPropertyDefinition = {
+  let sharedPropertyDefinition: commomObject = {
     enumerable: true,
-    configurable: true,
-    get() {
-    },
-    set(val: any) {
-    }
+    configurable: true
   }
   sharedPropertyDefinition.get = function proxyGetter() {
     return this[sourceKey][key]
   }
-  sharedPropertyDefinition.set = function proxySetter(val) {
+  sharedPropertyDefinition.set = function proxySetter(val: string) {
     this[sourceKey][key] = val
   }
   Object.defineProperty(target, key, sharedPropertyDefinition)
@@ -34,14 +30,14 @@ export function proxy(target: commomObject, sourceKey: string, key: string) {
  * @param proxyObj
  * @param cb
  */
-export function proxyObject(target: commomObject, proxyObj: commomObject, cb = always(true)) {
-  let sharedPropertyDefinition = {
+export function proxyObject(
+  target: commomObject,
+  proxyObj: commomObject,
+  cb: ((key: string) => boolean) = always(true)
+) {
+  let sharedPropertyDefinition: commomObject = {
     enumerable: true,
-    configurable: true,
-    get() {
-    },
-    set(val: any) {
-    }
+    configurable: true
   }
   for (let key in proxyObj) {
     let needProxy = cb(key)
@@ -51,7 +47,7 @@ export function proxyObject(target: commomObject, proxyObj: commomObject, cb = a
     sharedPropertyDefinition.get = function proxyGetter() {
       return proxyObj[key]
     }
-    sharedPropertyDefinition.set = function proxySetter(val) {
+    sharedPropertyDefinition.set = function proxySetter(val: string) {
       proxyObj[key] = val
     }
     Object.defineProperty(target, key, sharedPropertyDefinition)

@@ -1,7 +1,9 @@
-const arrayProto = Array.prototype
+const arrayProto: {
+  [propName: string]: any
+} = Array.prototype
 export const arrayMethods = Object.create(arrayProto)
 
-const methodsToPatch = [
+const methodsToPatch: Array<string> = [
   'push',
   'pop',
   'shift',
@@ -17,7 +19,7 @@ const methodsToPatch = [
 methodsToPatch.forEach((method: string) => {
   // 原始的数组处理方法
   const original = arrayProto[method]
-  let mutator = function (...args) {
+  let mutator = function (...args: Array<any>) {
     const result = original.apply(this, args)
     const ob = this.__ob__
     let inserted

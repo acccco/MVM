@@ -1,15 +1,16 @@
-/**
- * 将一个 watcher 推入 watcher 队列，优化调用
- */
+
 import {commomObject} from "../types/commom"
 import {WatcherInterface} from "../types/watcher"
 
+const queue: Array<WatcherInterface> = []
 let has: commomObject = {}
 let flushing: boolean = false
 let waiting: boolean = false
-const queue: Array<WatcherInterface> = []
 let index: number = 0
 
+/**
+ * 将一个 watcher 推入 watcher 队列，优化调用
+ */
 export function watcherQueue(watcher: WatcherInterface) {
   const id:number = watcher.id
   if (!has[id]) {

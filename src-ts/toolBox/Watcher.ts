@@ -1,5 +1,5 @@
 import {DepInterface} from "../types/dep"
-import {WatcherInterface, watcherOption} from "../types/watcher"
+import {watcherCallback, WatcherInterface, watcherOption} from "../types/watcher"
 
 import {Dep, pushTarget, popTarget} from './Dep'
 import {traverse} from '../util/traverse'
@@ -26,7 +26,7 @@ export class Watcher implements WatcherInterface {
   constructor(
     ctx: any,
     getter: () => any,
-    callback: (newValue: any, oldValue: any) => any,
+    callback: watcherCallback,
     options: watcherOption = {}
   ) {
     this.id = uid++

@@ -1,9 +1,10 @@
 import {DepInterface} from "../types/dep"
+import {commomObject, objOrArray} from "../types/commom"
+import {ObserverInterface} from "../types/observer"
 
 import {Dep} from './Dep'
 import {arrayMethods} from '../util/array'
 import {is} from '../util/util'
-import {commomObject, objOrArray} from "../types/commom"
 
 const arrayKeys = Object.getOwnPropertyNames(arrayMethods)
 
@@ -12,7 +13,7 @@ let uid = 0
 /**
  * 遍历对象，同时生成一个对象对应的 Dep
  */
-class Observer {
+class Observer implements ObserverInterface {
 
   id: number
   dep: DepInterface
@@ -56,12 +57,16 @@ class Observer {
 }
 
 // 使用 __proto__ 覆盖原数组方法
-function protoAugment(target, src) {
-  target.__proto__ = src // eslint-disable-line
+function protoAugment(target: Array<any>, src: object) {
+  (<any>target).__proto__ = src // eslint-disable-line
 }
 
 // 直接将数组方法定义在当前对象下，以达到覆盖数组方法的目的
-function copyAugment(target, src, keys) {
+function copyAugment(
+  target: Array<any>,
+  src: { [propName: string]: () => any },
+  keys: Array<string>
+) {
   for (let i = 0, l = keys.length; i < l; i++) {
     const key = keys[i]
     Object.defineProperty(target, key, {
@@ -80,7 +85,11 @@ function copyAugment(target, src, keys) {
  * @param value
  * @returns {*}
  */
-export function defineReactive(object: commomObject, key: string, value: any) {
+export function defineReactive(
+  object: commomObject,
+  key: string,
+  value: any
+) {
   let dep = new Dep(object, key)
   let childOb = observe(value)
   Object.defineProperty(object, key, {
@@ -112,7 +121,9 @@ export function defineReactive(object: commomObject, key: string, value: any) {
  * @param value
  * @returns {*}
  */
-export function observe(value: objOrArray) {
+export function observe(
+  value: objOrArray
+) {
   if (typeof value !== 'object') {
     return
   }
