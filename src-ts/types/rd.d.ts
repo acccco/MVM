@@ -31,4 +31,5 @@ type classRD = {
   extend: (extendOption: optionType) => any
   mixin: (mixin: optionType) => this
   use: (plugin: any, ...args: Array<any>) => this
+  _installedPlugins?: Array<any>
 }

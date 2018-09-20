@@ -3,7 +3,9 @@ import {classRD} from "../../types/rd"
 export function initUse(
   RD: classRD
 ) {
-  RD.use = function (plugin: any, ...args: Array<any>) {
+  RD.use = function (
+    plugin: any, ...args: Array<any>
+  ) {
     // 保存已生效的插件
     const installedPlugins = (this._installedPlugins || (this._installedPlugins = []))
     if (installedPlugins.indexOf(plugin) > -1) {

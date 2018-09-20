@@ -8,7 +8,9 @@ let cid = 1
 export function initExtend(
   RD: classRD
 ) {
-  RD.extend = function (extendOption: optionType) {
+  RD.extend = function (
+    extendOption: optionType
+  ) {
     const Super = this
 
     class Sub extends Super {
