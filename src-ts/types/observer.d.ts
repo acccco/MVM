@@ -1,9 +1,9 @@
 import {DepInterface} from "./dep"
-import {commomObject} from "./commom"
+import {commonObject} from "./commom"
 
 export interface ObserverInterface {
   id: number
   dep: DepInterface
-  walk: (obj: commomObject) => void
+  walk: (obj: commonObject) => void
   observeArray: (items: Array<any>) => void
 }

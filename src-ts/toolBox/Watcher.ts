@@ -1,7 +1,8 @@
 import {DepInterface} from "../types/dep"
 import {watcherCallback, WatcherInterface, watcherOption} from "../types/watcher"
+import {RDInterface} from "../types/rd"
 
-import {Dep, pushTarget, popTarget} from './Dep'
+import {pushTarget, popTarget} from './Dep'
 import {traverse} from '../util/traverse'
 import {watcherQueue} from '../util/watcherQueue'
 
@@ -24,7 +25,7 @@ export class Watcher implements WatcherInterface {
   value: any
 
   constructor(
-    ctx: any,
+    ctx: RDInterface,
     getter: () => any,
     callback: watcherCallback,
     options: watcherOption = {}
@@ -51,6 +52,10 @@ export class Watcher implements WatcherInterface {
     this.dirty = false
   }
 
+  /**
+   * 用于计算 watcher 的值，并且在相关属性下添加依赖
+   * @returns {any}
+   */
   get() {
     pushTarget(this)
     let value = this.getter()
@@ -63,6 +68,9 @@ export class Watcher implements WatcherInterface {
     return value
   }
 
+  /**
+   * 当响应属性变化时，触发 watcher 的更新机制
+   */
   update() {
     if (this.lazy) {
       this.dirty = true
@@ -71,9 +79,11 @@ export class Watcher implements WatcherInterface {
     }
   }
 
+  /**
+   * watcher 的更新机制
+   */
   run() {
     if (this.active) {
-      Dep.target = this
       let value = this.get()
       if (value !== this.value || this.ignoreChange || this.deep) {
         // 设置新值
@@ -92,6 +102,10 @@ export class Watcher implements WatcherInterface {
     this.dirty = false
   }
 
+  /**
+   * 添加依赖的 dep
+   * @param {DepInterface} dep
+   */
   addDep(dep: DepInterface) {
     const id: number = dep.id
     if (!this.newDepId.has(id)) {
@@ -103,10 +117,13 @@ export class Watcher implements WatcherInterface {
     }
   }
 
+  /**
+   * 清空无效的 dep 和 当前 watcher 的关联
+   */
   cleanupDep() {
     let i: number = this.dep.length
     while (i--) {
-      const dep: DepInterface = this.dep[i]
+      const dep = this.dep[i]
       if (!this.newDepId.has(dep.id)) {
         dep.removeSub(this)
       }
@@ -121,7 +138,10 @@ export class Watcher implements WatcherInterface {
     this.newDep.length = 0
   }
 
-  teardown() {
+  /**
+   * 销毁该 watcher
+   */
+  destroy() {
     if (this.active) {
       let i: number = this.dep.length
       while (i--) {

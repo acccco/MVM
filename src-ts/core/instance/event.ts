@@ -1,9 +1,9 @@
+import {RD} from "./index"
+
 /**
  * 将子组件的事件触发可以通知到父组件，实现子父组件间的通信
  * @param rd
  */
-import {RD} from "./index"
-
 export function initEvent(
   rd: RD
 ) {

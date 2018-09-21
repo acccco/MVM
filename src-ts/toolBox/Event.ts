@@ -18,7 +18,16 @@ export class Event implements EventInterface {
     this._events = {}
   }
 
-  $on(eventName: Array<string> | string, fn: Array<eventFunType> | eventFunType) {
+  /**
+   * 添加事件处理函数
+   * @param {Array<string> | string} eventName
+   * @param {Array<eventFunType> | eventFunType} fn
+   * @returns {this}
+   */
+  $on(
+    eventName: Array<string> | string,
+    fn: Array<eventFunType> | eventFunType
+  ) {
     if (Array.isArray(eventName)) {
       eventName.forEach(name => this.$on(name, fn))
     } else {
@@ -30,6 +39,12 @@ export class Event implements EventInterface {
     return this
   }
 
+  /**
+   * 添加仅触发一次的函数
+   * @param {string} eventName
+   * @param {eventFunType} fn
+   * @returns {this}
+   */
   $once(eventName: string, fn: eventFunType) {
     let proxyFun: eventFunType = (...args: Array<any>) => {
       this.$off(eventName, proxyFun)
@@ -41,6 +56,12 @@ export class Event implements EventInterface {
     return this
   }
 
+  /**
+   * 按照规则清除，事件对应的函数
+   * @param {Array<string> | string} eventName
+   * @param {eventFunType} fn
+   * @returns {this}
+   */
   $off(eventName?: Array<string> | string, fn?: eventFunType) {
     // 清空所有事件
     if (!arguments.length) {
@@ -82,6 +103,12 @@ export class Event implements EventInterface {
     return this
   }
 
+  /**
+   * 触发事件对应的函数
+   * @param {string} eventName
+   * @param args
+   * @returns {this}
+   */
   $emit(eventName: string, ...args: Array<any>) {
     let cbs = this._events[eventName]
     if (cbs) {

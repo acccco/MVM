@@ -1,4 +1,4 @@
-export type commomObject = {
+export type commonObject = {
   [propName: string]: any
 }
 

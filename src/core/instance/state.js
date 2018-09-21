@@ -70,7 +70,9 @@ function initData(rd) {
 function initComputed(rd) {
   let computed = rd._computed = {}
   for (let key in rd.$option.computed) {
-    computed[key] = (new Computed(rd, key, rd.$option.computed[key])).value
+    let newComputed = new Computed(rd, key, rd.$option.computed[key])
+    rd._computedWatcher.push(newComputed)
+    computed[key] = newComputed.value
   }
   observe(computed)
   proxyObject(rd, computed, (key) => {

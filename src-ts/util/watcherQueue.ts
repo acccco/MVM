@@ -1,9 +1,9 @@
 
-import {commomObject} from "../types/commom"
+import {commonObject} from "../types/commom"
 import {WatcherInterface} from "../types/watcher"
 
 const queue: Array<WatcherInterface> = []
-let has: commomObject = {}
+let has: commonObject = {}
 let flushing: boolean = false
 let waiting: boolean = false
 let index: number = 0

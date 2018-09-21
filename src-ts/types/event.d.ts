@@ -1,7 +1,7 @@
-import {commomObject} from "./commom"
+import {commonObject} from "./commom"
 
 export type eventFunType = {
-  (event: commomObject): any
+  (event: commonObject): any
   [propName: string]: any
 }
 

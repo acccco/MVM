@@ -28,5 +28,5 @@ export interface WatcherInterface {
   evaluate: () => void
   addDep: (dep: DepInterface) => void
   cleanupDep: () => void
-  teardown: () => void
+  destroy: () => void
 }

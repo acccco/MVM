@@ -1,6 +1,6 @@
 import {afterMergeOptionType, computedObj, injectObj, optionType, propObj} from "../../types/option"
 import {RDInterface} from "../../types/rd"
-import {commomObject} from "../../types/commom"
+import {commonObject} from "../../types/commom"
 import {watcherCallback, WatcherInterface, watcherOption} from "../../types/watcher"
 import {ComputedInterface} from "../../types/computed"
 
@@ -47,12 +47,18 @@ export class RD extends Event implements RDInterface {
     this.active = true
   }
 
+  /**
+   * 初始化 RD 实例
+   * @param {optionType} option
+   * @returns {any}
+   * @private
+   */
   _init(option: optionType) {
     let rd = this
 
     // 合并 option 参数
     rd.$option = mergeOption(
-      (<commomObject>this.constructor).option,
+      (<commonObject>this.constructor).option,
       option
     )
     initProperties(rd)
@@ -79,9 +85,11 @@ export class RD extends Event implements RDInterface {
     }) : rd
   }
 
-  // 处理传入的 prop ，当传入的组件的 prop 有更新时
-  // 需要调用该方法触发子组件状态更新
-  $initProp(prop: commomObject) {
+  /**
+   * 处理传入的 prop ，当传入的组件的 prop 有更新时，需要调用该方法触发子组件状态更新
+   * @param {commonObject} prop
+   */
+  $initProp(prop: commonObject) {
     if (isEmpty(prop)) return
     // TODO 有效性验证
     let rd = this
@@ -96,9 +104,13 @@ export class RD extends Event implements RDInterface {
     }
   }
 
-  // 用于取消特定的属性监听
-  // 比如表单元素的 value 值，发生变化时是不需要引发视图变化的
-  $cancelWatch(getter: string | (() => any)) {
+  /**
+   * 取消对对象下某个属性的监听
+   * 比如表单元素的 value 值，发生变化时是不需要引发视图变化的
+   * @param {(string | (() => any))} getter
+   * @returns {any}
+   */
+  $cancelWatch(getter: string | (() => any)): any {
     pushTarget(null)
     let value = null
     if (typeof getter === 'string') {
@@ -110,14 +122,20 @@ export class RD extends Event implements RDInterface {
     return value
   }
 
-  // 创建一个观察者，观察者会观察在 getter 中对属性的 get 的操作
-  // 当对应属性发生 set 动作时，会触发 callback
-  // 新生成的观察者对象会保存在实例的 _watch 属性下
+  /**
+   * 创建一个观察者，观察者会观察在 getter 中对属性的 get 的操作
+   * 当对应属性发生 set 动作并且值发生变化时时，会触发 callback
+   * 新生成的观察者对象会保存在实例的 _watch 属性下
+   * @param {(string | (() => any))} getter
+   * @param {watcherCallback} callback
+   * @param {watcherOption} option
+   * @returns {Watcher}
+   */
   $watch(
     getter: string | (() => any),
     callback: watcherCallback,
     option: watcherOption
-  ) {
+  ): Watcher {
     if (typeof getter === 'string') {
       getter = () => {
         (<string>getter).split('.').reduce((res, name) => res[name], this)
@@ -141,12 +159,12 @@ export class RD extends Event implements RDInterface {
 
       // 注销 watch
       while (rd._watch.length) {
-        rd._watch.shift().teardown()
+        rd._watch.shift().destroy()
       }
 
       // 注销 computed
       while (rd._computedWatcher.length) {
-        rd._computedWatcher.shift().teardown()
+        rd._computedWatcher.shift().destroy()
       }
 
       // 清空事件

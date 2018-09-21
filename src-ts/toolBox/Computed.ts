@@ -1,5 +1,5 @@
 import {WatcherInterface} from "../types/watcher"
-import {commomObject} from "../types/commom"
+import {commonObject} from "../types/commom"
 import {ComputedInterface} from "../types/computed"
 
 import {Watcher} from './Watcher'
@@ -16,7 +16,7 @@ export class Computed implements ComputedInterface {
   id: number
   ctx: any
   key: string
-  option: commomObject
+  option: commonObject
   active: boolean
   watch: null | WatcherInterface
   value: any
@@ -24,7 +24,7 @@ export class Computed implements ComputedInterface {
   constructor(
     ctx: any,
     key: string,
-    option: commomObject = {}
+    option: commonObject = {}
   ) {
     this.id = uid++
     this.ctx = ctx
@@ -33,24 +33,31 @@ export class Computed implements ComputedInterface {
     this.active = true
     this.watch = null
     this.value = null
-    this.init()
+    this._init()
   }
 
-  init() {
+  /**
+   * 初始化 computed
+   */
+  _init() {
     let rd = this.ctx
     let watcher = this.watch = new Watcher(
       rd,
       this.option.get || noop,
       (newValue) => {
         rd[this.key] = newValue
-      }
+      },
+      this.option
     )
     this.value = watcher.value
   }
 
-  teardown() {
+  /**
+   * 销毁当前 computed 实例
+   */
+  destroy() {
     if (this.active) {
-      this.watch.teardown()
+      this.watch.destroy()
     }
   }
 }

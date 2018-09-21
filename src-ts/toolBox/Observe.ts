@@ -1,5 +1,5 @@
 import {DepInterface} from "../types/dep"
-import {commomObject, objOrArray} from "../types/commom"
+import {commonObject, objOrArray} from "../types/commom"
 import {ObserverInterface} from "../types/observer"
 
 import {Dep} from './Dep'
@@ -40,15 +40,21 @@ class Observer implements ObserverInterface {
     })
   }
 
-  // 遍历对象下属性，使得属性变成可监听的结构
-  walk(obj: commomObject) {
+  /**
+   * 遍历对象下属性，使得属性变成可监听的结构
+   * @param {commonObject} obj
+   */
+  walk(obj: commonObject) {
     const keys = Object.keys(obj)
     for (let i = 0; i < keys.length; i++) {
       defineReactive(obj, keys[i], obj[keys[i]])
     }
   }
 
-  // 同上，遍历数组
+  /**
+   * 同上，遍历数组
+   * @param {Array<any>} items
+   */
   observeArray(items: Array<any>) {
     for (let i = 0, l = items.length; i < l; i++) {
       observe(items[i])
@@ -56,15 +62,24 @@ class Observer implements ObserverInterface {
   }
 }
 
-// 使用 __proto__ 覆盖原数组方法
+/**
+ * 使用 __proto__ 覆盖原数组方法
+ * @param {Array<any>} target
+ * @param {object} src
+ */
 function protoAugment(target: Array<any>, src: object) {
   (<any>target).__proto__ = src // eslint-disable-line
 }
 
-// 直接将数组方法定义在当前对象下，以达到覆盖数组方法的目的
+/**
+ * 直接将数组方法定义在当前对象下，以达到覆盖数组方法的目的
+ * @param {Array<any>} target
+ * @param {commonObject} src
+ * @param {Array<string>} keys
+ */
 function copyAugment(
   target: Array<any>,
-  src: { [propName: string]: () => any },
+  src: commonObject,
   keys: Array<string>
 ) {
   for (let i = 0, l = keys.length; i < l; i++) {
@@ -80,13 +95,12 @@ function copyAugment(
 
 /**
  * 将对象下的某条属性变成可监听结构
- * @param object
- * @param key
+ * @param {commonObject} object
+ * @param {string} key
  * @param value
- * @returns {*}
  */
 export function defineReactive(
-  object: commomObject,
+  object: commonObject,
   key: string,
   value: any
 ) {
@@ -118,8 +132,8 @@ export function defineReactive(
 
 /**
  * 属性遍历器
- * @param value
- * @returns {*}
+ * @param {objOrArray} value
+ * @returns {any}
  */
 export function observe(
   value: objOrArray

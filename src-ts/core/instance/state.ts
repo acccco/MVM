@@ -24,6 +24,10 @@ export function initState(
   if (opt.provide) initProvide(rd)
 }
 
+/**
+ * 初始化 inject 并将 inject 代理到 this 对象下
+ * @param {RD} rd
+ */
 function initInject(
   rd: RD
 ) {
@@ -34,6 +38,10 @@ function initInject(
   proxyObject(rd, inject)
 }
 
+/**
+ * 初始化 prop 并将 prop 代理到 this 对象下
+ * @param {RD} rd
+ */
 function initProp(
   rd: RD
 ) {
@@ -52,6 +60,10 @@ function initProp(
   })
 }
 
+/**
+ * 初始化 method 并将 method 代理到 this 对象下
+ * @param {RD} rd
+ */
 function initMethod(
   rd: RD
 ) {
@@ -62,6 +74,10 @@ function initMethod(
   }
 }
 
+/**
+ * 初始化 data 并将 data 代理到 this 对象下
+ * @param {RD} rd
+ */
 function initData(
   rd: RD
 ) {
@@ -80,6 +96,10 @@ function initData(
   })
 }
 
+/**
+ * 初始化 computed 并将 computed 代理到 this 对象下
+ * @param {RD} rd
+ */
 function initComputed(
   rd: RD
 ) {
@@ -95,6 +115,10 @@ function initComputed(
   })
 }
 
+/**
+ * 初始化 watcher
+ * @param {RD} rd
+ */
 function initWatch(
   rd: RD
 ) {
@@ -107,6 +131,10 @@ function initWatch(
   }
 }
 
+/**
+ * 初始化 provide
+ * @param {RD} rd
+ */
 function initProvide(
   rd: RD
 ) {

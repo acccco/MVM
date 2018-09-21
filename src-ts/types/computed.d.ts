@@ -1,14 +1,14 @@
 import {WatcherInterface} from "./watcher"
-import {commomObject} from "./commom"
+import {commonObject} from "./commom"
 
 export interface ComputedInterface {
   id: number
   ctx: any
   key: string
-  option: commomObject
+  option: commonObject
   active: boolean
   watch: null | WatcherInterface
   value: any
-  init: () => void
-  teardown: () => void
+  _init: () => void
+  destroy: () => void
 }

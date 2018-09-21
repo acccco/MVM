@@ -1,6 +1,11 @@
 import { noop, merge, clone, is } from './util'
 import { LIFECYCLE_HOOK } from '../core/instance/lifecycle'
 
+/**
+ * 判断是否是定义的属性
+ * @param key
+ * @returns {boolean}
+ */
 function isUserPrams(key) {
   let list = [
     ...LIFECYCLE_HOOK,
@@ -20,8 +25,6 @@ function isUserPrams(key) {
  * @returns {*}
  */
 export function mergeOption(parent = {}, child = {}) {
-  normalizeComputed(parent)
-  normalizeComputed(child)
   normalizeProp(child)
   normalizeInject(child)
 
@@ -46,7 +49,7 @@ export function mergeOption(parent = {}, child = {}) {
   option.watch = mergeWatch(option.watch, child.watch)
 
   // 合并 method 同名覆盖
-  option.method = merge(option.method, child.method)
+  option.computed = mergeComputed(option.computed, child.computed)
 
   // 合并 computed 同名覆盖
   option.computed = merge(option.computed, child.computed)
@@ -61,12 +64,24 @@ export function mergeOption(parent = {}, child = {}) {
   return option
 }
 
+/**
+ * 合并 data 属性
+ * @param parentValue
+ * @param childValue
+ * @returns {function(): *}
+ */
 function mergeData(parentValue = noop, childValue = noop) {
   return function mergeFnc() {
     return merge(parentValue.call(this), childValue.call(this))
   }
 }
 
+/**
+ * 合并 watch 属性
+ * @param parentVal
+ * @param childVal
+ * @returns {*}
+ */
 function mergeWatch(parentVal = {}, childVal = {}) {
   let watchers = clone(parentVal)
   for (let key in watchers) {
@@ -85,23 +100,27 @@ function mergeWatch(parentVal = {}, childVal = {}) {
   return watchers
 }
 
-function normalizeLifecycle(option, name) {
-  if (undefined === option[name]) {
-    option[name] = []
-    return
+/**
+ * 合并 computed 属性
+ * @param parentVal
+ * @param childVal
+ * @returns {*}
+ */
+function mergeComputed(parentVal = {}, childVal = {}) {
+  let computed = clone(parentVal)
+  for (let key in computed) {
+    computed[key] = normalizeComputed(computed[key])
   }
-  if (!is(Array, option[name])) {
-    option[name] = [option[name]]
+  for (let key in childVal) {
+    computed[key] = normalizeComputed(childVal[key])
   }
+  return computed
 }
 
 /**
- *
+ * 统一处理不同形式的 watcher
  * @param watcher
- * return {
- *   handler: Function,
- *   ...
- * }
+ * @returns {*}
  */
 function normalizeWatcher(watcher) {
   if (is(Function, watcher)) {
@@ -113,16 +132,39 @@ function normalizeWatcher(watcher) {
 }
 
 /**
- * 处理 prop 返回统一结构
- * @param option
- * return {
- *   key: {
- *     type: String|Number|...,
- *     ...
- *   }
- * }
+ * 统一处理不同形式的 computed
+ * @param computed
+ * @returns {*}
  */
+function normalizeComputed(computed) {
+  if (is(Function, computed)) {
+    return {
+      get: computed,
+      set: noop
+    }
+  }
+  return computed
+}
 
+/**
+ * 统一处理生命周期函数
+ * @param option
+ * @param name
+ */
+function normalizeLifecycle(option, name) {
+  if (undefined === option[name]) {
+    option[name] = []
+    return
+  }
+  if (!is(Array, option[name])) {
+    option[name] = [option[name]]
+  }
+}
+
+/**
+ * 统一处理不同形式的 prop
+ * @param option
+ */
 function normalizeProp(option) {
   if (!option.prop) {
     return
@@ -143,16 +185,9 @@ function normalizeProp(option) {
 }
 
 /**
- * 处理 inject 返回统一结构
+ * 统一处理不同形式的 inject
  * @param option
- * returns {
- *   key: {
- *     from: xxx,
- *     ...
- *   }
- * }
  */
-
 function normalizeInject(option) {
   let inject = option.inject
   let normalInject = option.inject = {}
@@ -168,28 +203,6 @@ function normalizeInject(option) {
         inject[key].from = key
       }
       normalInject[key] = Object.assign({}, inject[key])
-    }
-  }
-}
-
-/**
- * 处理 computed 返回统一结构
- * @param option
- * return {
- *   key: {
- *     get: Function,
- *     set: Function
- *   }
- * }
- */
-function normalizeComputed(option) {
-  let computed = option.computed
-  for (let key in computed) {
-    if (is(Function, computed[key])) {
-      option.computed[key] = {
-        get: computed[key],
-        set: noop
-      }
     }
   }
 }

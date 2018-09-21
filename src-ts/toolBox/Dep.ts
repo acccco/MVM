@@ -1,4 +1,4 @@
-import {commomObject} from "../types/commom"
+import {commonObject} from "../types/commom"
 import {DepInterface} from "../types/dep"
 import {WatcherInterface} from "../types/watcher"
 
@@ -14,14 +14,15 @@ let uid = 0
 export class Dep implements DepInterface {
 
   static target: null | WatcherInterface
+
   id: number
   monitor: {
-    object: commomObject
+    object: commonObject
     key: string
   }
   subs: Array<WatcherInterface>
 
-  constructor(object: commomObject, key: string) {
+  constructor(object: commonObject, key: string) {
     this.id = uid++
     this.monitor = {
       object,
@@ -30,6 +31,10 @@ export class Dep implements DepInterface {
     this.subs = []
   }
 
+  /**
+   * 添加一个 watcher 到当前 dep 中
+   * @param {WatcherInterface} sub
+   */
   addSub(sub: WatcherInterface) {
     for (let i = 0; i < this.subs.length; i++) {
       if (this.subs[i].id === sub.id) {
@@ -39,6 +44,10 @@ export class Dep implements DepInterface {
     this.subs.push(sub)
   }
 
+  /**
+   * 从当前 dep 中删除指定的 watcher
+   * @param {WatcherInterface} sub
+   */
   removeSub(sub: WatcherInterface) {
     const index = this.subs.indexOf(sub)
     if (index > -1) {
@@ -46,6 +55,9 @@ export class Dep implements DepInterface {
     }
   }
 
+  /**
+   * 触发当前 dep 下的所有 watcher
+   */
   notify() {
     this.subs.forEach(sub => sub.update())
   }
@@ -55,11 +67,18 @@ Dep.target = null
 
 const targetStack: Array<WatcherInterface> = []
 
+/**
+ * 将旧的 target 推入栈中，Dep.target 赋值为新的 target
+ * @param {WatcherInterface} target
+ */
 export function pushTarget(target: WatcherInterface) {
   if (Dep.target) targetStack.push(Dep.target)
   Dep.target = target
 }
 
+/**
+ * 从 targetStack 中推出 watcher，赋值给 Dep.target
+ */
 export function popTarget() {
   Dep.target = targetStack.pop()
 }

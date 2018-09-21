@@ -35,9 +35,9 @@ function isUserPrams(
 
 /**
  * 合并两个 option
- * @param parent
- * @param child
- * @returns {*}
+ * @param {optionType} parent
+ * @param {optionType} child
+ * @returns {afterMergeOptionType}
  */
 export function mergeOption(
   parent: optionType = {},
@@ -82,6 +82,12 @@ export function mergeOption(
   return option
 }
 
+/**
+ * 合并 data 属性
+ * @param {() => object} parentValue
+ * @param {() => object} childValue
+ * @returns {() => object}
+ */
 function mergeData(
   parentValue: () => object = noop,
   childValue: () => object = noop
@@ -91,12 +97,19 @@ function mergeData(
   }
 }
 
+type unMergeWatchType = { [propName: string]: optionWatchType }
+type mergeWatchType = { [propName: string]: watchObj }
+
+/**
+ * 合并 watch 属性
+ * @param {unMergeWatchType} parentVal
+ * @param {unMergeWatchType} childVal
+ * @returns {mergeWatchType}
+ */
 function mergeWatch(
-  parentVal: { [propName: string]: optionWatchType } = {},
-  childVal: { [propName: string]: optionWatchType } = {}
-): {
-  [propName: string]: watchObj
-} {
+  parentVal: unMergeWatchType = {},
+  childVal: unMergeWatchType = {}
+): mergeWatchType {
   let watcher = clone(parentVal)
   for (let key in watcher) {
     if (!is(Array, watcher[key])) {
@@ -114,12 +127,19 @@ function mergeWatch(
   return watcher
 }
 
+type unMergeComputedType = { [propName: string]: optionComputedType }
+type mergeComputedType = { [propName: string]: computedObj }
+
+/**
+ * 合并 computed 属性
+ * @param {unMergeComputedType} parentVal
+ * @param {unMergeComputedType} childVal
+ * @returns {mergeComputedType}
+ */
 function mergeComputed(
-  parentVal: { [propName: string]: optionComputedType } = {},
-  childVal: { [propName: string]: optionComputedType } = {}
-): {
-  [propName: string]: computedObj
-} {
+  parentVal: unMergeComputedType = {},
+  childVal: unMergeComputedType = {}
+): mergeComputedType {
   let computed = clone(parentVal)
   for (let key in computed) {
     computed[key] = normalizeComputed(computed[key])
@@ -130,6 +150,44 @@ function mergeComputed(
   return computed
 }
 
+/**
+ * 统一处理不同形式的 watcher
+ * @param {optionWatch} watcher
+ * @returns {watchObj}
+ */
+function normalizeWatcher(
+  watcher: optionWatch
+): watchObj {
+  if (is(Function, watcher)) {
+    return {
+      handler: <watchFun>watcher
+    }
+  }
+  return <watchObj>watcher
+}
+
+/**
+ * 统一处理不同形式的 computed
+ * @param {optionComputedType} computed
+ * @returns {computedObj}
+ */
+function normalizeComputed(
+  computed: optionComputedType
+): computedObj {
+  if (is(Function, computed)) {
+    return {
+      get: <computedFun>computed,
+      set: noop
+    }
+  }
+  return <computedObj>computed
+}
+
+/**
+ * 统一处理生命周期函数
+ * @param {optionType} option
+ * @param {string} name
+ */
 function normalizeLifecycle(
   option: optionType,
   name: string
@@ -144,16 +202,9 @@ function normalizeLifecycle(
 }
 
 /**
- * 处理 prop 返回统一结构
- * @param option
- * return {
- *   key: {
- *     type: String|Number|...,
- *     ...
- *   }
- * }
+ * 统一处理不同形式的 prop
+ * @param {optionType} option
  */
-
 function normalizeProp(
   option: optionType
 ) {
@@ -177,16 +228,9 @@ function normalizeProp(
 }
 
 /**
- * 处理 inject 返回统一结构
- * @param option
- * returns {
- *   key: {
- *     from: xxx,
- *     ...
- *   }
- * }
+ * 统一处理不同形式的 inject
+ * @param {optionType} option
  */
-
 function normalizeInject(
   option: optionType
 ) {
@@ -208,43 +252,3 @@ function normalizeInject(
     }
   }
 }
-
-/**
- *
- * @param watcher
- * return {
- *   handler: Function,
- *   ...
- * }
- */
-function normalizeWatcher(
-  watcher: optionWatch
-): watchObj {
-  if (is(Function, watcher)) {
-    return {
-      handler: <watchFun>watcher
-    }
-  }
-  return <watchObj>watcher
-}
-
-/**
- * 处理 computed 返回统一结构
- * @param computed
- * return {
- *   get: Function,
- *   set: Function
- * }
- */
-function normalizeComputed(
-  computed: optionComputedType
-): computedObj {
-  if (is(Function, computed)) {
-    return {
-      get: <computedFun>computed,
-      set: noop
-    }
-  }
-  return <computedObj>computed
-}
-

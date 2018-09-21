@@ -1,4 +1,5 @@
-import {commomObject} from "../types/commom"
+import {commonObject} from "../types/commom"
+import {RDInterface} from "../types/rd"
 
 import always from 'ramda/src/always'
 import merge from 'ramda/src/merge'
@@ -10,8 +11,14 @@ import equals from 'ramda/src/equals'
 
 export {merge, clone, is, isEmpty, isNil, equals}
 
-export function proxy(target: commomObject, sourceKey: string, key: string) {
-  let sharedPropertyDefinition: commomObject = {
+/**
+ * 为 target.key 代理到 target.sourceKey.key
+ * @param {commonObject} target
+ * @param {string} sourceKey
+ * @param {string} key
+ */
+export function proxy(target: commonObject, sourceKey: string, key: string) {
+  let sharedPropertyDefinition: commonObject = {
     enumerable: true,
     configurable: true
   }
@@ -26,16 +33,17 @@ export function proxy(target: commomObject, sourceKey: string, key: string) {
 
 /**
  * 将 proxyObj 下的属性代理到 target 对象下，仅仅是代理，不是赋值
- * @param target
- * @param proxyObj
- * @param cb
+ * 用 cb 来检测是否符合代理规则
+ * @param {commonObject} target
+ * @param {commonObject} proxyObj
+ * @param {(key: string) => boolean} cb
  */
 export function proxyObject(
-  target: commomObject,
-  proxyObj: commomObject,
+  target: commonObject,
+  proxyObj: commonObject,
   cb: ((key: string) => boolean) = always(true)
 ) {
-  let sharedPropertyDefinition: commomObject = {
+  let sharedPropertyDefinition: commonObject = {
     enumerable: true,
     configurable: true
   }
@@ -60,12 +68,12 @@ export function noop() {
 
 /**
  * 从祖先节点上获得最近的 provide
- * @param ctx
- * @param key
+ * @param {RDInterface} ctx
+ * @param {string} key
  * @param defaultValue
- * @returns {*}
+ * @returns {any}
  */
-export function getProvideForInject(ctx: any, key: string, defaultValue: any) {
+export function getProvideForInject(ctx: RDInterface, key: string, defaultValue: any) {
   let parent = ctx.$parent
   let value = defaultValue
   while (parent) {
@@ -89,6 +97,12 @@ export const allowedGlobals = makeMap(
   'require' // for Webpack/Browserify
 )
 
+/**
+ * 将规定字符串设置成一个 map
+ * @param {string} str
+ * @param {boolean} expectsLowerCase
+ * @returns {((val: string) => any) | ((val: string) => any)}
+ */
 export function makeMap(str: string, expectsLowerCase: boolean = false) {
   const map = Object.create(null)
   const list = str.split(',')
@@ -107,8 +121,8 @@ export function warn(msg: string, rd: any) {
 
 /**
  * 检查属性的覆盖情况
- * @param name
- * @param type
+ * @param {string} name
+ * @param {string} type
  * @param ctx
  * @returns {boolean}
  */

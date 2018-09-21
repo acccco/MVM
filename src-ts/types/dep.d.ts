@@ -1,9 +1,9 @@
-import {commomObject} from "./commom"
+import {commonObject} from "./commom"
 
 export interface DepInterface {
   id: number
   monitor: {
-    object: commomObject
+    object: commonObject
     key: string
   }
   subs: Array<any>

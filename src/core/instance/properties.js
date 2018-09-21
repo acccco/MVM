@@ -12,4 +12,5 @@ export function initProperties(rd) {
   rd.$children = []
 
   rd._watch = []
+  rd._computedWatcher = []
 }
