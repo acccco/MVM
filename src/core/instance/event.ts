@@ -1,4 +1,4 @@
-import {RD} from "./index"
+import {RD} from "../"
 
 /**
  * 将子组件的事件触发可以通知到父组件，实现子父组件间的通信

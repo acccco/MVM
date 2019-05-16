@@ -1,4 +1,4 @@
-import {RD} from "./index"
+import {RD} from "../"
 import {Computed} from '../../toolbox/Computed'
 import {Watcher} from '../../toolbox/Watcher'
 import {getProvideForInject, checkProp, proxyObject, warn, is} from '../../util/util'

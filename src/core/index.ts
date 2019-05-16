@@ -1,18 +1,18 @@
-import {optionType} from "../../types/option"
-import {RDInterface} from "../../types/rd"
-import {watcherCallback, watcherOption, WatcherInterface} from "../../types/watcher"
-import {ComputedInterface} from "../../types/computed"
+import {commonObject} from "../types/commom"
+import {optionType} from "../types/option"
+import {RDInterface} from "../types/rd"
+import {ComputedInterface} from "../types/computed"
+import {watcherCallback, watcherOption, WatcherInterface} from "../types/watcher"
 
-import {Event} from '../../toolbox/Event'
-import {mergeOption} from '../../util/option'
-import {initState} from './state'
-import {initProperties} from './properties'
-import {initEvent} from './event'
-import {Watcher} from '../../toolbox/Watcher'
-import {callHook} from './lifecycle'
-import {warn, allowedGlobals, isEmpty, equals} from '../../util/util'
-import {pushTarget, popTarget} from '../../toolbox/Dep'
-import {commonObject} from "../../types/commom"
+import {Event} from '../toolBox/Event'
+import {Watcher} from '../toolBox/Watcher'
+import {mergeOption} from '../util/option'
+import {initState} from './instance/state'
+import {initProperties} from './instance/properties'
+import {initEvent} from './instance/event'
+import {callHook} from './instance/lifecycle'
+import {warn, allowedGlobals, isEmpty, equals} from '../util/util'
+import {pushTarget, popTarget} from '../toolBox/Dep'
 
 let uid = 0
 

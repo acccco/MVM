@@ -1,4 +1,4 @@
-import {RD} from "./index"
+import {RD} from "../"
 
 export const LIFECYCLE_HOOK: Array<string> = [
   'beforeCreate',

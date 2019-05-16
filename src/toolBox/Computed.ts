@@ -3,6 +3,7 @@ import {ComputedInterface, computedHandle} from "../types/computed"
 
 import {Watcher} from './Watcher'
 import {noop} from '../util/util'
+import {RDInterface} from "../types/rd"
 
 let uid = 0
 
@@ -17,7 +18,7 @@ export class Computed implements ComputedInterface {
   watch: WatcherInterface
   value: any
 
-  constructor(ctx: any, key: string, handle: computedHandle) {
+  constructor(ctx: RDInterface, key: string, handle: computedHandle) {
     this.id = uid++
     this.active = true
     this.value = null

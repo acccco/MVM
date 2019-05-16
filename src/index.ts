@@ -1,4 +1,4 @@
-import {RD} from './core/instance'
+import {RD} from './core'
 import {initGlobalApi} from './core/global-api'
 
 // 初始化 RD 下的类方法
