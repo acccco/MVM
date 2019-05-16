@@ -1,21 +1,34 @@
-var path = require('path');
+var path = require('path')
 
 module.exports = {
   mode: 'production',
-  entry: './src/index.js',
+  entry: './src/index.ts',
   output: {
     filename: 'RD.js',
     path: path.resolve(__dirname, '../dist'),
-    library: "RD",
+    library: 'RD',
     libraryTarget: 'umd',
-    libraryExport: "default"
+    libraryExport: 'default'
   },
   module: {
     rules: [
       {
-        test: /.js$/,
-        loader: 'babel-loader'
+        test: /\.ts$/,
+        loader: 'eslint-loader',
+        enforce: 'pre',
+        include: [path.resolve(__dirname, 'src')],
+        options: {
+          formatter: require('eslint-friendly-formatter')
+        }
+      },
+      {
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+        exclude: /node_modules/
       }
     ]
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js']
   }
-};
+}

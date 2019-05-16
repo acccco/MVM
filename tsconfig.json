@@ -1,13 +1,16 @@
 {
   "compilerOptions": {
-    "outDir": "./dist",
-    "target": "es6",
-    "noImplicitAny": false,
+    "outDir": "./lib",
+    "target": "es5",
     "module": "commonjs",
-    "sourceMap": true,
-    "allowJs": true
+    "strict": true,
+    "declaration": true,
+    "lib": [
+      "dom",
+      "es6"
+    ]
   },
   "include": [
-    "./src-ts/**/*"
+    "./src/**/*"
   ]
 }
