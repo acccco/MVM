@@ -1,10 +1,6 @@
 ## Reactive Data 响应式数据
 
----
-
-让数据活起来，在现代的 MVVM 框架中，除了视图层，最重要的就是数据了，一份可响应的数据配合渲染引擎就足以显示一个网页。
-
-#### RD 拥有什么？
+#### 例子
 
 从一个简单的例子开始
 
@@ -35,6 +31,10 @@ let demo = new RD({
     }
 })
 
+// 测试 data
+demo.text
+// Hello
+
 // 测试 watch
 demo.text = 'Hello World'
 // Hello World
@@ -51,13 +51,11 @@ demo.testMethod()
 
 #### data
 
-类型 `() => object`
+`() => object`
 
-不能使用简单对象，设置的属性值可直接在 `this` 下访问。
+不能使用简单对象，可直接在 `this` 下访问。
 
 #### watch
-
-类型
 
 ```typescript
 type handleType = (newValue, oldValue) => void
@@ -74,8 +72,6 @@ type watchType = {
 
 #### computed
 
-类型
-
 ```typescript
 type computedType = {
   [computedName: string]: {
@@ -85,11 +81,9 @@ type computedType = {
 }
 ```
 
-根据相应的数据得出结果，可直接用 `this` 访问对应的 `key` 值，同时可以 使用 `set` 在赋值时做一些处理。
+根据相应的数据得出结果，可直接用 `this` 访问对应的 `key` 值，可以使用 `set` 在赋值时做一些处理。
 
 #### method
-
-类型 
 
 ```typescript
 type methodType = {
@@ -104,7 +98,7 @@ type methodType = {
 3. beforeDestroy
 4. destroyed
 
-由于 `RD` 仅仅是维护数据，通知数据变化，而不在意数据变化后的处理，所以生命周期也就只剩下了创建和销毁两个阶段。对于其他的生命周期，可以使用事件手动触发。
+`RD` 仅仅是维护数据，通知数据变化，而不在意数据变化后的处理，所以生命周期也就只有创建和销毁两个阶段。
 
 #### 事件
 
@@ -144,14 +138,15 @@ let child = new RD({
     }
 })
 
-console.log(child.$parent.name)
+child.$parent.name
 // parent
 
-console.log(child.foo)
+child.foo
 // bar
 ```
 
-`inject/provide` 可以跨多级实例，`inject` 为数据的使用者，`provide` 为数据的提供者
+`inject/provide` 可以跨多级传递，`inject` 为数据的使用者，`provide` 为数据的提供者
+
 #### RD类属性
 
 1. extend   扩展实例，让扩展出的实例拥有默认的 option
