@@ -7,4 +7,4 @@ RD.use(jsxPlugin, RD)
 
 window.app = App
 
-RD.$mount(document.getElementById('app'), App)
+RD.$mount(document.getElementById('app'), new RD(App))

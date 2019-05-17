@@ -13,7 +13,7 @@ function createTree(template) {
     tree.children = template.children.map(node => {
       let treeNode = node
       if (node.isComponent) {
-        node.component = new node.ComponentClass({ parent: node.parent, propData: node.properties })
+        node.component = new node.ComponentClass({ parent: node.parent, propData: node.properties, event: node.event })
         treeNode = node.component.$vnode = node.component.$createComponentVNode(node.properties)
         treeNode.component = node.component
       }
@@ -47,7 +47,11 @@ function changeTree(newTemplate, oldTemplate) {
       if (treeNode.isComponent) {
         node.component = getOldComponent(oldTemplate.children, treeNode.ComponentClass.cid)
         if (!node.component) {
-          node.component = new node.ComponentClass({ parent: node.parent, propData: node.properties })
+          node.component = new node.ComponentClass({
+            parent: node.parent,
+            propData: node.properties,
+            event: node.event
+          })
           node.component.$vnode = node.component.$createComponentVNode(node.properties)
           treeNode = node.component.$vnode
           treeNode.component = node.component

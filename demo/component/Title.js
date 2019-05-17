@@ -1,10 +1,8 @@
-import RD from '../../src/index'
-
-export default RD.extend({
+export default {
   render(h) {
     return (
       <p className='title'>{this.title}</p>
     )
   },
   prop: ['title']
-})
+}

@@ -1,13 +1,12 @@
-import RD from '../../src/index'
 import TodoTask from './TodoTask'
 import NoTask from './NoTask'
 import Title from './Title'
 import TodoInput from './TodoInput'
 
-export default new RD({
+export default {
   render(h) {
     let todoList = this.todoList.map((item) =>
-      <TodoTask task={item}/>
+      <TodoTask on-removeById on-toggleTaskType task={item}/>
     )
     if (todoList.length === 0) {
       todoList = <NoTask noTaskInfo={this.noTaskInfo}/>
@@ -18,34 +17,34 @@ export default new RD({
         <div className='item-wrap'>
           {todoList}
         </div>
-        <TodoInput placeholder={'记点什么'}/>
+        <TodoInput on-addTodo placeholder={'记点什么'}/>
       </div>
     )
   },
-  created() {
-    this.$on('removeById', (id) => {
+  method: {
+    removeById(id) {
       for (let i = 0, len = this.todoList.length; i < len; i++) {
         if (this.todoList[i].id === id) {
           this.todoList.splice(i, 1)
           return
         }
       }
-    })
-    this.$on('toggleTaskType', (task) => {
+    },
+    addTodo(name) {
+      this.todoList.unshift({
+        id: this.todoList.length,
+        complete: false,
+        taskName: name
+      })
+    },
+    toggleTaskType(task) {
       for (let i = 0, len = this.todoList.length; i < len; i++) {
         if (this.todoList[i].id === task.id) {
           this.todoList[i].complete = !task.complete
           return
         }
       }
-    })
-    this.$on('addTodo', (name) => {
-      this.todoList.unshift({
-        id: this.todoList.length,
-        complete: false,
-        taskName: name
-      })
-    })
+    }
   },
   data() {
     return {
@@ -56,16 +55,5 @@ export default new RD({
       test1: 'abc',
       test2: 'def'
     }
-  },
-  computed: {
-    test: {
-      get() {
-        return this.test1 + this.test2
-      },
-      set(value) {
-        this.test1 = value + '1'
-        this.test2 = value + '2'
-      }
-    }
   }
-})
+}

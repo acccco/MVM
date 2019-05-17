@@ -2,7 +2,7 @@ import {RD} from "../"
 
 /**
  * 确定实例的父子关系
- * @param rd
+ * @param {RD} rd
  */
 export function initProperties(rd: RD) {
   let parent = rd.$option.parent
@@ -11,5 +11,4 @@ export function initProperties(rd: RD) {
   }
   rd.$parent = parent
   rd.$root = parent ? parent.$root : rd
-  rd.$children = []
 }

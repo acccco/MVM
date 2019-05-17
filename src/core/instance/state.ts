@@ -6,7 +6,7 @@ import {observe, observeComputed} from '../../class/Observe'
 /**
  * 使用合并后的 option 初始化实例的状态
  * inject、prop、method、data、computed、watch、provide
- * @param rd
+ * @param {RD} rd
  */
 export function initState(rd: RD) {
   let opt = rd.$option
@@ -53,7 +53,7 @@ function initProp(rd: RD) {
  */
 function initData(rd: RD) {
   if (!is(Function, rd.$option.data)) {
-    warn('data 项必须是一个函数', rd)
+    warn('data 必须是一个函数', rd)
     return
   }
   rd._data = rd.$option.data ? rd.$option.data.call(rd) : {}
@@ -80,13 +80,21 @@ function initComputed(rd: RD) {
 }
 
 /**
+ * 初始化 provide
+ * @param {RD} rd
+ */
+function initProvide(rd: RD) {
+  rd._provide = rd.$option.provide ? rd.$option.provide.call(rd) : {}
+}
+
+/**
  * 初始化 method 并将 method 代理到 this 对象下
  * @param {RD} rd
  */
 function initMethod(rd: RD) {
   for (let key in rd.$option.method) {
     if (checkProp(key, 'method', rd)) {
-      rd[key] = rd.$option.method[key]
+      rd[key] = rd.$option.method[key].bind(rd)
     }
   }
 }
@@ -103,12 +111,4 @@ function initWatch(rd: RD) {
       }, item.callback, item.option))
     })
   }
-}
-
-/**
- * 初始化 provide
- * @param {RD} rd
- */
-function initProvide(rd: RD) {
-  rd._provide = rd.$option.provide ? rd.$option.provide.call(rd) : {}
 }

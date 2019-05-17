@@ -22,7 +22,7 @@ class Observer implements ObserverInterface {
     this.dep = new Dep(value, 'this')
     // 处理数组
     if (Array.isArray(value)) {
-      // CHECK 设置原型，达到覆盖数组方法的目的
+      // 将处理过的数组方法设置成数组的原型
       Object.setPrototypeOf(value, arrayMethods)
       this.observeArray(value)
     } else {
@@ -107,6 +107,10 @@ export function observe(value: any) {
   }
 }
 
+/**
+ * 遍历计算属性，设置属性的 get 和 set
+ * @param computed
+ */
 export function observeComputed(computed: computedOption) {
   for (let key in computed) {
     let dep = new Dep(computed, key)

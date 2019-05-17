@@ -31,7 +31,6 @@ export class RD extends Event implements RDInterface {
   _data: commonObject
   _computed: commonObject
   _watch: Array<WatcherInterface>
-
   _proxy: WindowProxy | RDInterface
 
   [propName: string]: any
@@ -74,22 +73,20 @@ export class RD extends Event implements RDInterface {
 
   /**
    * 初始化 RD 实例
-   * @param {optionType} option
-   * @returns {void}
+   * @param     {optionType} option
+   * @returns   {void}
    * @private
    */
   _init(option: optionType): void {
-    let rd = this
-
-    initProperties(rd)
+    initProperties(this)
 
     // 触发 beforeCreate 事件
-    callHook(rd, 'beforeCreate')
-    initState(rd)
+    callHook(this, 'beforeCreate')
+    initState(this)
 
     // 触发 created 事件
-    callHook(rd, 'created')
-    initEvent(rd)
+    callHook(this, 'created')
+    initEvent(this)
   }
 
   /**
@@ -138,7 +135,7 @@ export class RD extends Event implements RDInterface {
    * @param   {watcherOption}           option
    * @returns {Watcher}
    */
-  $watch(getter: string | (() => any), callback: watcherCallback, option: watcherOption): Watcher {
+  $watch(getter: string | Function, callback: watcherCallback, option: watcherOption): Watcher {
     if (typeof getter === 'string') {
       getter = () => {
         (<string>getter).split('.').reduce((res, name) => res[name], this)

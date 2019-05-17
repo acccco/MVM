@@ -1,6 +1,4 @@
-import RD from '../../src/index'
-
-export default RD.extend({
+export default {
   render(h) {
     return (
       <div className='item-wrap row'>
@@ -10,7 +8,7 @@ export default RD.extend({
                oninput={(e) => {
                  this.inputValue = e.target.value
                }}/>
-        <div className='save' onclick={this.save.bind(this)}>保存</div>
+        <div className='save' onclick={this.save}>保存</div>
       </div>
     )
   },
@@ -26,4 +24,4 @@ export default RD.extend({
       this.inputValue = ''
     }
   }
-})
+}

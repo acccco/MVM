@@ -1,6 +1,4 @@
-import RD from '../../src/index'
-
-let TodoTask = RD.extend({
+export default {
   render(h) {
     return (
       <div className='row todo-item'>
@@ -32,6 +30,4 @@ let TodoTask = RD.extend({
       this.$emit('removeById', id)
     }
   }
-})
-
-export default TodoTask
+}
