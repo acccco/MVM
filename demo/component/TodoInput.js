@@ -5,10 +5,10 @@ export default {
         <input className='input' type='text'
                placeholder={this.placeholder}
                value={this.inputValue}
-               oninput={(e) => {
+               onInput={(e) => {
                  this.inputValue = e.target.value
                }}/>
-        <div className='save' onclick={this.save}>保存</div>
+        <div className='save' onClick={this.save}>保存</div>
       </div>
     )
   },
