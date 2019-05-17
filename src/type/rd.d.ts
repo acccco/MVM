@@ -2,7 +2,6 @@ import {commonObject} from "./commom"
 import {optionType} from "./option"
 import {EventInterface} from "./event"
 import {watcherCallback, watcherOption, WatcherInterface} from "./watcher"
-import {ComputedInterface} from "./computed"
 
 export interface RDInterface extends EventInterface {
   id: number
@@ -17,7 +16,6 @@ export interface RDInterface extends EventInterface {
   _data: commonObject
   _computed: commonObject
   _watch: Array<WatcherInterface>
-  _computedWatcher: Array<ComputedInterface>
   _proxy: WindowProxy | RDInterface
 
   [name: string]: any

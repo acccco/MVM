@@ -1,4 +1,4 @@
-import {commonObject} from "../types/commom"
+import {commonObject} from "../type/commom"
 
 const arrayProto: commonObject = Array.prototype
 export const arrayMethods = Object.create(arrayProto)

@@ -1,18 +1,17 @@
-import {commonObject} from "../types/commom"
-import {optionType} from "../types/option"
-import {RDInterface} from "../types/rd"
-import {ComputedInterface} from "../types/computed"
-import {watcherCallback, watcherOption, WatcherInterface} from "../types/watcher"
+import {commonObject} from "../type/commom"
+import {optionType} from "../type/option"
+import {RDInterface} from "../type/rd"
+import {watcherCallback, watcherOption, WatcherInterface} from "../type/watcher"
 
-import {Event} from '../toolBox/Event'
-import {Watcher} from '../toolBox/Watcher'
+import {Event} from '../class/Event'
+import {Watcher} from '../class/Watcher'
 import {mergeOption} from '../util/option'
 import {initState} from './instance/state'
 import {initProperties} from './instance/properties'
 import {initEvent} from './instance/event'
 import {callHook} from './instance/lifecycle'
 import {warn, allowedGlobals, isEmpty, equals} from '../util/util'
-import {pushTarget, popTarget} from '../toolBox/Dep'
+import {pushTarget, popTarget} from '../class/Dep'
 
 let uid = 0
 
@@ -32,7 +31,6 @@ export class RD extends Event implements RDInterface {
   _data: commonObject
   _computed: commonObject
   _watch: Array<WatcherInterface>
-  _computedWatcher: Array<ComputedInterface>
 
   _proxy: WindowProxy | RDInterface
 
@@ -55,7 +53,6 @@ export class RD extends Event implements RDInterface {
     this._prop = {}
     this._data = {}
     this._computed = {}
-    this._computedWatcher = []
     this._watch = []
 
     // 使用代理拦截属性的获取，得到错误信息
@@ -168,12 +165,6 @@ export class RD extends Event implements RDInterface {
       while (this._watch.length) {
         // @ts-ignore
         this._watch.shift().destroy()
-      }
-
-      // 注销 computed
-      while (this._computedWatcher.length) {
-        // @ts-ignore
-        this._computedWatcher.shift().destroy()
       }
 
       // 清空事件

@@ -1,5 +1,4 @@
 import {watcherCallback, watcherOption} from "./watcher"
-import {computedHandle} from "./computed"
 import {arrayT, commonObject} from "./commom"
 
 export type injectOption = {
@@ -30,6 +29,11 @@ export type watchOption = {
 
 export type userWatchOption = {
   [watcherName: string]: arrayT<watcherCallback | watcherObject>
+}
+
+export type computedHandle = {
+  set: Function
+  get: Function
 }
 
 export type computedOption = {

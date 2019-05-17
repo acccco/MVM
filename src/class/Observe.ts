@@ -1,10 +1,11 @@
-import {DepInterface} from "../types/dep"
-import {ObserverInterface} from "../types/observer"
+import {DepInterface} from "../type/dep"
+import {ObserverInterface} from "../type/observer"
 
 import {Dep} from './Dep'
 import {arrayMethods} from '../util/array'
 import {is} from '../util/util'
-import {commonObject} from "../types/commom"
+import {commonObject} from "../type/commom"
+import {computedOption} from "../type/option"
 
 let uid = 0
 
@@ -103,5 +104,25 @@ export function observe(value: any) {
     return value.__ob__
   } else if (Object.isExtensible(value)) {
     return new Observer(value)
+  }
+}
+
+export function observeComputed(computed: computedOption) {
+  for (let key in computed) {
+    let dep = new Dep(computed, key)
+    let value = computed[key]
+    Object.defineProperty(computed, key, {
+      configurable: true,
+      enumerable: true,
+      get() {
+        if (Dep.target) {
+          Dep.target.addDep(dep)
+        }
+        return value.get()
+      },
+      set(newValue) {
+        value.set(newValue)
+      }
+    })
   }
 }

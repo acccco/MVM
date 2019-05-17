@@ -1,8 +1,7 @@
 import {RD} from "../"
-import {Computed} from '../../toolbox/Computed'
-import {Watcher} from '../../toolbox/Watcher'
+import {Watcher} from '../../class/Watcher'
 import {getProvideForInject, checkProp, proxyObject, warn, is} from '../../util/util'
-import {observe} from '../../toolbox/Observe'
+import {observe, observeComputed} from '../../class/Observe'
 
 /**
  * 使用合并后的 option 初始化实例的状态
@@ -11,12 +10,6 @@ import {observe} from '../../toolbox/Observe'
  */
 export function initState(rd: RD) {
   let opt = rd.$option
-  rd._inject = {}
-  rd._prop = {}
-  rd._data = {}
-  rd._computed = {}
-  rd._computedWatcher = []
-  rd._watch = []
   if (opt.inject) initInject(rd)
   if (opt.prop) initProp(rd)
   if (opt.data) initData(rd)
@@ -78,11 +71,11 @@ function initData(rd: RD) {
  */
 function initComputed(rd: RD) {
   for (let key in rd.$option.computed) {
-    let newComputed = new Computed(rd, key, rd.$option.computed[key])
-    rd._computedWatcher.push(newComputed)
-    rd._computed[key] = newComputed.value
+    rd._computed[key] = {}
+    rd._computed[key].set = rd.$option.computed[key].set.bind(rd)
+    rd._computed[key].get = rd.$option.computed[key].get.bind(rd)
   }
-  observe(rd._computed)
+  observeComputed(rd._computed)
   proxyObject(rd, rd._computed, (key) => checkProp(key, 'computed', rd))
 }
 

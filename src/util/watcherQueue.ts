@@ -1,5 +1,5 @@
-import {commonObject} from "../types/commom"
-import {WatcherInterface} from "../types/watcher"
+import {commonObject} from "../type/commom"
+import {WatcherInterface} from "../type/watcher"
 
 const queue: Array<WatcherInterface> = []
 let has: commonObject = {}

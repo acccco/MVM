@@ -5,13 +5,13 @@ import {
   propOption, userComputedOption,
   userOptionType,
   userWatchOption,
-  watchOption
-} from "../types/option"
-import {arrayT, commonObject} from "../types/commom"
+  watchOption,
+  computedHandle
+} from "../type/option"
+import {arrayT, commonObject} from "../type/commom"
 
 import {noop, clone, is} from './util'
 import {LIFECYCLE_HOOK} from '../core/instance/lifecycle'
-import {computedHandle} from "../types/computed"
 
 /**
  * 判断是否是用户自己写的属性

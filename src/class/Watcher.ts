@@ -1,6 +1,6 @@
-import {DepInterface} from "../types/dep"
-import {WatcherInterface, watcherCallback, watcherOption} from "../types/watcher"
-import {RDInterface} from "../types/rd"
+import {DepInterface} from "../type/dep"
+import {WatcherInterface, watcherCallback, watcherOption} from "../type/watcher"
+import {RDInterface} from "../type/rd"
 
 import {pushTarget, popTarget} from './Dep'
 import {traverse} from '../util/traverse'

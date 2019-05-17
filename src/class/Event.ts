@@ -1,5 +1,5 @@
-import {arrayT} from "../types/commom"
-import {eventGroup, EventInterface} from "../types/event"
+import {arrayT} from "../type/commom"
+import {eventGroup, EventInterface} from "../type/event"
 
 let uid = 0
 

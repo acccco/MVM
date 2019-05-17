@@ -1,5 +1,5 @@
-import {DepInterface} from "../types/dep"
-import {WatcherInterface} from "../types/watcher"
+import {DepInterface} from "../type/dep"
+import {WatcherInterface} from "../type/watcher"
 
 let uid = 0
 

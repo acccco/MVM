@@ -1,4 +1,4 @@
-import {optionType} from "../../types/option"
+import {optionType} from "../../type/option"
 
 import {mergeOption} from '../../util/option'
 

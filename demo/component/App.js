@@ -52,7 +52,20 @@ export default new RD({
       title: 'RD with jsx TodoList',
       todoList: [],
       inputValue: '',
-      noTaskInfo: '暂无 TodoList'
+      noTaskInfo: '暂无 TodoList',
+      test1: 'abc',
+      test2: 'def'
+    }
+  },
+  computed: {
+    test: {
+      get() {
+        return this.test1 + this.test2
+      },
+      set(value) {
+        this.test1 = value + '1'
+        this.test2 = value + '2'
+      }
     }
   }
 })

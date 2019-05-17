@@ -1,5 +1,5 @@
-import {commonObject} from "../types/commom"
-import {RDInterface} from "../types/rd"
+import {commonObject} from "../type/commom"
+import {RDInterface} from "../type/rd"
 
 import always from 'ramda/es/always'
 import clone from 'ramda/es/clone'

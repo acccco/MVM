@@ -1,4 +1,4 @@
-import {objOrArray} from "../types/commom"
+import {objOrArray} from "../type/commom"
 import {is} from './util'
 
 const seenObjects = new Set()
