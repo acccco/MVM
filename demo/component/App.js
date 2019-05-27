@@ -42,7 +42,6 @@ export default {
       for (let i = 0, len = this.todoList.length; i < len; i++) {
         if (this.todoList[i].id === task.id) {
           this.todoList[i].complete = !task.complete
-          console.log('1234123')
           return
         }
       }
