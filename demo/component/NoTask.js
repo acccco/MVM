@@ -4,5 +4,11 @@ export default {
       <div className="no-task">{this.noTaskInfo}</div>
     )
   },
-  prop: ['noTaskInfo']
+  prop: ['noTaskInfo'],
+  created() {
+    console.log('no task created')
+  },
+  destroyed() {
+    console.log('no task destroyed')
+  }
 }

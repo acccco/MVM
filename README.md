@@ -1,8 +1,8 @@
-## Reactive Data 响应式数据
+# Reactive Data 响应式数据
 
-#### 例子
+## 例子
 
-从一个简单的例子开始
+一个简单的例子
 
 ```javascript
 let demo = new RD({
@@ -32,7 +32,7 @@ let demo = new RD({
 })
 
 // 测试 data
-demo.text
+console.log(demo.text)
 // Hello
 
 // 测试 watch
@@ -41,7 +41,7 @@ demo.text = 'Hello World'
 // Hello
 
 // 测试计算属性
-demo.fullName
+console.log(demo.fullName)
 // aco yang
 
 // 测试方法
@@ -49,11 +49,15 @@ demo.testMethod()
 // test
 ```
 
+## 字段说明
+
 #### data
 
-`() => object`
+```typescript
+type dataType = () => object
+```
 
-不能使用简单对象，可直接在 `this` 下访问。
+只能使用函数，返回的对象会被代理到实例对象下，即可直接在实例下访问。
 
 #### watch
 
@@ -68,7 +72,8 @@ type watchType = {
 }
 ```
 
-当对应的 `key` 值发生变化时，执行回调。
+当对应的 `watchName` 值发生变化时，执行回调。
+`watchName` 为 `data/prop/computed` 中声明过的键值，可以使用 `aaa.bbb` 来监听 `aaa` 对象下的 `bbb` 属性。
 
 #### computed
 
@@ -81,7 +86,8 @@ type computedType = {
 }
 ```
 
-根据相应的数据得出结果，可直接用 `this` 访问对应的 `key` 值，可以使用 `set` 在赋值时做一些处理。
+根据相应的数据得出结果，相应 `key` 值会被代理到实例对象下，可直接访问。
+当然还可以使用 `set` 在赋值时做一些处理。
 
 #### method
 
@@ -90,6 +96,8 @@ type methodType = {
   [methodName: string]: Function
 }
 ```
+
+声明的方法会被代理到实例对象下，可直接访问。
 
 #### 生命周期：
 
@@ -109,7 +117,7 @@ type methodType = {
 
 #### inject/provide
 
-当然，如果在实例创建时，将父实例通过 parent 传入，可以使用 `inject/provide` 可以传递信息
+当然，如果在实例创建时，将父实例通过 `parent` 传入，使用 `inject/provide` 可以越级传递信息。
 
 ```javascript
 let parent = new RD({
@@ -138,16 +146,16 @@ let child = new RD({
     }
 })
 
-child.$parent.name
+console.log(child.$parent.name)
 // parent
 
-child.foo
+console.log(child.foo)
 // bar
 ```
 
-`inject/provide` 可以跨多级传递，`inject` 为数据的使用者，`provide` 为数据的提供者
+`inject/provide` 可以跨多级传递，`inject` 为数据的使用者，`provide` 为数据的提供者。
 
-#### RD类属性
+#### RD 类的静态方法
 
 1. extend   扩展实例，让扩展出的实例拥有默认的 option
 2. mixin    用于全局混入
@@ -157,7 +165,7 @@ child.foo
 
 #### 关于 prop
 
-由于 `prop` 是动态的，当父组件中 `prop` 的相关值发生变化时，需要手动调用实例下提供的方法：`$initProp` 来通知子组件的变化，而 `prop` 的相关内容由于是在组件组成时动态传递的，所以可以看看 `demo` 。
+由于 `prop` 是动态的，当父组件中 `prop` 的相关值发生变化时，需要手动调用实例下提供的方法：`$initProp` 来通知子组件的变化，而 `prop` 的相关内容由于是在组件生成时动态传递的，所以可以看看 `demo` 。
 
 ## RD 没有什么
 
@@ -173,32 +181,32 @@ child.foo
 
 `VNode` 使用了 `github` 上的一个库，[点击查看](https://github.com/Matt-Esch/virtual-dom)
 
-- `RD`      担当了数据提供和通知数据变化的角色
-- `JSX`     承担了模板的作用，主要用于生成 `VNode` 结构
+- `RD`      数据提供和通知数据变化
+- `JSX`     模板，用于生成 `VNode` 结构
 - `VNode`   通过 `create/diff/patch` 方法通知浏览器 生成/更改 页面结构
 
 大致的编写流程如下：
 
 1. 编写 `JSX` 插件（`demo/plugin/index.js`），使用 `RD.use` 扩展实例，实现了 `$mount/$createElement/$createComponentVNode/$patch/$initDOMBind` 这些方法
-2. 编写获取 `VNode` 树（`demo/plugin/getTree.js`），根据 `JSX` 生成的结构生成 `VNode` 树结构
+2. 编写获取 `VNode` 树（`demo/plugin/createElement.js`），根据 `JSX` 生成的结构生成 `VNode` 树结构
 3. 编写组件（`demo/component/*.js`）
 4. 聚合到 `demo/index.js` 中
-5. 一个简单的 `MVVM` 框架实现
+5. 一个 `MVVM` 框架实现
 
 插件扩展方法的作用如下：
 
-- $mount：                 将实例挂载到摸个 `DOM` 元素下，同时监听 `render` （也就是生成 `VNode` 树）所使用的数据，当相关数据变化时，触发 `$patch` 方法
-- $createElement：         `JSX` 模板编译后使用的方法
+- $mount：                 将实例挂载到摸个 `DOM` 元素下，当相关数据变化时，重新生成 `VNode` 同时触发 `$patch` 方法
+- $createElement：         `JSX` 模板编译后使用的方法， `render` 通过该方法获取 `VNode`
 - $createComponentVNode：  用于创建组件对应的 `VNode` 树，同时监听生成树结构所用到的数据，当数据变动时，触发 `$patch` 方法
-- $patch：                 根据传入的新模板，对比老模板（`getTree.js`）进行 `diff & patch`
+- $initRenderWatch：       初始化监听，规定当数据发生变化时，需要执行的函数
+- $patch：                 根据 `VNode` 进行 `diff & patch`
 - $initDOMBind：           绑定每个组件的 `$el`，用于子组件的 `diff & patch`
 
 so 有了 `RD` 手撸一个 `MVVM` 不是梦~~
 
-最后我们来看下我们一共写了几行代码配合 `RD` 实现了这个 `MVVM` 框架（plugin 中的内容）
+最后我们来看下我们一共写了几行代码配合 `RD` 实现了这个 `MVVM` 框架（`plugin` 中的内容）
 
-- createElement.js:      35行
-- getTree.js:            116 行
-- index.js:              64 行
+- createElement.js:      87 行
+- index.js:              63 行
 
-当这还包括了空行，所以我们写了不到 215 行代码就实现了一个 `MVVM` 的框架。
+这还包括了空行，所以我们写了不到 150 行代码就实现了一个 `MVVM` 的框架。

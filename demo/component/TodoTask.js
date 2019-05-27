@@ -4,11 +4,11 @@ export default {
       <div className='row todo-item'>
         <div className='col-1 row'>
           <input type='checkbox' checked={this.task.complete}
-                 onChange={this.change.bind(this, this.task)}/>
+                 onchange={this.change}/>
         </div>
         <div className={this.task.complete ? 'col-2 on' : 'col-2'}>{this.task.taskName}</div>
         <div className='col-3'>
-          <span className='btn' onClick={this.remove.bind(this, this.task.id)}>删除</span>
+          <span className='btn' onclick={this.remove.bind(this, this.task.id)}>删除</span>
         </div>
       </div>
     )
@@ -23,11 +23,17 @@ export default {
     }
   },
   method: {
-    change(task) {
-      this.$emit('toggleTaskType', task)
+    change() {
+      this.$emit('toggleTaskType', this.task)
     },
     remove(id) {
       this.$emit('removeById', id)
     }
+  },
+  created() {
+    console.log('todo created')
+  },
+  destroyed() {
+    console.log('todo destroyed')
   }
 }

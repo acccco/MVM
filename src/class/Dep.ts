@@ -64,14 +64,14 @@ export class Dep implements DepInterface {
 
 Dep.target = null
 
-const targetStack: Array<WatcherInterface> = []
+const targetStack: Array<WatcherInterface | null> = []
 
 /**
  * 将旧的 target 推入栈中，Dep.target 赋值为新的 target
  * @param {WatcherInterface} target
  */
 export function pushTarget(target: WatcherInterface | null) {
-  if (Dep.target) targetStack.push(Dep.target)
+  if (Dep.target || Dep.target === null) targetStack.push(Dep.target)
   Dep.target = target
 }
 

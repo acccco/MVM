@@ -16,6 +16,7 @@ export class Watcher implements WatcherInterface {
   dirty: boolean
   deep: boolean
   ignoreChange: boolean
+  initCallback: boolean
   getter: () => any
   cb: watcherCallback
   dep: Array<DepInterface>
@@ -33,8 +34,9 @@ export class Watcher implements WatcherInterface {
       this.deep = !!options.deep
       // 为 true 即为: 不需要判断 getter 的返回值是否变化，当有绑定属性变化时，直接执行 callback
       this.ignoreChange = !!options.ignoreChange
+      this.initCallback = !!options.initCallback
     } else {
-      this.lazy = this.deep = this.ignoreChange = false
+      this.lazy = this.deep = this.ignoreChange = this.initCallback = false
     }
 
     this.getter = getter.bind(ctx)
@@ -45,6 +47,10 @@ export class Watcher implements WatcherInterface {
     this.newDepId = new Set()
     this.value = this.get()
     this.dirty = false
+
+    if (this.initCallback) {
+      callback(this.value, null)
+    }
   }
 
   /**

@@ -4,5 +4,11 @@ export default {
       <p className='title'>{this.title}</p>
     )
   },
-  prop: ['title']
+  prop: ['title'],
+  created() {
+    console.log('title created')
+  },
+  destroyed() {
+    console.log('title destroyed')
+  }
 }

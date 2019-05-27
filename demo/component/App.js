@@ -31,6 +31,7 @@ export default {
       }
     },
     addTodo(name) {
+      console.log(name)
       this.todoList.unshift({
         id: this.todoList.length,
         complete: false,
@@ -41,6 +42,7 @@ export default {
       for (let i = 0, len = this.todoList.length; i < len; i++) {
         if (this.todoList[i].id === task.id) {
           this.todoList[i].complete = !task.complete
+          console.log('1234123')
           return
         }
       }
@@ -50,10 +52,13 @@ export default {
     return {
       title: 'RD with jsx TodoList',
       todoList: [],
-      inputValue: '',
       noTaskInfo: '暂无 TodoList',
-      test1: 'abc',
-      test2: 'def'
     }
+  },
+  created() {
+    console.log('app created')
+  },
+  destroyed() {
+    console.log('app destroyed')
   }
 }

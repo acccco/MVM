@@ -6,6 +6,7 @@ export type watcherOption = {
   lazy?: boolean
   deep?: boolean
   ignoreChange?: boolean
+  initCallback?: boolean
 }
 
 export interface WatcherInterface {
@@ -15,6 +16,7 @@ export interface WatcherInterface {
   dirty: boolean
   deep: boolean
   ignoreChange: boolean
+  initCallback: boolean
   dep: Array<DepInterface>
   depId: Set<number>
   newDep: Array<DepInterface>
