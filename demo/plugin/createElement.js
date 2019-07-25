@@ -76,6 +76,10 @@ export function createElement(ctx, tag, properties, ...children) {
   return h(tag, properties, children)
 }
 
+/**
+ * 获取 vNode 结束后需要重置 Map
+ * @param ctx
+ */
 export function resetMap(ctx) {
   let cid = ctx.constructor.cid
   if (!storeMap[cid]) return
