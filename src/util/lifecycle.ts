@@ -1,4 +1,4 @@
-import ReactiveData from "../";
+import ReactiveData from "..";
 
 export const LIFECYCLE_HOOK: Array<string> = [
   "beforeCreate",

@@ -1,7 +1,7 @@
 import { is } from "ramda";
 import Dep from "./dep";
 import arrayMethods from "../util/array-fix";
-import { computedOption } from "./reactive-data";
+import { computedOption } from "../";
 
 let uid = 0;
 

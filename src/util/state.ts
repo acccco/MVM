@@ -1,6 +1,6 @@
 import { is } from "ramda";
 import Watcher from "../core/watcher";
-import ReactiveData from "../";
+import ReactiveData from "..";
 import { observe, observeComputed } from "../core/observe";
 import { warn, proxyObject, checkProp } from "./util";
 

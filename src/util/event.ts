@@ -1,4 +1,4 @@
-import ReactiveData from "../";
+import ReactiveData from "..";
 
 export default function initEvent(rd: ReactiveData) {
   if (rd.$option.event) {

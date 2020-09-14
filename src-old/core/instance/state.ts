@@ -1,4 +1,4 @@
-import {RD} from ".."
+import {RD} from "../"
 import {Watcher} from '../../class/Watcher'
 import {getProvideForInject, checkProp, proxyObject, warn, is} from '../../util/util'
 import {observe, observeComputed} from '../../class/Observe'

@@ -1,4 +1,4 @@
-import {RD} from ".."
+import {RD} from "../"
 
 /**
  * 确定实例的父子关系
