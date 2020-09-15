@@ -1,135 +1,70 @@
 import Event from "./core/event";
 import Watcher, { watcherCallback } from "./core/watcher";
-import initEvent from "./util/event";
-import { callHook } from "./util/lifecycle";
-import mergeOption from "./util/option";
-import initState from "./util/state";
-import { allowedGlobals, warn } from "./util/util";
-
-type lifeCycleFun = () => any;
-
-export type computedOption = {
-  [name: string]: { set: Function; get: Function };
-};
-
-export type watchOption = {
-  [name: string]: {
-    callback: watcherCallback;
-  }[];
-};
-
-export type optionType = {
-  data?: () => object;
-  computed?: computedOption;
-  method?: {
-    [propName: string]: () => any;
-  };
-  watch?: watchOption;
-  beforeCreate?: lifeCycleFun[];
-  created?: lifeCycleFun[];
-  beforeDestroy?: lifeCycleFun[];
-  destroyed?: lifeCycleFun[];
-
-  [key: string]: any;
-};
+import Dep from "./core/dep";
+import { observe } from "./core/observe";
 
 let uid = 0;
 
-export default class ReactiveData extends Event {
-  static version: string;
-  static option: optionType;
+export default class ReactiveData<
+  T extends { [prop: string]: any } = {}
+> extends Event {
+  id: number = uid++;
+  active: boolean = true;
 
-  id: number;
-  active: boolean;
-  $option: optionType;
-  _data: object;
-  _computed: computedOption;
-  _watch: Watcher[];
-  _proxy: WindowProxy | this;
+  data: T = {} as T;
+  watchQueue: Watcher[] = [];
 
-  [key: string]: any;
-
-  constructor(option: optionType) {
+  constructor() {
     super();
-    this.id = uid++;
-    this.active = true;
-    // 合并参数
-    this.$option = mergeOption((this.constructor as any).option, option);
-    this._data = {};
-    this._computed = {};
-    this._watch = [];
-
-    // 使用代理拦截属性的获取，得到错误信息
-    this._proxy = Proxy
-      ? new Proxy(this, {
-          has(target, key) {
-            return key in target || !allowedGlobals(<string>key);
-          },
-          get(target, key): any {
-            if (typeof key === "string" && !(key in target)) {
-              warn(
-                `data/prop/method/computed 下未定义 ${key} 请检查。`,
-                target,
-              );
-            }
-            // @ts-ignore
-            return target[key];
-          },
-        })
-      : this;
-
-    this._init(option);
+    Promise.resolve().then(() => {
+      observe(this.data);
+      this.computedHook();
+      this.watchHook();
+    });
   }
 
-  /**
-   * 初始化 RD 实例
-   * @param     {optionType} option
-   * @returns   {void}
-   * @private
-   */
-  _init(option: optionType): void {
-    // 触发 beforeCreate 事件
-    callHook(this, "beforeCreate");
-    initState(this);
+  computedHook() {}
+  watchHook() {}
 
-    // 触发 created 事件
-    callHook(this, "created");
-    initEvent(this);
+  addComputed(
+    key: string,
+    getCall: (data: T) => any,
+    setCall: (data: T, ...args: any[]) => void = (data) => {},
+  ) {
+    let _this = this;
+    let dep = new Dep(this.data, key);
+    Object.defineProperty(this.data, key, {
+      configurable: true,
+      enumerable: true,
+      get() {
+        if (Dep.target) {
+          Dep.target.addDep(dep);
+        }
+        return getCall(_this.data);
+      },
+      set(newValue) {
+        setCall(_this.data, newValue);
+      },
+    });
   }
 
-  /**
-   * 创建一个观察者，观察者会观察在 getter 中对属性的 get 的操作
-   * 当对应属性发生 set 动作并且值发生变化时时，会触发 callback
-   * 新生成的观察者对象会保存在实例的 _watch 属性下
-   */
-  $watch(getter: string | Function, callback: watcherCallback): Watcher {
+  addWatch(getter: string | (() => any), callback: watcherCallback): Watcher {
     if (typeof getter === "string") {
-      getter = () => {
-        (getter as string).split(".").reduce((res, name) => res[name], this);
-      };
+      let names = getter.split(".");
+      getter = () => names.reduce((res, name) => res.data[name], this);
     }
-    let watch = new Watcher(this, getter, callback);
-    this._watch.push(watch);
+    let watch = new Watcher(getter, callback);
+    this.watchQueue.push(watch);
     return watch;
   }
 
-  /**
-   * 销毁当前实例
-   */
-  $destroy() {
+  destroy() {
     if (this.active) {
-      callHook(this, "beforeDestroy");
-
-      // 注销 watch
-      while (this._watch.length) {
-        // @ts-ignore
-        this._watch.shift().destroy();
+      while (this.watchQueue.length) {
+        this.watchQueue.shift()?.destroy();
       }
-
       // 清空事件
       this.off();
-
-      callHook(this, "destroyed");
       this.active = false;
     }
   }

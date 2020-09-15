@@ -17,7 +17,7 @@ const methodsToPatch: Array<string> = [
 methodsToPatch.forEach((method: string) => {
   // 原始的数组处理方法
   const original = arrayProto[method];
-  let mutator = function (...args: Array<any>) {
+  let mutator = function (...args: any[]) {
     // @ts-ignore
     const result = original.apply(this, args);
     // @ts-ignore

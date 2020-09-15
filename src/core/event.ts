@@ -2,13 +2,6 @@ type arrayT<T> = T[] | T;
 
 let uid = 0;
 
-/**
- * 事件对象
- * $on:    添加对应事件名的处理函数
- * $once:  仅仅触发一次的事件
- * $off:   花式取消事件
- * $emit:  触发事件
- */
 export default class Event {
   id: number;
   _event: {
@@ -23,19 +16,21 @@ export default class Event {
   on(eventName: arrayT<string>, fn: arrayT<Function>) {
     if (Array.isArray(eventName)) {
       eventName.forEach((name) => this.on(name, fn));
+      return;
+    }
+    if (!this._event[eventName]) {
+      this._event[eventName] = [];
+    }
+    if (Array.isArray(fn)) {
+      this._event[eventName]?.push(...fn);
     } else {
-      if (!Array.isArray(fn)) {
-        fn = [fn];
-      }
-      (this._event[eventName] || (this._event[eventName] = [])).push(
-        ...(<[]>fn),
-      );
+      this._event[eventName]?.push(fn);
     }
     return this;
   }
 
   once(eventName: string, fn: Function) {
-    let proxyFun: Function = (...args: Array<any>) => {
+    let proxyFun: Function = (...args: any[]) => {
       this.off(eventName, proxyFun);
       fn.apply(this, args);
     };
@@ -47,9 +42,9 @@ export default class Event {
     return this;
   }
 
-  off(eventName?: arrayT<string> | undefined, fn?: arrayT<Function>) {
+  off(eventName?: arrayT<string>, fn?: arrayT<Function>) {
     // 清空所有事件
-    if (!arguments.length) {
+    if (!eventName) {
       this._event = {};
       return this;
     }
@@ -58,7 +53,6 @@ export default class Event {
       eventName.forEach((name) => this.off(name, fn));
       return this;
     }
-    eventName = <string>eventName;
     // 若没有事件对应的函数列表则不用处理
     const cbs = this._event[eventName];
     if (!cbs) {
@@ -70,21 +64,19 @@ export default class Event {
       return this;
     }
     // 取消特定事件的特定处理函数
-    if (fn) {
-      let cb;
-      let i = cbs.length;
-      // 处理一次取消多个的情况
-      if (Array.isArray(fn)) {
-        fn.forEach((fnc) => this.off(eventName, fnc));
-        return this;
-      }
-      while (i--) {
-        cb = cbs[i];
-        // @ts-ignore
-        if (cb === fn || cb.fn === fn) {
-          cbs.splice(i, 1);
-          break;
-        }
+    let cb;
+    let i = cbs.length;
+    // 处理一次取消多个的情况
+    if (Array.isArray(fn)) {
+      fn.forEach((fnc) => this.off(eventName, fnc));
+      return this;
+    }
+    while (i--) {
+      cb = cbs[i];
+      // @ts-ignore
+      if (cb === fn || cb.fn === fn) {
+        cbs.splice(i, 1);
+        break;
       }
     }
     return this;

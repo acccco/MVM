@@ -1,7 +1,6 @@
 import Dep from "./dep";
-import ReactiveData from "./reactive-data";
-import traverse from "../watch/traverse";
-import watcherQueue from "../watch/watcherQueue";
+import traverse from "../util/watcher-traverse";
+import watcherQueue from "../util/watcher-queue";
 
 export type watcherCallback = (newValue: any, oldValue: any) => any;
 
@@ -13,17 +12,17 @@ export default class Watcher {
   dirty: boolean;
   getter: () => any;
   callback: watcherCallback;
-  dep: Array<Dep>;
+  dep: Dep[];
   depId: Set<number>;
-  newDep: Array<Dep>;
+  newDep: Dep[];
   newDepId: Set<number>;
   value: any;
 
-  constructor(ctx: ReactiveData, getter: Function, callback: watcherCallback) {
+  constructor(getter: () => any, callback: watcherCallback) {
     this.id = uid++;
     this.active = true;
-    this.getter = getter.bind(ctx);
-    this.callback = callback.bind(ctx);
+    this.getter = getter;
+    this.callback = callback;
     this.dep = [];
     this.depId = new Set();
     this.newDep = [];
@@ -32,10 +31,6 @@ export default class Watcher {
     this.dirty = false;
   }
 
-  /**
-   * 用于计算 watcher 的值，并且在相关属性下添加依赖
-   * @returns {any}
-   */
   get(): any {
     Dep.pushTarget(this);
     let value = this.getter();
@@ -45,20 +40,14 @@ export default class Watcher {
     return value;
   }
 
-  /**
-   * 当响应属性变化时，触发 watcher 更新，由 dep 调用
-   */
   update(): void {
     watcherQueue(this);
   }
 
-  /**
-   * watcher 执行更新
-   */
   run(): void {
     if (this.active) {
       let value = this.get();
-      if (value !== this.value) {
+      if (value !== this.value || typeof value === "object") {
         // 设置新值
         const oldValue = this.value;
         this.value = value;
@@ -67,18 +56,11 @@ export default class Watcher {
     }
   }
 
-  /**
-   * 脏检查机制手动触发更新函数
-   */
   evaluate(): void {
     this.value = this.getter();
     this.dirty = false;
   }
 
-  /**
-   * 添加依赖的 dep
-   * @param {Dep} dep
-   */
   addDep(dep: Dep): void {
     const id = dep.id;
     if (!this.newDepId.has(id)) {
@@ -90,9 +72,6 @@ export default class Watcher {
     }
   }
 
-  /**
-   * 清空无效的 dep 和 当前 watcher 的关联
-   */
   cleanDep(): void {
     let i = this.dep.length;
     while (i--) {

@@ -1,16 +1,14 @@
 import { is } from "ramda";
 import Dep from "./dep";
 import arrayMethods from "../util/array-fix";
-import { computedOption } from "../";
 
 let uid = 0;
 
 class Observer {
-  id: number;
+  id: number = uid++;
   dep: Dep;
 
   constructor(value: Object | Array<any>) {
-    this.id = uid++;
     this.dep = new Dep(value, "this");
     // 处理数组
     if (Array.isArray(value)) {
@@ -61,7 +59,7 @@ export function defineReactive(object: Object, key: string, value: any) {
         dep.subscribe(Dep.target);
         Dep.target.addDep(dep);
         if (Array.isArray(value)) {
-          childOb.dep.addSub(Dep.target);
+          childOb.dep.subscribe(Dep.target);
           Dep.target.addDep(childOb.dep);
         }
       }
@@ -85,25 +83,5 @@ export function observe(value: any) {
     return value.__ob__;
   } else if (Object.isExtensible(value)) {
     return new Observer(value);
-  }
-}
-
-export function observeComputed(computed: computedOption) {
-  for (let key in computed) {
-    let dep = new Dep(computed, key);
-    let value = computed[key];
-    Object.defineProperty(computed, key, {
-      configurable: true,
-      enumerable: true,
-      get() {
-        if (Dep.target) {
-          Dep.target.addDep(dep);
-        }
-        return value.get();
-      },
-      set(newValue) {
-        value.set(newValue);
-      },
-    });
   }
 }
